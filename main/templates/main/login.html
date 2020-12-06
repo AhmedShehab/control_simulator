@@ -1,0 +1,24 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block style %}
+<link href="{% static 'main/cred.css' %}" rel="stylesheet">
+{% endblock style %}
+{% block body %}
+    <div class="container">
+        <form class="cred_form" action="{% url 'login' %}" method="POST">
+        <h1 style="color: green;text-align: center;grid-area: 1/2;">Login</h1>
+            {% csrf_token %}
+            <input class="cred" type="text" placeholder="Email" name="username">
+            <br>
+            <input class="cred" type="password" name="password" id="" placeholder="Password">
+            <br>
+            <!-- <input type="checkbox" name="remember" id=""> -->
+            <span style="color: green;margin-right: 120px;">Remember me</span>
+            <a href="#" class="link">Forgot password?</a>
+            <br>
+            <button class="button" type="submit" name="student" style="margin-right: 20px;">Login</button>
+            <br>
+            <a id="signup" href="{% url 'register' %}" >Don't have an account ? Sign Up</a>
+        </form>
+    </div>
+{% endblock body %}

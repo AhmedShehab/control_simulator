@@ -1,8 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
     <title></title>
+    {% block style %}
+    {% endblock style %}
     </head>
     <body>
+        <div style="text-align: center;">
+            <h1>NavBAR</h1>
+            <hr>
+        </div>
+        {% block body %}
+        {% endblock body %}
     </body>
 </html>
