@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from .models import User,Instructor,Student,Course
+from uuid import UUID
 # Create your views here.
 def home(request):
     return render(request, "main/home.html")
@@ -49,11 +50,15 @@ def register(request):
                 })
         # If the user is a student
         elif request.POST.get("student"):
-            try:
+            try: # Creating New User
+                try : # Check if the Course Code is valid.
+                    temp = UUID(code,version=4)
+                except:
+                    return render(request, "main/register.html", {
+                    "message": "Make sure that your course code is valid."
+                })
                 course=Course.objects.filter(code=code)
-                print(course)
-                user = User.objects.create_user(username, email, password)
-                user.save()
+                user = User.objects.create_user(username, email, password).save()
                 student=Student.objects.create(credentials=user).save()
             except IntegrityError:
                 return render(request, "main/register.html", {
