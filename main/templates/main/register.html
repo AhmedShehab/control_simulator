@@ -1,6 +1,8 @@
 {% extends 'main/login.html' %}
+{% block title %}
+<title>Register</title>
+{% endblock title %}
 {% block body %}
-
 <div class="container">
         <form class="cred_form" action="{% url 'register' %}" method="POST">
         <h1 style="color: green;">Sign up</h1>
@@ -19,9 +21,9 @@
                     <h5 style="color: red;">{{message}}</h5>
             {% endif %}
             <input type="checkbox" name="agree" >
-            <span style="color: green;margin-right: 120px;">I agree to the terms and privacy policy</span>
+            <span style="color: green;margin-right: 40px;">I agree to the terms and privacy policy</span>
             <br>
-            <button class="button" type="submit" name="student" value="1" style="margin-right: 20px;">Sign up as a student</button>
+            <button class="button" type="submit" name="student" value="1">Sign up as a student</button>
             <button class="button" type="submit" name="instructor" value="1">Sign up as an instructor</button>
         </form>
     </div>

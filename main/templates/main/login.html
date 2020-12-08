@@ -1,5 +1,8 @@
 {% extends 'main/layout.html' %}
 {% load static %}
+{% block title %}
+<title>Login</title>
+{% endblock title %}
 {% block style %}
 <link href="{% static 'main/cred.css' %}" rel="stylesheet">
 {% endblock style %}
@@ -12,13 +15,13 @@
             <br>
             <input class="cred" type="password" name="password" id="" placeholder="Password">
             <br>
-            <!-- <input type="checkbox" name="remember" id=""> -->
-            <span style="color: green;margin-right: 120px;">Remember me</span>
-            <a href="#" class="link">Forgot password?</a>
+            <input type="checkbox" name="remember">
+            <span style="color: green;margin-right: 70px;">Remember me</span>
+            <a href="#" class="signup">Forgot password?</a>
             <br>
             <button class="button" type="submit" name="student" style="margin-right: 20px;">Login</button>
             <br>
-            <a id="signup" href="{% url 'register' %}" >Don't have an account ? Sign Up</a>
+            <a class="signup" href="{% url 'register' %}" >Don't have an account ? Sign Up</a>
         </form>
     </div>
 {% endblock body %}

@@ -1,0 +1,53 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}
+<title>Home</title>
+{% endblock title %}
+{% block body %}
+<div class = 'row test' >
+            <div class = 'col-6'>
+                <img src= "{% static 'main/car-shift.jpg' %}" alt='car shifter'>
+            </div>
+            <div class = 'col-6 test2'>
+                <h3>Description</h3>
+                <p>
+                    Test, learn and program PID control loops in real time with the automated PID Simulator! 
+                    With the simulated feedback and optional controls, the PID Simulator is the perfect tool to learn, practice,
+                    and teach how a PID controller works in a safe environment while maintaining a real world feel.
+                </p>
+            </div>
+        </div>
+        <div class = 'row test3 '>
+            <div class ='col-6 test4'>
+                <h3>Basic Cruise Control Simulator</h3>
+                <p>
+                    Basic cruise control is a system that automatically controls the speed of a motor vehicle.
+                    The system is a servomechanism that takes over the throttle of the car to maintain a steady speed as set
+                    by the driver.
+                </p>
+                    <form action="#">
+                       <button type="submit" class="btn btn-outline-success" >Run Simulation</button>
+                    </form>                   
+            </div>
+            <div class = 'col-6'>   
+                <img src= "{% static 'main/Cruise-Control-Diagram.png' %}" alt='cruise control block diagram'>
+            </div>
+        </div>
+        <div class = 'row test3 '>
+            <div class = 'col-6'>
+                <img src= "{% static 'main/Adaptive-Cruise-Controller-Block-Diagram.png' %}" alt='adaptive cruise control block diagram'>
+            </div>
+            <div class ='col-6 test4'>
+                <h3>Adaptive Cruise Control Simulator</h3>
+                <p>
+                    Adaptive cruise control (ACC) is an available. cruise control advanced driver assistance system for road vehicles
+                    that automatically adjusts the vehicle speed to maintain a safe distance from vehicles ahead.As of 2019.
+                    it is also called by 20 unique names that describe that basic functionality.This is also known as Dynamic cruise
+                    control.
+                </p>
+                    <form action="#">
+                       <button type="submit" class="btn btn-outline-success" >Run Simulation</button>
+                    </form>                   
+            </div>
+        </div>
+{% endblock body %}

@@ -54,10 +54,12 @@
     border-radius: 20px;
 }
 
-#signup{
+.signup{
     color: green;
     text-decoration: none;
 }
-#signup:hover{
+.signup:hover{
+    color: green;
     text-decoration: underline;
+    background-color: snow;
 }
