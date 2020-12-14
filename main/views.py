@@ -43,7 +43,8 @@ def register(request):
             try:
                 user = User.objects.create_user(username, email, password)
                 user.save()
-                instructor=Instructor.objects.create(credentials=user).save()
+                instructor=Instructor.objects.create(credentials=user)
+                instructor.save()
             except IntegrityError:
                 return render(request, "main/register.html", {
                     "message": "Username already taken."
@@ -57,9 +58,12 @@ def register(request):
                     return render(request, "main/register.html", {
                     "message": "Make sure that your course code is valid."
                 })
-                course=Course.objects.filter(code=code)
-                user = User.objects.create_user(username, email, password).save()
-                student=Student.objects.create(credentials=user).save()
+                course=Course.objects.get(code=code)
+                user = User.objects.create_user(username, email, password)
+                user.save()
+                student=Student.objects.create(credentials=user)
+                student.save()
+                student.courses.add(course)
             except IntegrityError:
                 return render(request, "main/register.html", {
                     "message": "Username already taken."
