@@ -18,7 +18,8 @@ class Course(models.Model):
 # Student Model 
 class Student(models.Model):
     credentials=models.ForeignKey(User, on_delete=models.CASCADE)
-    courses=models.ManyToManyField(Course)
+    courses=models.ForeignKey(Course,on_delete=models.CASCADE)
+    major=models.CharField(max_length=64,default="Not mentioned")
     # Write all students data rows here
     def __str__(self):
         return f"{self.credentials.username}"
@@ -28,3 +29,7 @@ class Instructor(models.Model):
     # Write all instructor data rows here
     def __str__(self):
         return f"{self.credentials.username}"
+class Assignment(models.Model):
+    name=models.CharField(max_length=64)
+    dueDate=models.DateField()
+    score=models.FloatField()

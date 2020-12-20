@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User,Instructor,Student,Course
+from .models import User,Instructor,Student,Course,Assignment
 from uuid import UUID
 # Create your views here.
 def home(request):
@@ -61,9 +61,8 @@ def register(request):
                 course=Course.objects.get(code=code)
                 user = User.objects.create_user(username, email, password)
                 user.save()
-                student=Student.objects.create(credentials=user)
+                student=Student.objects.create(credentials=user,courses=course)
                 student.save()
-                student.courses.add(course)
             except IntegrityError:
                 return render(request, "main/register.html", {
                     "message": "Username already taken."
@@ -75,11 +74,12 @@ def register(request):
 
 def login_view(request):
     if request.method == "POST":
+        print(request.POST)
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
-
+        print(user)
         # Check if authentication successful
         if user is not None:
             login(request, user)
@@ -94,3 +94,16 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("home"))
+
+def student(request):
+    user=request.user
+    student=Student.objects.get(credentials=user)
+    return render(request,"main/student.html",{
+        "student":student,
+        "assignments":Assignment.objects.all()
+    })
+
+def cruise(request):
+    return render(request,"main/cruise.html")
+def adaptive(request):
+    return render(request,"main/adaptive.html")

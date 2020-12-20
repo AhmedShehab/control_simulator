@@ -1,0 +1,14 @@
+.profile{
+    margin-left: 300px;
+    margin-top: 30px;
+}
+.table{
+    margin-left: 300px;
+    width: 70%;
+    text-align: center;
+}
+th{
+    color: white;
+    background-color: green;
+}
+  

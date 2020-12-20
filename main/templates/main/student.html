@@ -1,0 +1,28 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block style %}
+<link href="{% static 'main/css/profile.css' %}" rel="stylesheet">
+{% endblock style %}
+{% block body %}
+<div class="profile" style="display:flex;">
+    <span><img src="{% static 'main/images/car-shift.jpg' %}" alt="Student Photo" style="width:200px;height:200px"></span>
+    <span><h4>Username: <small>{{student.credentials.username}}</small></h4><h4>Major:  <small>{{student.major}}</small></h4><h4>Course Code:  <small>{{student.courses.code}}</small></h4></span>
+</div>
+<div>
+    <table class="table">
+        <tr>
+            <th>Assignment</th><th>Requirements</th><th>Completion Status</th><th>Score</th><th>Due Date</th>
+        </tr>
+        {% for assignment in assignments %}
+        <tr>
+            <td>{{assignment.name}}</td>
+            <td>-----------</td>
+            <td>-----------</td>
+            <td>{{assignment.score}}</td>
+            <td>{{assignment.dueDate}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock body %}

@@ -15,11 +15,13 @@
             <br>
             <input class="cred" type="password" name="password" id="" placeholder="Password">
             <br>
-            <input type="checkbox" name="remember">
-            <span style="color: green;margin-right: 70px;">Remember me</span>
+            {% comment %} <input type="checkbox" name="remember">
+            <span style="color: green;margin-right: 70px;">Remember me</span> 
+            Disabled Temporarely
+            {% endcomment %}
             <a href="#" class="signup">Forgot password?</a>
             <br>
-            <button class="button" type="submit" name="student" style="margin-right: 20px;">Login</button>
+            <button class="button" type="submit" style="margin-right: 20px;">Login</button>
             <br>
             <a class="signup" href="{% url 'register' %}" >Don't have an account ? Sign Up</a>
         </form>
