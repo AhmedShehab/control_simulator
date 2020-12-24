@@ -5,11 +5,10 @@
 {% endblock style %}
 {% block body %}
 <div class="profile" style="display:flex;">
-    <span><img src="{% static 'main/images/profile.png' %}" alt="Student Photo" style="width:100px;height:100px"></span>
-    <span><h4>{{student.credentials.username}}</h4><h4>Major:  <small style="color: black;">{{student.major}}</small></h4><h4>Course Code:  <small style="color: black;">{{student.courses.code}}</small></h4></span>
+    <span><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo" style="width:100px;height:100px"></span>
+    <span><h4>{{instructor.credentials.username}}</h4><h4>Major:  <small style="color: black;">{{instructor.major}}</small></h4></span>
 </div>
-<div>
-    <table class="table">
+<table class="table">
         <tr>
             <th>Assignment</th><th>Requirements</th><th>Completion Status</th><th>Score</th><th>Due Date</th>
         </tr>
@@ -23,6 +22,4 @@
         </tr>
         {% endfor %}
     </table>
-</div>
-
 {% endblock body %}
