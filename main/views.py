@@ -16,8 +16,6 @@ def register(request):
     except :
         if request.method == "POST":
             username = request.POST["username"]
-            first= request.POST["first"]
-            last= request.POST["last"]
             major= request.POST["major"]
             email = request.POST["email"]
             code=request.POST["code"]

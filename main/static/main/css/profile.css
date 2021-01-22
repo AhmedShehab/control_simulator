@@ -11,4 +11,22 @@ th{
     color: white;
     background-color: green;
 }
-  
+#assignment:hover{
+    cursor: pointer;
+}
+#assignment{
+    width: 175px;
+}
+.assign_form{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.658);
+    height: 100%;
+    width: 100%;
+}
+.assign_child{
+    background-color: white;
+    width: 40%;
+    border: 2px solid green;
+    border-radius: 60px;
+    transform: translate(75%,40%);
+}

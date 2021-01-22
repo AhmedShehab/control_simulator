@@ -15,6 +15,7 @@ class Assignment(models.Model):
     dueDate=models.DateField()
     score=models.FloatField()
     intructor=models.CharField(max_length=64,null=True) # Remove Null= True later
+    #Describtion, Simulator(Cruise , basic, servo ...),  
     def __str__(self):
         return f"{self.name}: {self.dueDate}"
 # Course Model
