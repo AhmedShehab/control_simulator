@@ -11,13 +11,19 @@ class User(AbstractUser,models.Model):
     status=models.CharField(max_length=5,choices=status_choices,default="s")
 
 class Assignment(models.Model):
-    name=models.CharField(max_length=64)
+    subject=models.CharField(max_length=64,null=True)
     dueDate=models.DateField()
     score=models.FloatField()
-    intructor=models.CharField(max_length=64,null=True) # Remove Null= True later
-    #Describtion, Simulator(Cruise , basic, servo ...),  
+    instructor=models.CharField(max_length=64,null=True) # Remove Null= True later
+    describtion = models.TextField(null=True)
+    simulator_choices=[
+        ("Cruise Control","Cruise Control"),
+        ("Adaptive Cruise control","Adaptive Cruise control"),
+        ("Servo Motor","Servo Motor")
+    ]
+    simulator = models.CharField(max_length=64,choices=simulator_choices,null=True) # Remove Null= True later
     def __str__(self):
-        return f"{self.name}: {self.dueDate}"
+        return f"{self.subject}: {self.dueDate}"
 # Course Model
 class Course(models.Model):
     name=models.CharField(max_length=50)
@@ -39,7 +45,7 @@ class Student(models.Model):
 # Instructor Model
 class Instructor(models.Model):
     credentials=models.ForeignKey(User, on_delete=models.CASCADE)
-    assignments=models.ManyToManyField(Assignment)
+    assignments=models.ManyToManyField(Assignment,related_name="asisgnments")
     major=models.CharField(max_length=64,default="Not mentioned")
     # Write all instructor data rows here
     def __str__(self):

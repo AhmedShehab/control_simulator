@@ -10,12 +10,12 @@
         <form class="cred_form" action="{% url 'instructor' %}" method="POST">
             <h1 style="color: green;">New Assignment</h1>
                 {% csrf_token %}
-                <input class="cred" type="text" placeholder="Subject" name="name">
+                <input class="cred" type="text" placeholder="Subject" name="subject">
                 <br>
                 <select class="cred" placeholder="Simulator" name="sim">
-                    <option value="c">Cruise Control</option>
-                    <option value="a">Adaptive Cruise Control</option>
-                    <option value="w">Water Tank</option>
+                    {% for simulator in simulators %}
+                        <option value="{{simulator}}">{{simulator}}</option>
+                    {% endfor %}
                 </select>
                 <br>
                 <input class="cred" type="date" placeholder="dueDate" name="due">
@@ -41,13 +41,13 @@
 </div>
 <table class="table">
         <tr>
-            <th>Assignment</th><th>Requirements</th><th>Completion Status</th><th>Score</th><th>Due Date</th>
+            <th>Assignment</th><th>Requirements</th><th>Simulator</th><th>Score</th><th>Due Date</th>
         </tr>
         {% for assignment in assignments %}
         <tr>
-            <td>{{assignment.name}}</td>
-            <td>-----------</td>
-            <td>-----------</td>
+            <td>{{assignment.subject}}</td>
+            <td>{{assignment.describtion}}</td>
+            <td>{{assignment.simulator}}</td>
             <td>{{assignment.score}}</td>
             <td>{{assignment.dueDate}}</td>
         </tr>

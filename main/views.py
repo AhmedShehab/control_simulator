@@ -114,15 +114,34 @@ def student(request):
         return HttpResponseRedirect(reverse("home")) 
 
 def instructor(request):
-    try:
-        user=request.user    
-        instructor= Instructor.objects.get(credentials=user)
-        return render(request,"main/instructor.html",{
-            "instructor":instructor,
-            
-        })
-    except:
-        return HttpResponseRedirect(reverse("home")) 
+    if request.POST: 
+        # Reminder: Check if there are missing fields
+        sim = request.POST.get("sim")
+        desc = request.POST.get("desc")
+        due = request.POST.get("due")
+        subject = request.POST.get("subject")
+        assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,describtion=desc,score=5,instructor=request.user.username)
+        assign.save()
+        return HttpResponseRedirect(reverse("instructor")) 
+    else:
+        assignments = []
+        simulators=[]
+        assignment=Assignment.objects.filter(instructor=request.user.username)
+        i=0
+        for something in assignment:
+            assignments.append(something)
+        for choice in Assignment.simulator_choices:
+            simulators.append(choice[0])
+        try:
+            user=request.user    
+            instructor= Instructor.objects.get(credentials=user)
+            return render(request,"main/instructor.html",{
+                "instructor":instructor,
+                "assignments": assignments,
+                "simulators": simulators
+            })
+        except:
+            return HttpResponseRedirect(reverse("home")) 
 
 
 def cruise(request):
