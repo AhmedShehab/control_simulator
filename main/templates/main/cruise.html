@@ -1,1 +1,22 @@
 {% extends 'main/layout.html' %}
+{% load static%}
+{%block head%}
+    <title>Cruise Control Simulator</title>
+    <meta charset="utf-8">     
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">     
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"></script>
+{% endblock head%}
+{%block body%}
+ <div>
+        Disable Animation <input type="checkbox" id="animation">
+    </div>
+    <div>
+        <button onclick="sim({{speed_samples}});">Run</button>
+    </div>
+    <div class = 'container'>
+        <canvas id="myChart"></canvas>
+    </div>
+    <script src=" {% static 'main/script/chart.js' %}"></script>
+{% endblock body%}

@@ -1,8 +1,9 @@
 {% extends 'main/layout.html' %}
 {% load static %}
-{% block style %}
+{% block head %}
+<title>Student Profile</title>
 <link href="{% static 'main/css/profile.css' %}" rel="stylesheet">
-{% endblock style %}
+{% endblock head %}
 {% block body %}
 <div class="profile" style="display:flex;">
     <span><img src="{% static 'main/images/profile.png' %}" alt="Student Photo" style="width:100px;height:100px"></span>

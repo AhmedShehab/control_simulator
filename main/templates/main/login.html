@@ -1,11 +1,9 @@
 {% extends 'main/layout.html' %}
 {% load static %}
-{% block title %}
+{% block head %}
 <title>Login</title>
-{% endblock title %}
-{% block style %}
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
-{% endblock style %}
+{% endblock head %}
 {% block body %}
     <div class="container">
         <form class="cred_form" action="{% url 'login' %}" method="POST">
@@ -24,7 +22,7 @@
             {% endif %}
             <a href="#" class="signup">Forgot password?</a>
             <br>
-            <button class="button" type="submit" style="margin-right: 20px;">Login</button>
+            <button class="button" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Login</button>
             <br>
             <a class="signup" href="{% url 'register' %}" >Don't have an account ? Sign Up</a>
         </form>

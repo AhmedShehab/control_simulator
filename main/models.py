@@ -22,6 +22,7 @@ class Assignment(models.Model):
         ("Servo Motor","Servo Motor")
     ]
     simulator = models.CharField(max_length=64,choices=simulator_choices,null=True) # Remove Null= True later
+    
     def __str__(self):
         return f"{self.subject}: {self.dueDate}"
 # Course Model
@@ -30,7 +31,7 @@ class Course(models.Model):
     code=models.UUIDField(primary_key=True,default=uuid.uuid4) #Reminder: add editable=False later.
     instructor=models.ForeignKey(User, on_delete=models.CASCADE,related_name="courses")
     students=models.ManyToManyField(User,related_name="students",blank=True)
-
+    assignments=models.ManyToManyField(Assignment)
     def __str__(self):
         return f"{self.name}: {self.code}"
 # Student Model 

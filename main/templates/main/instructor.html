@@ -1,9 +1,10 @@
 {% extends 'main/layout.html' %}
 {% load static %}
-{% block style %}
+{% block head %}
+<title>Instructor Profile</title>
 <link href="{% static 'main/css/profile.css' %}" rel="stylesheet">
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
-{% endblock style %}
+{% endblock head %}
 {% block body %}
 <div class="assign_form" style="display: none;" id="myForm">
     <div class="assign_child">
@@ -25,7 +26,7 @@
                 {% if message %}
                         <h5 style="color: red;">{{message}}</h5>
                 {% endif %}
-                <button class="button" onclick="closeForm()">Cancel</button>
+                <button type="button" class="button" onclick="closeForm()">Cancel</button>
                 <button class="button" type="submit">Save</button>
             </form>
     </div>
@@ -35,32 +36,39 @@
     <span><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo" style="width:100px;height:100px"></span>
     <span><h4>{{instructor.credentials.username}}</h4><h4>Major:  <small style="color: black;">{{instructor.major}}</small></h4></span>
 </div>
-<div class="profile" style="display:flex;" id="assignment" onclick="openForm()">
-    <span><img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo" style="width:25px;height:25px"></span>
-    <span><h6>Create a new assignment</h6></span>
+<div class="profile" style="display:flex;" id="assignment" >
+    <span onclick="openForm()"><img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo" style="width:25px;height:25px"></span>
+    <span onclick="openForm()"><h6>Create a new assignment</h6></span>
 </div>
+<div class="profile">
+    <h5 style="margin-top: -40px">Show results for: </h5>
+    <form action="{% url 'instructor' %}" method="POST">
+    {% csrf_token %}
+    Course:
+    <select name="course" style=" border: green solid 1px; border-radius: 10px;outline:none">
+        {% for course in courses %}
+            <option value="{{course.name}}">{{course.name}}</option>
+        {% endfor %}
+    </select>
+    Assignmet:
+    <select name="assign" style=" border: green solid 1px; border-radius: 10px;outline:none">
+        {% for assignment in assignments %}
+            <option value="{{assignment.subject}}">{{assignment.subject}}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" style="color: white;border: white solid 1px;border-radius: 10px;background-color: green;padding: 4px;outline: none;">Show</button>
+</form>
+</div>
+    
 <table class="table">
         <tr>
-            <th>Assignment</th><th>Requirements</th><th>Simulator</th><th>Score</th><th>Due Date</th>
+            <th>Students</th><th>Submission</th><th>Score</th><th>Date Submitted</th><th>Due Date</th>
         </tr>
-        {% for assignment in assignments %}
+        {% for student in students %}
         <tr>
-            <td>{{assignment.subject}}</td>
-            <td>{{assignment.describtion}}</td>
-            <td>{{assignment.simulator}}</td>
-            <td>{{assignment.score}}</td>
-            <td>{{assignment.dueDate}}</td>
+            <td>{{student}}</td>
         </tr>
         {% endfor %}
     </table>
-    <script>
-            function openForm() {
-                document.getElementById("myForm").style.display = "block";
-                window.scroll(0,92);
-            }
-
-            function closeForm() {
-                document.getElementById("myForm").style.display = "none";
-            }
-    </script>
+    <script src="{% static 'main/script/assign.js' %}"></script>
 {% endblock body %}

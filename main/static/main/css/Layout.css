@@ -4,8 +4,12 @@
     padding: 2px 0;
     color: #28a745;
 }
-html{
+html,body{
     scroll-behavior: smooth;
+}
+body{
+    max-width: 100%; 
+    overflow-x: hidden;
 }
 .nav
 {
