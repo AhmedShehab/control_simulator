@@ -9,6 +9,10 @@ from uuid import UUID
 def home(request):
     return render(request, "main/home.html")
 
+def test(request):
+    return render(request, "main/test.html")
+
+
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
