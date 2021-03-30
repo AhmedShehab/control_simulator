@@ -3,7 +3,6 @@
 {% block head %}
 <title>Register</title>
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
-<script src="{% static 'main/script/register.js' %}"></script>
 {% endblock head %}
 {% block body %}
 <div class="studentInstructorGrid" id="studInstForm">
@@ -79,5 +78,7 @@
         <br>
         <button class="button" type="submit" name="instructor" value="1">Sign up</button>
     </form>
+    
+<script src="{% static 'main/script/register.js' %}"></script>
 </div>
 {% endblock body %}
