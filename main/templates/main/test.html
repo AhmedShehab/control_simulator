@@ -1,107 +1,128 @@
 {% extends 'main/layout.html' %}
-{% block title %}
+{% load static %}
+{% block head %}
 <title>Design Test</title>
-{% endblock title %}
+<link href="{% static 'main/css/test.css' %}" rel="stylesheet">
+<link href="{% static 'main/css/Layout.css' %}" rel="stylesheet">
+{% endblock head %}
 {% block body %}
-<script>
-    window.onload = function () {
-    var omega = document.getElementById("omega").value;
-    var mag = document.getElementById("mag").value;
-    var ph = document.getElementById("ph").value;
-    omega = omega.match(/\d+(?:\.\d+)?/g).map(Number);
-    ph = ph.match(/\d+(?:\.\d+)?/g).map(Number);
-    mag = mag.match(/\d+(?:\.\d+)?/g).map(Number);
-    console.log(omega[0], omega[1],omega[2],omega[998],omega[999]);
-    console.log(ph[0], ph[1],ph[2],ph[998],ph[999]);
-    console.log(mag[0], mag[1],mag[2],mag[998],mag[999]);
-    var limit = omega.length;
-    var data = [];
-    var dataSeries = { type: "line" };
-    var dataPoints = [];
-    for (var i = 0; i < limit; i += 1) {
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <script src="{% static 'main/script/bode.js' %}"></script>
+    <h1 class="test" style="font-weight: bold;">{{name}}:</h1>
+    <div class="sys_name ">
+        <div style="text-align: left;">
+           $$(Gs) = { {{numerator}} \over {{denominator}}} \\ $$ 
+        </div>
+        <h2 style=" display: inline;">Controller:</h2>
+        <select class="form-select form-select-lg mb-3 dropdown" style="display: inline; margin-bottom: 1%;" aria-label=".form-select-lg example" onchange="display()" id="selector">
+            <option selected>Open this select menu</option>
+            <option value="P">P</option>
+            <option value="PI">PI</option>
+            <option value="PD">PD</option>
+            <option value="PID">PID</option>
+            <option value="lag">Lag</option>
+            <option value="lead">Lead</option>
+            <option value="laglead">Lag-Lead</option>
+          </select>
+        <div id="P" class="no" style="display: none;">
+            <form class="cred_form" action="{% url 'test' %}" method="POST">
+                {% csrf_token %}
+                <br> <h5 style="display: inline-block;">P:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="p">
+                <br>
+                <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+            </form>
+        </div>
+        <div id="PI" class="no" style="display: none;">
+            <form class="cred_form" action="{% url 'test' %}" method="POST">
+                {% csrf_token %}
+                <br> <h5 style="display: inline-block;">P:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="p">
+                <br> <h5 style="display: inline-block;">I:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="i">
+                <br>
+                <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+            </form>
+        </div>
+        <div id="PD" class="no" style="display: none;">
+            <form class="cred_form" action="{% url 'test' %}" method="POST">
+                {% csrf_token %}
+                <br> <h5 style="display: inline-block;">P:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="p">
+                <br> <h5 style="display: inline-block;">D:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="d">
+                <br>
+                <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+            </form>
+        </div>
+        <div id="PID" class="no" style="display: none;">
+            <form class="cred_form" action="{% url 'test' %}" method="POST">
+                {% csrf_token %}
+                <br> <h5 style="display: inline-block;">P:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="p">
+                <br> <h5 style="display: inline-block;">I:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="i">
+                <br> <h5 style="display: inline-block;">D:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="d">
+                <br>
+                <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+            </form>
+        </div>
+        <div id="lag" class="no" style="display: none;">
+            <form class="cred_form" action="{% url 'test' %}" method="POST">
+                {% csrf_token %}
+                <br> <h5 style="display: inline-block;">Zero:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="zero">
+                <br> <h5 style="display: inline-block;">Pole:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="pole">
+                <br> <h5 style="display: inline-block;">Gain:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="gain">
+                <br>
+                <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+            </form>
+        </div>
+        <div id="lead" class="no" style="display: none;">
+            <form class="cred_form" action="{% url 'test' %}" method="POST">
+                {% csrf_token %}
+                <br> <h5 style="display: inline-block;">Zero:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="zero">
+                <br> <h5 style="display: inline-block;">Pole:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="pole">
+                <br> <h5 style="display: inline-block;">Gain:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="gain">
+                <br>
+                <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+            </form>
+        </div>
+        <div id="laglead" class="no" style="display: none;">
+            <form class="cred_form" action="{% url 'test' %}" method="POST">
+                {% csrf_token %}
+                <br> <h5 style="display: inline-block;">Zero:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="zero">
+                <br> <h5 style="display: inline-block;">Pole:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="pole">
+                <br> <h5 style="display: inline-block;">Gain:</h5>
+                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="gain">
+                <br>
+                <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+            </form>
+        </div>
         
-        dataPoints.push({
-            x: omega[i],
-            y: mag[i]
-        });
-    }
-    dataSeries.dataPoints = dataPoints;
-    data.push(dataSeries);
+
+    </div>
+    <div style="width: 65%; float: left;">
+        <div id="Magnitude" style="height: 300px; width: 100%;"></div>
+        <br>
+        <div id="Phase" style="height: 300px; width: 100%;"></div> 
+    </div>
+ 
     
     
-    var data2 = [];
-    var dataSeries = { type: "line" };
-    var dataPoints = [];
-    for (var i = 0; i < limit; i += 1) {
-        
-        dataPoints.push({
-            x: omega[i],
-            y: ph[i]
-        });
-    }
-    dataSeries.dataPoints = dataPoints;
-    data2.push(dataSeries);
-    var m = {
-        zoomEnabled: true,
-        animationEnabled: true,
-        theme: "light",
-        title: {
-            text: "Bode Diagram"
-        },
-        axisX:{
-            logarithmic: true,
-            title: "Frequency (Log)",
-            gridThickness: 1
-           
-        },
-        axisY: {
-            lineThickness: 1,
-            title: "Magnitude dB",
-            
-        },
-        data: data
-        
-        
-    };
-    var p = {
-        zoomEnabled: true,
-        animationEnabled: true,
-        theme: "light",
-        pointStyle:'dash',
-        title: {
-        },
-        axisX:{
-            logarithmic: true,
-            title: "Frequency (Log)",
-            gridThickness: 1
-           
-        },
-        axisY: {
-            lineThickness: 1,
-            title: "Phase",
-            
-        },
-        data: data2  
-        
-    };
-    
-    var chartM = new CanvasJS.Chart("Magnitude", m);
-    chartM.render();
-    var chartP = new CanvasJS.Chart("Phase", p);
-    chartP.render();
-    }
-    </script>
-    <form class="cred_form" action="{% url 'test' %}" method="POST">
-        {% csrf_token %}
-        <input type="text" placeholder="Enter number" name="send">
-        <button class="button" type="submit" name="s" value="1">Send</button>
-    </form>
-    <h1> {{data}}</h1>
     <input hidden name="omega" value="{{omega}}" id =omega>
     <input hidden name="ph" value="{{ph}}" id =ph>
     <input hidden name="mag" value="{{mag}}" id =mag>
-    <div id="Magnitude" style="height: 300px; width: 100%;"></div>
-    <br>
-    <div id="Phase" style="height: 300px; width: 100%;"></div>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>    
+
 {% endblock body %}

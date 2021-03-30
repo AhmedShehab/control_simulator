@@ -1,0 +1,10 @@
+.function, .sys_name{
+    text-align: left; 
+    float: left;
+    display: block;
+}
+.sys_name{
+    width: 32%;
+    float: left;
+    margin-left: 2%;
+}
