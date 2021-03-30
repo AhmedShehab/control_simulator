@@ -3,18 +3,38 @@
 {% block head %}
 <title>Register</title>
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
+<script src="{% static 'main/script/register.js' %}"></script>
 {% endblock head %}
 {% block body %}
-<div class="container">
+<div class="studentInstructorGrid" id="studInstForm">
+    <div style="grid-column: 1 / -1; padding-left: 45%;margin-top: 2px;">
+    <h1 style="color: green;">Sign up</h1>
+    </div>
+    <div class="studentGridItem" onclick="openStudentForm()" >
+        <div class="child1">
+            <h3 style="color: white;width: 250px; padding: 20px;">Student</h3>
+            <img class="studImg" src="{% static 'main/images/studentIcon.png' %}" alt="Student Image">
+        </div> 
+        </div>
+    <div class="instructorGridItem" onclick="openInstructorForm()">
+        <div class="child2">
+            <h3 style="color: white;width: 250px; padding: 20px;">Instructor</h3>
+            <img class="instImg" src="{% static 'main/images/instructorIcon.png' %}" alt="Professor Image">
+        </div>
+        </div>
+</div>
+</div>
+<div class="container" id="studentForm" style="display: none;">
     <form class="cred_form" action="{% url 'register' %}" method="POST">
-        <h1 style="color: green;">Sign up</h1>
         {% csrf_token %}
-        {% comment "Add First and Last name Later" %}Add First and Last name Later{% endcomment %} 
+        <h1 style="color: green;">Sign up</h1>
         <input class="cred" type="text" placeholder="Username" name="username">
         <br>
-        <input class="cred" type="email" placeholder="Email" name="email">
+        <input class="cred" type="text" placeholder="First Name" name="first">
         <br>
-        <input class="cred" type="text" placeholder="Major" name="major">
+        <input class="cred" type="text" placeholder="Last Name" name="last">
+        <br>
+        <input class="cred" type="email" placeholder="Email" name="email">
         <br>
         <input class="cred" type="text" placeholder="Course Code" name="code">
         <br>
@@ -28,8 +48,36 @@
         <input type="checkbox" name="agree">
         <span style="color: green;margin-right: 40px;">I agree to the terms and privacy policy</span>
         <br>
-        <button class="button" type="submit" name="student" value="1">Sign up as a student</button>
-        <button class="button" type="submit" name="instructor" value="1">Sign up as an instructor</button>
+        <button class="button" type="submit" name="student" value="1">Sign up</button>
+        
+    </form>
+</div>
+<div class="container" id="instructorForm" style="display: none;">
+    <form class="cred_form" action="{% url 'register' %}" method="POST">
+        <h1 style="color: green;">Sign up</h1>
+        {% csrf_token %}
+        {% comment "Add First and Last name Later" %}Add First and Last name Later{% endcomment %} 
+        <input class="cred" type="text" placeholder="Username" name="username">
+        <br>
+        <input class="cred" type="text" placeholder="First Name" name="first">
+        <br>
+        <input class="cred" type="text" placeholder="Last Name" name="last">
+        <br>
+        <input class="cred" type="email" placeholder="Email" name="email">
+        <br>
+        <input class="cred" type="text" placeholder="Major" name="major">
+        <br>
+        <input class="cred" type="password" placeholder="Password" name="password">
+        <br>
+        <input class="cred" type="password" placeholder="Confirm Password" name="confirmation">
+        <br>
+        {% if message %}
+        <h5 style="color: red;">{{message}}</h5>
+        {% endif %}
+        <input type="checkbox" name="agree">
+        <span style="color: green;margin-right: 40px;">I agree to the terms and privacy policy</span>
+        <br>
+        <button class="button" type="submit" name="instructor" value="1">Sign up</button>
     </form>
 </div>
 {% endblock body %}

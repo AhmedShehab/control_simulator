@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User,Instructor,Student,Course,Assignment
+from .models import User,Instructor,Student,Course,Assignment,Submission    
 from uuid import UUID
 # Create your views here.
 def home(request):
@@ -15,15 +15,17 @@ def register(request):
         return HttpResponseRedirect(reverse("home"))
     except :
         if request.method == "POST":
-            username = request.POST["username"]
-            major= request.POST["major"]
-            email = request.POST["email"]
-            code=request.POST["code"]
+            username = request.POST.get("username")
+            first=request.POST.get("first")
+            last=request.POST.get("last")
+            major= request.POST.get("major")
+            email = request.POST.get("email")
+            code=request.POST.get("code")
             agree=request.POST.get("agree")
-            password = request.POST["password"]
-            confirmation = request.POST["confirmation"]
+            password = request.POST.get("password")
+            confirmation = request.POST.get("confirmation")
             # Ensure all fields are filled correctly
-            if not password or not email or not username:
+            if not password or not email or not username or not first or not last:
                 return render(request, "main/register.html", {
                     "message": "Make sure all fields are filled."
                 })
@@ -46,7 +48,7 @@ def register(request):
             # If the user is an instructor
             if request.POST.get("instructor"):
                 try:
-                    user = User.objects.create_user(username, email, password,status="i")
+                    user = User.objects.create_user(username, email, password,status="i",first_name=first,last_name=last)
                     user.save()
                     instructor=Instructor.objects.create(credentials=user,major=major)
                     instructor.save()
@@ -64,7 +66,7 @@ def register(request):
                         "message": "Make sure that your course code is valid."
                     })
                     course=Course.objects.get(code=code)
-                    user = User.objects.create_user(username, email, password,status="s")
+                    user = User.objects.create_user(username, email, password,status="s",first_name=first,last_name=last)
                     user.save()
                     student=Student.objects.create(credentials=user,courses=course,major=major)
                     student.save()
@@ -101,9 +103,8 @@ def logout_view(request):
 def student(request):
     try:
         assignments=[]
-        user=request.user
-        student=Student.objects.get(credentials=user)
-        for something in student.assignments.all():
+        student=Student.objects.get(credentials=request.user)
+        for something in student.courses.assignments.all():
             assignments.append(something)
         return render(request,"main/student.html",{
             "student":student,
@@ -114,11 +115,11 @@ def student(request):
 
 def instructor(request):
     try:    
-            instructor= Instructor.objects.get(credentials=request.user)
+        instructor= Instructor.objects.get(credentials=request.user)
     except:
-            return HttpResponseRedirect(reverse("home"))
-    courses = []
-    assignments = []
+        return HttpResponseRedirect(reverse("home"))
+    courses=[]
+    assignments=[]
     simulators=[]
     course=Course.objects.filter(instructor=request.user)
     assignment=Assignment.objects.filter(instructor=request.user)
@@ -132,11 +133,20 @@ def instructor(request):
         if request.POST.get("sim"):
             # Reminder: Check if there are missing fields
             sim = request.POST.get("sim")
+            course = request.POST.get("course")
             desc = request.POST.get("desc")
             due = request.POST.get("due")
-            subject = request.POST.get("subject")
-            assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,describtion=desc,score=5,instructor=request.user.username)
+            subject = request.POST.get("assignmentSubject")
+            assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,describtion=desc,score=5,instructor=request.user.username) #Scoere Adjust
             assign.save()
+            course=Course.objects.get(name=course)
+            course.assignments.add(assign)
+            return HttpResponseRedirect(reverse("instructor"))
+        if request.POST.get("courseName"):
+        # Reminder: Check if there are missing fields
+            courseName = request.POST.get("courseName")
+            course=Course.objects.create(name=courseName,instructor=request.user)
+            course.save
             return HttpResponseRedirect(reverse("instructor"))
         elif request.POST.get("course"):
             students=[]
@@ -145,11 +155,13 @@ def instructor(request):
             assignment = request.POST.get("assign")
             course=Course.objects.get(name=course)
             student= Student.objects.filter(courses=course)
-            for something in student:
-                students.append(something)
+            assign= Assignment.objects.filter(subject=assignment)
+            for name in student:
+                submission=Submission.objects.filter(student=name,assignment__in=assign)
             return render(request,"main/instructor.html",{
                 "instructor":instructor,
                 "students":students,
+                "submissions":submission,
                 "courses":courses,
                 "assignments":assignments,
                 "simulators":simulators,

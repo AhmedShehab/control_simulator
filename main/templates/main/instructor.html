@@ -6,69 +6,107 @@
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
 {% endblock head %}
 {% block body %}
-<div class="assign_form" style="display: none;" id="myForm">
+<div class="assign_form" style="display: none;" id="assignmentForm">
     <div class="assign_child">
         <form class="cred_form" action="{% url 'instructor' %}" method="POST">
             <h1 style="color: green;">New Assignment</h1>
-                {% csrf_token %}
-                <input class="cred" type="text" placeholder="Subject" name="subject">
-                <br>
-                <select class="cred" placeholder="Simulator" name="sim">
-                    {% for simulator in simulators %}
-                        <option value="{{simulator}}">{{simulator}}</option>
-                    {% endfor %}
-                </select>
-                <br>
-                <input class="cred" type="date" placeholder="dueDate" name="due">
-                <br>
-                <textarea cols="30" rows="3" class="cred" type="textarea" placeholder="Describtion" name="desc"></textarea>
-                <br>
-                {% if message %}
-                        <h5 style="color: red;">{{message}}</h5>
-                {% endif %}
-                <button type="button" class="button" onclick="closeForm()">Cancel</button>
-                <button class="button" type="submit">Save</button>
-            </form>
+            {% csrf_token %}
+            <select class="cred" placeholder="Course" name="course">
+                {% for course in courses %}
+                    <option value="{{course.name}}">{{course.name}}</option>
+                {% endfor %}
+            </select>
+            <input class="cred" type="text" placeholder="Subject" name="assignmentSubject">
+            <br>
+            <select class="cred" placeholder="Simulator" name="sim">
+                {% for simulator in simulators %}
+                <option value="{{simulator}}">{{simulator}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <input class="cred" type="date" placeholder="dueDate" name="due">
+            <br>
+            <textarea cols="30" rows="3" class="cred" type="textarea" placeholder="Describtion" name="desc"></textarea>
+            <br>
+            {% if message %}
+            <h5 style="color: red;">{{message}}</h5>
+            {% endif %}
+            <button type="button" class="button" onclick="closeAssignmentForm()">Cancel</button>
+            <button class="button" type="submit">Save</button>
+        </form>
     </div>
+</div>
+<div class="assign_form" style="display: none;" id="courseForm">
+    <div class="assign_child">
+        <form class="cred_form" action="{% url 'instructor' %}" method="POST">
+            <h1 style="color: green;">New Course</h1>
+            {% csrf_token %}
+            <input class="cred" type="text" placeholder="courseName" name="courseName">
+            <br>
+            {% if message %}
+            <h5 style="color: red;">{{message}}</h5>
+            {% endif %}
+            <button type="button" class="button" onclick="closeCourseForm()">Cancel</button>
+            <button class="button" type="submit">Save</button>
+        </form>
     </div>
-    
+</div>
+
 <div class="profile" style="display:flex;">
-    <span><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo" style="width:100px;height:100px"></span>
-    <span><h4>{{instructor.credentials.username}}</h4><h4>Major:  <small style="color: black;">{{instructor.major}}</small></h4></span>
+    <span><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo"
+            style="width:100px;height:100px"></span>
+    <span>
+        <h4>{{instructor.credentials.first_name}} {{instructor.credentials.last_name}}</h4>
+        <h4>Major: <small style="color: black;">{{instructor.major}}</small></h4>
+    </span>
 </div>
-<div class="profile" style="display:flex;" id="assignment" >
-    <span onclick="openForm()"><img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo" style="width:25px;height:25px"></span>
-    <span onclick="openForm()"><h6>Create a new assignment</h6></span>
+<div class="profile" style="display:flex;" id="assignment">
+    <span onclick="openCourseForm()"><img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo"
+            style="width:25px;height:25px"></span>
+    <span onclick="openCourseForm()">
+        <h6>New Course</h6>
+    </span>
+    <span onclick="openAssignmentForm()"><img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo"
+            style="width:25px;height:25px"></span>
+    <span onclick="openAssignmentForm()">
+        <h6>New Assignment</h6>
+    </span>
 </div>
-<div class="profile">
-    <h5 style="margin-top: -40px">Show results for: </h5>
+<div class="profile" style="margin-top: -10px;">
     <form action="{% url 'instructor' %}" method="POST">
-    {% csrf_token %}
-    Course:
-    <select name="course" style=" border: green solid 1px; border-radius: 10px;outline:none">
-        {% for course in courses %}
+        {% csrf_token %}
+        Course:
+        <select name="course" style=" border: green solid 1px; border-radius: 10px;outline:none">
+            {% for course in courses %}
             <option value="{{course.name}}">{{course.name}}</option>
-        {% endfor %}
-    </select>
-    Assignmet:
-    <select name="assign" style=" border: green solid 1px; border-radius: 10px;outline:none">
-        {% for assignment in assignments %}
+            {% endfor %}
+        </select>
+        Assignmet:
+        <select name="assign" style=" border: green solid 1px; border-radius: 10px;outline:none">
+            {% for assignment in assignments %}
             <option value="{{assignment.subject}}">{{assignment.subject}}</option>
-        {% endfor %}
-    </select>
-    <button type="submit" style="color: white;border: white solid 1px;border-radius: 10px;background-color: green;padding: 4px;outline: none;">Show</button>
-</form>
+            {% endfor %}
+        </select>
+        <button type="submit"
+            style="color: white;border: white solid 1px;border-radius: 10px;background-color: green;padding: 4px;outline: none;">Show Results</button>
+    </form>
 </div>
-    
+
 <table class="table">
-        <tr>
-            <th>Students</th><th>Submission</th><th>Score</th><th>Date Submitted</th><th>Due Date</th>
-        </tr>
-        {% for student in students %}
-        <tr>
-            <td>{{student}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <script src="{% static 'main/script/assign.js' %}"></script>
+    <tr>
+        <th>Assignment</th>
+        <th>Students</th>
+        <th>Score</th>
+        <th>Date Submitted / Due</th>
+    </tr>
+    {% for submission in submissions %}
+    <tr>
+        <td>{{submission.assignment.subject}}</td>
+        <td>{{submission.student}}</td>
+        <td>{{submission.score}}/{{submission.assignment.score}}</td>
+        <td>{{submission.dateSubmitted}}/{{submission.assignment.dueDate}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<script src="{% static 'main/script/instructor.js' %}"></script>
 {% endblock body %}
