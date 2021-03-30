@@ -25,7 +25,6 @@ def test(request):
                 "mag": mag
             })
 
-
 def register(request):
     try: # Check if already logged in and have an account
         user = User.objects.get(username=request.user)
@@ -41,29 +40,24 @@ def register(request):
             agree=request.POST.get("agree")
             password = request.POST.get("password")
             confirmation = request.POST.get("confirmation")
-            # Ensure all fields are filled correctly
-            if not password or not email or not username or not first or not last:
-                return render(request, "main/register.html", {
-                    "message": "Make sure all fields are filled."
-                })
-            # Ensure password matches confirmation
-            if password != confirmation:
-                return render(request, "main/register.html", {
-                    "message": "Passwords must match."
-                })
-            if request.POST.get("student") and not code:
-                return render(request, "main/register.html", {
-                    "message": "Make sure to enter your course code correctly."
-                })
-
-            # Ensure that the user agrees to all terms and privacy policy
-            if not request.POST.get("agree")=="on":
-                return render(request, "main/register.html", {
-                    "message": "You need to agree on the terms in order to sign up."
-                })
             # Attempt to create new user
             # If the user is an instructor
             if request.POST.get("instructor"):
+                # Ensure all fields are filled correctly
+                if not password or not email or not username or not first or not last:
+                    return render(request, "main/register.html", {
+                        "instMSG": "Make sure all fields are filled."
+                    })
+                # Ensure password matches confirmation
+                if password != confirmation:
+                    return render(request, "main/register.html", {
+                        "instMSG": "Passwords must match."
+                    })
+                # Ensure that the user agrees to all terms and privacy policy
+                if not request.POST.get("agree")=="on":
+                    return render(request, "main/register.html", {
+                        "instMSG": "You need to agree on the terms in order to sign up."
+                    })
                 try:
                     user = User.objects.create_user(username, email, password,status="i",first_name=first,last_name=last)
                     user.save()
@@ -71,16 +65,31 @@ def register(request):
                     instructor.save()
                 except IntegrityError:
                     return render(request, "main/register.html", {
-                        "message": "Username already taken."
+                        "instMSG": "Username already taken."
                     })
             # If the user is a student
             elif request.POST.get("student"):
+                # Ensure all fields are filled correctly
+                if not password or not email or not username or not first or not last:
+                    return render(request, "main/register.html", {
+                        "studMSG": "Make sure all fields are filled."
+                    })
+                # Ensure password matches confirmation
+                if password != confirmation:
+                    return render(request, "main/register.html", {
+                        "studMSG": "Passwords must match."
+                    })
+                # Ensure that the user agrees to all terms and privacy policy
+                if not request.POST.get("agree")=="on":
+                    return render(request, "main/register.html", {
+                        "studMSG": "You need to agree on the terms in order to sign up."
+                   })  
                 try: # Creating New User
                     try : # Check if the Course Code is valid.
                         temp = UUID(code,version=4)
                     except:
                         return render(request, "main/register.html", {
-                        "message": "Make sure that your course code is valid."
+                        "studMSG": "Make sure that your course code is valid."
                     })
                     course=Course.objects.get(code=code)
                     user = User.objects.create_user(username, email, password,status="s",first_name=first,last_name=last)
@@ -89,7 +98,11 @@ def register(request):
                     student.save()
                 except IntegrityError:
                     return render(request, "main/register.html", {
-                        "message": "Username already taken."
+                        "studMSG": "Username already taken."
+                    })
+                if not code:
+                    return render(request, "main/register.html", {
+                        "studMSG": "Make sure to enter your course code correctly."
                     })
             login(request, user)
             return HttpResponseRedirect(reverse("home"))
@@ -121,7 +134,9 @@ def student(request):
     try:
         assignments=[]
         student=Student.objects.get(credentials=request.user)
-        for something in student.courses.assignments.all():
+        for something in student.courses.assignments.filter():
+            for sub in Submission.objects.filter(student=student):
+                print(something)
             assignments.append(something)
         return render(request,"main/student.html",{
             "student":student,
