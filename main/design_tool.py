@@ -1,6 +1,7 @@
 def control():
     import numpy as np
     import control.matlab as control
+    import sys
 
     # Define plant transfer function
     Gs = control.tf(36, [1, 3.6, 0])
@@ -13,6 +14,21 @@ def control():
     print(f"Frequency for Gain Margin = {wg} radians/sec")
     print(f"Frequecny for Phase Margin = {wp} radians/sec")
     mag, phase, omega = control.bode(Gs)
+    print(mag.shape)
+    print(phase.shape)
+    print(omega.shape)
+    mag = 20 * np.log10(mag)
+    phase= np.degrees(phase)
+    omega = omega.T
+    phase = phase.T
+    mag = mag.T
+    
+    omega= list(omega)
+    phase= list(phase)
+    mag= list(mag)
+    
+#mag = 20*np.log(mag,10)
+
 
     # Compensator in zpk form
     z = [-0.2]
@@ -32,4 +48,4 @@ def control():
     print(f"Frequency for Gain Margin = {wg} radians/sec")
     print(f"Frequecny for Phase Margin = {wp} radians/sec")
     mag_comp, phase_comp, omega_comp = control.bode(Gs, DsGs)
-    return Gs
+    return Gs, mag_comp, phase_comp, omega_comp, mag, phase, omega
