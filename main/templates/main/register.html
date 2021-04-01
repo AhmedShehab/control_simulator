@@ -5,10 +5,8 @@
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
 {% endblock head %}
 {% block body %}
+<h1 style="color: green;position: relative;left: 45%;margin-top: 2%;margin-bottom: -4%;">Sign up</h1>
 <div class="studentInstructorGrid" id="studInstForm">
-    <div style="grid-column: 1 / -1; padding-left: 45%;margin-top: 2px;">
-    <h1 style="color: green;">Sign up</h1>
-    </div>
     <div class="studentGridItem" onclick="openStudentForm()" >
         <div class="child1">
             <h3 style="color: white;width: 250px; padding: 20px;">Student</h3>
@@ -26,7 +24,6 @@
 <div class="container" id="studentForm" style="display: none;">
     <form class="cred_form" action="{% url 'register' %}" method="POST">
         {% csrf_token %}
-        <h1 style="color: green;">Sign up</h1>
         <input class="cred" type="text" placeholder="Username" name="username">
         <br>
         <input class="cred" type="text" placeholder="First Name" name="first">
@@ -41,19 +38,17 @@
         <br>
         <input class="cred" type="password" placeholder="Confirm Password" name="confirmation">
         <br>
-        {% if message %}
-        <h5 style="color: red;">{{message}}</h5>
+        {% if studMSG %}
+        <h5 id="studMSG" style="color: red;">{{studMSG}}</h5>
         {% endif %}
         <input type="checkbox" name="agree">
         <span style="color: green;margin-right: 40px;">I agree to the terms and privacy policy</span>
         <br>
         <button class="button" type="submit" name="student" value="1">Sign up</button>
-        
     </form>
 </div>
 <div class="container" id="instructorForm" style="display: none;">
     <form class="cred_form" action="{% url 'register' %}" method="POST">
-        <h1 style="color: green;">Sign up</h1>
         {% csrf_token %}
         {% comment "Add First and Last name Later" %}Add First and Last name Later{% endcomment %} 
         <input class="cred" type="text" placeholder="Username" name="username">
@@ -70,15 +65,14 @@
         <br>
         <input class="cred" type="password" placeholder="Confirm Password" name="confirmation">
         <br>
-        {% if message %}
-        <h5 style="color: red;">{{message}}</h5>
+        {% if instMSG %}
+        <h5  id="instMSG" style="color: red;">{{instMSG}}</h5>
         {% endif %}
         <input type="checkbox" name="agree">
         <span style="color: green;margin-right: 40px;">I agree to the terms and privacy policy</span>
         <br>
         <button class="button" type="submit" name="instructor" value="1">Sign up</button>
     </form>
-    
 <script src="{% static 'main/script/register.js' %}"></script>
 </div>
 {% endblock body %}
