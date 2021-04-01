@@ -45,7 +45,7 @@ class Student(models.Model):
 # Instructor Model
 class Instructor(models.Model):
     credentials=models.ForeignKey(User, on_delete=models.CASCADE)
-    assignments=models.ManyToManyField(Assignment,related_name="asisgnments")
+    assignments=models.ManyToManyField(Assignment,related_name="assignments",blank=True)
     major=models.CharField(max_length=64,default="Not mentioned")
     # Write all instructor data rows here
     def __str__(self):

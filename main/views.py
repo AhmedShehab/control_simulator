@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from .models import User,Instructor,Student,Course,Assignment,Submission    
 from uuid import UUID
+import simplejson as json
 # Create your views here.
 def home(request):
     return render(request, "main/home.html")
@@ -108,7 +109,6 @@ def register(request):
             return HttpResponseRedirect(reverse("home"))
         else:
             return render(request, "main/register.html")
-
 def login_view(request):
     if request.method == "POST":
         # Attempt to sign user in
@@ -153,10 +153,16 @@ def instructor(request):
     courses=[]
     assignments=[]
     simulators=[]
+    courseAssignments=[] #Assignmentsn in each course 
+    courseAssignment={} #course:assignment pairs
+    assignmentSubmissions=[]
     course=Course.objects.filter(instructor=request.user)
     assignment=Assignment.objects.filter(instructor=request.user)
     for something in course:
-        courses.append(something)
+        for assign in something.assignments.all():
+            courseAssignments.append(assign.subject)
+        courseAssignment[something.name]=courseAssignments[:]
+        courseAssignments.clear()
     for something in assignment:
         assignments.append(something)    
     for choice in Assignment.simulator_choices:
@@ -189,7 +195,11 @@ def instructor(request):
             student= Student.objects.filter(courses=course)
             assign= Assignment.objects.filter(subject=assignment)
             for name in student:
-                submission=Submission.objects.filter(student=name,assignment__in=assign)
+                    submission= Submission.objects.filter(student=name,assignment__in=assign)
+            try:
+                print(submission)
+            except:
+                submission= ["Nothing Submitted Yet"]
             return render(request,"main/instructor.html",{
                 "instructor":instructor,
                 "students":students,
@@ -198,13 +208,13 @@ def instructor(request):
                 "assignments":assignments,
                 "simulators":simulators,
             })
-    else:
-            return render(request,"main/instructor.html",{
-                "instructor":instructor,
-                "courses": courses,
-                "assignments": assignments,
-                "simulators": simulators
-            }) 
+    else:   
+        return render(request,"main/instructor.html",{
+            "instructor":instructor,
+            "assignments": assignments,
+            "simulators": simulators,
+            "courseAssignment":courseAssignment,
+        }) 
 
 
 def cruise(request):

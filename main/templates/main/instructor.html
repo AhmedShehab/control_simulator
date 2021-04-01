@@ -76,22 +76,24 @@
     <form action="{% url 'instructor' %}" method="POST">
         {% csrf_token %}
         Course:
-        <select name="course" style=" border: green solid 1px; border-radius: 10px;outline:none">
-            {% for course in courses %}
-            <option value="{{course.name}}">{{course.name}}</option>
+        <select onselect="" id="courseSelect" name="course" style=" border: green solid 1px; border-radius: 10px;outline:none">
+            {% for course,value in courseAssignment.items %}
+            <option id="{{course}}" value="{{course}}">{{course}}</option>
             {% endfor %}
         </select>
         Assignmet:
         <select name="assign" style=" border: green solid 1px; border-radius: 10px;outline:none">
-            {% for assignment in assignments %}
-            <option value="{{assignment.subject}}">{{assignment.subject}}</option>
+            {% for course,values in courseAssignment.items %}
+                {% for value in values %}
+                <option id="{{course}}:{{value}}" value="{{value}}">{{value}}</option>
+                {% endfor %}
             {% endfor %}
         </select>
-        <button type="submit"
-            style="color: white;border: white solid 1px;border-radius: 10px;background-color: green;padding: 4px;outline: none;">Show Results</button>
     </form>
 </div>
-
+{% for object in courseAssignment.items %}
+       
+{% endfor %}
 <table class="table">
     <tr>
         <th>Assignment</th>
