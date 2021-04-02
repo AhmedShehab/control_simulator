@@ -11,6 +11,9 @@ from . import design_tool
 def home(request):
     return render(request, "main/home.html")
 
+def servomotor(request):
+    return render(request, "main/servomotor.html")
+
 def test(request):
     Gs, mag_comp, phase_comp, omega_comp, mag, phase, omega = design_tool.control()
     

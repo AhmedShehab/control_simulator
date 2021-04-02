@@ -10,5 +10,6 @@ urlpatterns = [
     path("logout/",views.logout_view,name="logout"),
     path("cruise/",views.cruise,name="cruise"),
     path("adaptive/",views.adaptive,name="adaptive"),
-    path("test/",views.test,name="test")
+    path("test/",views.test,name="test"),
+    path("servomotor/", views.servomotor, name="servomotor")
 ]

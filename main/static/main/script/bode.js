@@ -1,7 +1,7 @@
 
 window.onload = function () {
 var omega = document.getElementById("omega").value;
-var limit = omega.length;
+
 console.log(limit);
 
 var mag = document.getElementById("mag").value;
@@ -10,6 +10,7 @@ var ph = document.getElementById("ph").value;
 omega = omega.match(/-?\d+(?:\.\d+)?/g).map(Number);
 ph = ph.match(/-?\d+(?:\.\d+)?/g).map(Number);
 mag = mag.match(/-?\d+(?:\.\d+)?/g).map(Number);
+var limit = omega.length;
 // console.log(omega[0], omega[1],omega[2],omega[998],omega[999]);
 // console.log(ph[0], ph[1],ph[2],ph[998],ph[999]);
 // console.log(mag[0], mag[1],mag[2],mag[998],mag[999]);

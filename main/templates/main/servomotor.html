@@ -1,0 +1,37 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block head %}
+        <title>Servomotor Simulator</title>
+{% endblock head %}
+{% block body %}
+    <div class="container" id="simulatorForm">
+        <form class="cred_form">
+                <input class="cred" type="number" id="simulationTime" name="simulationTime" min="0" max="60" placeholder="Simulation time" required>
+            <br><br>
+            <div>
+                <label for="disturbanceLevel">Disturbance level</label>
+                <select class="cred" name="disturbanceLevel" id="disturbanceLevel" required>
+                    <option value="level1" >Level 1</option>
+                    <option value="level2" >Level 2</option>
+                    <option value="level3" >Level 3</option>
+                </select>
+            </div>
+            <br><br>
+            <input class="cred" type="number" id="intialSpeed" name="intialSpeed" placeholder="Intial speed (Km/h)" required>
+            <br><br>
+            <input class="cred" type="number" id="setPoint" name="setPoint" placeholder="Set point (Km/h)" required>
+            <br><br>
+            <input class="cred" type="number" id="kp" name="kp" placeholder="Kp - Proptional" required>
+            <br><br>
+            <input class="cred" type="number" id="ki" name="ki" placeholder="Ki - integral" required>
+            <br><br>
+            <input class="cred" type="number" id="kd" name="kd" placeholder="Kd - derivative" required>
+            <br><br>
+            <button class="button" type="submit" name="start" value="1">Start</button>
+            <input class="button" type="reset" value="Reset">
+            <br><br>
+            <button class="button" type="submit" name="Submit">Submit</button>
+        </form>
+    </div>
+    
+{% endblock body %}
