@@ -75,25 +75,23 @@
 <div class="profile" style="margin-top: -10px;">
     <form action="{% url 'instructor' %}" method="POST">
         {% csrf_token %}
-        Course:
-        <select onselect="" id="courseSelect" name="course" style=" border: green solid 1px; border-radius: 10px;outline:none">
+        <h4>See Student Submissions:</h4>
+        <select onchange="courseSelector({{courses}});" id="courseSelect" name="course" style=" border: green solid 1px; border-radius: 10px;outline:none">
+            <option disabled selected>Select a Course</option>
             {% for course,value in courseAssignment.items %}
-            <option id="{{course}}" value="{{course}}">{{course}}</option>
+            <option value="{{course}}">{{course}}</option>
             {% endfor %}
         </select>
-        Assignmet:
-        <select name="assign" style=" border: green solid 1px; border-radius: 10px;outline:none">
+        <select onchange="assignmentsSubmitted()" name="assign" id="assignmentSelect" style=" border: green solid 1px; border-radius: 10px;outline:none">
+            <option value="Select an Assignment" disabled selected>Select an Assignment</option>
             {% for course,values in courseAssignment.items %}
                 {% for value in values %}
-                <option id="{{course}}:{{value}}" value="{{value}}">{{value}}</option>
+                <option style="display: none;" class="{{course}}" value="{{value}}">{{value}}</option>
                 {% endfor %}
             {% endfor %}
         </select>
     </form>
 </div>
-{% for object in courseAssignment.items %}
-       
-{% endfor %}
 <table class="table">
     <tr>
         <th>Assignment</th>
@@ -101,12 +99,18 @@
         <th>Score</th>
         <th>Date Submitted / Due</th>
     </tr>
-    {% for submission in submissions %}
-    <tr>
-        <td>{{submission.assignment.subject}}</td>
-        <td>{{submission.student}}</td>
-        <td>{{submission.score}}/{{submission.assignment.score}}</td>
-        <td>{{submission.dateSubmitted}}/{{submission.assignment.dueDate}}</td>
+    {% for key,values in assignmentSubmission.items %}
+    <tr class="tr" id="{{key}}" style="display: none;">
+    {% if values %}
+    {% for value in values %}
+        <td>{{value.assignment.subject}}</td>
+        <td>{{value.student}}</td>
+        <td>{{value.score}}/{{value.assignment.score}}</td>
+        <td>{{value.dateSubmitted}}/{{value.assignment.dueDate}}</td>
+    {% endfor %}
+    {% else %}
+           <td><h3>No Submissions Yet</h3></td>
+    {% endif %}
     </tr>
     {% endfor %}
 </table>

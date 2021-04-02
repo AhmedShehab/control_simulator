@@ -7,7 +7,7 @@
 {% block body %}
 <div class="profile" style="display:flex;">
     <span><img src="{% static 'main/images/profile.png' %}" alt="Student Photo" style="width:100px;height:100px"></span>
-    <span><h4>{{student.credentials.first_name}} {{student.credentials.last_name}}</h4><h4>Major:  <small style="color: black;">{{student.major}}</small></h4><h4>Course Code:  <small style="color: black;">{{student.courses.code}}</small></h4></span>
+    <span><h4>{{student.credentials.first_name}} {{student.credentials.last_name}}</h4><h4>Course:  <small style="color: black;">{{student.courses.name}}</small></h4><h4>Course Code:  <small style="color: black;">{{student.courses.code}}</small></h4></span>
 </div>
 <div>
     <table class="table">
