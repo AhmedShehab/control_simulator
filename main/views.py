@@ -6,26 +6,41 @@ from django.urls import reverse
 from .models import User,Instructor,Student,Course,Assignment,Submission    
 from uuid import UUID
 import simplejson as json
+from . import design_tool
 # Create your views here.
 def home(request):
     return render(request, "main/home.html")
 
 def test(request):
     Gs, mag_comp, phase_comp, omega_comp, mag, phase, omega = design_tool.control()
-    
-    data = 1
+    print(omega_comp)
     if request.method == "POST":
-        data = request.POST["send"]
-        print(data)
-    data = int(data)*2
-    return render(request, "main/test.html", {
-                "data": data,
+        z = request.POST["z"]
+        p = request.POST["p"]
+        k = request.POST["k"]
+        return render(request, "main/test.html", {
+                
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
                 "name": 'Servo Motor',
                 "numerator": "3",
-                "denominator": "s^2 +1"
+                "denominator": "3 +1",
+                "mag_comp": mag_comp,
+                "ph_comp": phase_comp,
+                "omega_comp":omega_comp
+            })
+    return render(request, "main/test.html", {
+                
+                "omega": omega,
+                "ph": phase,
+                "mag": mag,
+                "name": 'Servo Motor',
+                "numerator": "3",
+                "denominator": "3s^2 +1",
+                "mag_comp": mag_comp,
+                "ph_comp": phase_comp,
+                "omega_comp":omega_comp
             })
 
 def register(request):
