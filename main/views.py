@@ -172,14 +172,20 @@ def instructor(request):
     courses=[]
     assignments=[]
     simulators=[]
-    courseAssignments=[] #Assignmentsn in each course 
+    courseAssignments=[] #Assignment in each course 
     courseAssignment={} #course:assignment pairs
-    assignmentSubmissions=[]
+    assignmentSubmissions=[] #Submissions in each assignment
+    assignmentSubmission={} #Assignment:submissions pairs
     course=Course.objects.filter(instructor=request.user)
     assignment=Assignment.objects.filter(instructor=request.user)
     for something in course:
+        courses.append(something.name)
         for assign in something.assignments.all():
             courseAssignments.append(assign.subject)
+            for submission in Submission.objects.filter(assignment=assign):
+                assignmentSubmissions.append(submission)
+            assignmentSubmission[f"{something.name}:{assign.subject}"]=assignmentSubmissions[:]
+            assignmentSubmissions.clear()
         courseAssignment[something.name]=courseAssignments[:]
         courseAssignments.clear()
     for something in assignment:
@@ -205,34 +211,15 @@ def instructor(request):
             course=Course.objects.create(name=courseName,instructor=request.user)
             course.save
             return HttpResponseRedirect(reverse("instructor"))
-        elif request.POST.get("course"):
-            students=[]
-            # Reminder: Check if there are missing fields
-            course = request.POST.get("course")
-            assignment = request.POST.get("assign")
-            course=Course.objects.get(name=course)
-            student= Student.objects.filter(courses=course)
-            assign= Assignment.objects.filter(subject=assignment)
-            for name in student:
-                    submission= Submission.objects.filter(student=name,assignment__in=assign)
-            try:
-                print(submission)
-            except:
-                submission= ["Nothing Submitted Yet"]
-            return render(request,"main/instructor.html",{
-                "instructor":instructor,
-                "students":students,
-                "submissions":submission,
-                "courses":courses,
-                "assignments":assignments,
-                "simulators":simulators,
-            })
-    else:   
+    else:
+        print(assignmentSubmission)
         return render(request,"main/instructor.html",{
             "instructor":instructor,
             "assignments": assignments,
             "simulators": simulators,
             "courseAssignment":courseAssignment,
+            "courses":courses,
+            "assignmentSubmission":assignmentSubmission,
         }) 
 
 
