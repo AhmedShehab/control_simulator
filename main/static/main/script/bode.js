@@ -81,7 +81,7 @@ window.onload = function () {
         data: phase
         
     };
-
+    console.log(magnitude);
 
     if (omega_comp != null){
         console.log("Nooooo!")
@@ -141,7 +141,7 @@ window.onload = function () {
                 title: "Magnitude comp",
                 
             },
-            data: [{magnitude},{magnitude_comp}]
+            data: magnitude
         };
         Ph = {
             zoomEnabled: true,

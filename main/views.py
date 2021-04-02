@@ -13,7 +13,6 @@ def home(request):
 
 def test(request):
     Gs, mag_comp, phase_comp, omega_comp, mag, phase, omega = design_tool.control()
-    print(omega_comp)
     if request.method == "POST":
         z = request.POST["z"]
         p = request.POST["p"]
