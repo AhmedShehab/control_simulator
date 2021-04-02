@@ -17,9 +17,6 @@ def servomotor(request):
 def test(request):
     Gs, mag_comp, phase_comp, omega_comp, mag, phase, omega = design_tool.control()
     if request.method == "POST":
-        z = request.POST["z"]
-        p = request.POST["p"]
-        k = request.POST["k"]
         return render(request, "main/test.html", {
                 
                 "omega": omega,
@@ -39,10 +36,7 @@ def test(request):
                 "mag": mag,
                 "name": 'Servo Motor',
                 "numerator": "3",
-                "denominator": "3s^2 +1",
-                "mag_comp": mag_comp,
-                "ph_comp": phase_comp,
-                "omega_comp":omega_comp
+                "denominator": "3s^2 +1"
             })
 
 def register(request):
