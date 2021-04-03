@@ -95,19 +95,6 @@
                 <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
             </form>
         </div>
-        <div id="laglead" class="no" style="display: none;">
-            <form class="cred_form" action="{% url 'test' %}" method="POST">
-                {% csrf_token %}
-                <br> <h5 style="display: inline-block;">Zero:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="zero">
-                <br> <h5 style="display: inline-block;">Pole:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="pole">
-                <br> <h5 style="display: inline-block;">Gain:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="gain">
-                <br>
-                <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
-            </form>
-        </div>
         
 
     </div>
