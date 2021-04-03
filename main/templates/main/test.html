@@ -29,7 +29,7 @@
             <form class="cred_form" action="{% url 'test' %}" method="POST">
                 {% csrf_token %}
                 <br> <h5 style="display: inline-block;">P:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="p">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="p">
                 <br>
                 <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
             </form>
@@ -38,9 +38,9 @@
             <form class="cred_form" action="{% url 'test' %}" method="POST">
                 {% csrf_token %}
                 <br> <h5 style="display: inline-block;">P:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="p">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="p">
                 <br> <h5 style="display: inline-block;">I:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="i">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="i">
                 <br>
                 <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
             </form>
@@ -49,9 +49,9 @@
             <form class="cred_form" action="{% url 'test' %}" method="POST">
                 {% csrf_token %}
                 <br> <h5 style="display: inline-block;">P:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="p">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="p">
                 <br> <h5 style="display: inline-block;">D:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="d">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="d">
                 <br>
                 <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
             </form>
@@ -60,11 +60,11 @@
             <form class="cred_form" action="{% url 'test' %}" method="POST">
                 {% csrf_token %}
                 <br> <h5 style="display: inline-block;">P:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="p">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="p">
                 <br> <h5 style="display: inline-block;">I:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="i">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="i">
                 <br> <h5 style="display: inline-block;">D:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="d">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="d">
                 <br>
                 <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
             </form>
@@ -73,11 +73,11 @@
             <form class="cred_form" action="{% url 'test' %}" method="POST">
                 {% csrf_token %}
                 <br> <h5 style="display: inline-block;">Zero:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="zero">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="zero">
                 <br> <h5 style="display: inline-block;">Pole:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="pole">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="pole">
                 <br> <h5 style="display: inline-block;">Gain:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="gain">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="gain">
                 <br>
                 <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
             </form>
@@ -86,20 +86,21 @@
             <form class="cred_form" action="{% url 'test' %}" method="POST">
                 {% csrf_token %}
                 <br> <h5 style="display: inline-block;">Zero:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="zero">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" placeholder="Enter the value" name="zero" required>
                 <br> <h5 style="display: inline-block;">Pole:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="pole">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" placeholder="Enter the value" name="pole" required> 
                 <br> <h5 style="display: inline-block;">Gain:</h5>
-                <input class="cred" style="display: inline-block;" type="text" placeholder="Enter the value" name="gain">
+                <input class="cred" style="display: inline-block;" type="number" step="0.00001" placeholder="Enter the value" name="gain" required>
                 <br>
                 <button class="btn btn-outline-success" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
             </form>
         </div>
-        
 
     </div>
     <div style="width: 65%; float: left;">
-        <div id="Magnitude" style="height: 300px; width: 100%;"></div>
+        <div id="Magnitude" style="height: 300px; width: 100%;">
+            
+        </div>
         <br>
         <div id="Phase" style="height: 300px; width: 100%;"></div> 
     </div>

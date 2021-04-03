@@ -57,3 +57,29 @@ def zpk(z, p, k):
     mag_comp = list(mag_comp)
 
     return omega_comp, mag_comp, phase_comp, gm, pm, wp, wg 
+
+def pid(Kp, Ki, Kd):
+    # PID Controller
+    s = matlab.tf('s')
+    Ds = Kp + Ki/s + Kd*s
+    # Draw the open-loop frequency resp. for the comp. sys
+    Gs = control.tf(36, [1, 3.6, 0])
+    DsGs = Ds*Gs
+    gm, pm, wg, wp = control.margin(DsGs)
+    print(f"Gain margin = {gm} dB")
+    print(f"Phase margin = {round(pm, 2)} degrees")
+    print(f"Frequency for Gain Margin = {wg} radians/sec")
+    print(f"Frequecny for Phase Margin = {wp} radians/sec")
+    omega_comp = np.logspace(-2,2,2000)
+    mag_comp, phase_comp, omega_comp = control.bode(DsGs, omega=omega_comp)
+    mag_comp = 20 * np.log10(mag_comp)
+    phase_comp = np.degrees(phase_comp)
+    omega_comp = omega_comp.T
+    phase_comp = phase_comp.T
+    mag_comp = mag_comp.T
+
+    omega_comp = list(omega_comp)
+    phase_comp = list(phase_comp)
+    mag_comp = list(mag_comp)
+
+    return omega_comp, mag_comp, phase_comp, gm, pm, wp, wg 

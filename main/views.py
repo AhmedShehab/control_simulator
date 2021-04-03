@@ -24,14 +24,20 @@ def test(request):
             k = float(request.POST.get("gain"))
             z = np.array([z])
             p = np.array([p])
-            print(z, p)
             omega_comp, mag_comp, phase_comp, gm, pm, wp, wg  = design_tool.zpk(z,p, k)
         if request.POST.get("p"):
-            p = float(request.POST.get("p"))
-            i = float(request.POST.get("i"))
-            d = float(request.POST.get("d"))
+            p = request.POST.get("p")
+            i = request.POST.get("i")
+            d = request.POST.get("d")
+            if not i:
+                i = 0
+            if not d:
+                d = 0
+            p = float(p)
+            i = float(i)
+            d = float(d)
+            omega_comp, mag_comp, phase_comp, gm, pm, wp, wg  = design_tool.pid(p, i, d)
         return render(request, "main/test.html", {
-                
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
@@ -49,7 +55,9 @@ def test(request):
                 "mag": mag,
                 "name": 'Servo Motor',
                 "numerator": "3",
-                "denominator": "3s^2 +1"
+                "denominator": "3s^2 +1",
+                "pm": pm,
+                "gm": gm
             })
 
 def register(request):
