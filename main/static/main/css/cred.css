@@ -13,6 +13,17 @@
     padding: 5px;
     grid-area: 1/2;
 }
+.form-control{
+    border-top:none ;
+    border-left: none;
+    border-right: #ced4da none;
+    outline: none;
+}
+.grade{
+    display: grid;
+    border-bottom: green solid 3px;
+    
+}
 .button{
     color: green;
     background-color:white;

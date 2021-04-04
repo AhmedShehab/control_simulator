@@ -26,13 +26,13 @@ th{
 .assign_child1,.assign_child2{
     padding: 20px;
     background-color: white;
-    width: 40%;
+    width: 30%;
     border: 2px solid green;
     border-radius: 60px;
 }
 .assign_child1{
-    transform: translate(75%,25%);
+    transform: translate(120%,7%);
 }
 .assign_child2{
-    transform: translate(75%,80%);
+    transform: translate(120%,80%);
 }

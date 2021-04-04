@@ -48,5 +48,14 @@ function assignmentsSubmitted(){
         }
     }
 }
-
+function gradeSelect(){
+    var grade = document.getElementById("grade").value
+    console.log(grade)
+    if (grade=="auto"){
+        document.getElementById("grade2").style.display="block"
+    }
+    else{
+        document.getElementById("grade2").style.display="none"
+    }
+}
 

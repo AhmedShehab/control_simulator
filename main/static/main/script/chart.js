@@ -12,9 +12,9 @@
         document.getElementById(name).style.display ="block";
         
     }
-        function sim(v) {
+        function sim(v) {/* 
             var ani = document.getElementById('animation')
-            if (ani.checked == true)
+            if (ani.checked == true) */
                 duration = 0;
             var ctx = document.getElementById('myChart').getContext('2d');
             var chart = new Chart(ctx, {

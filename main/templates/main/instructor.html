@@ -11,23 +11,23 @@
         <form class="cred_form" action="{% url 'instructor' %}" method="POST">
             <h1 style="color: green;">New Assignment</h1>
             {% csrf_token %}
-            <select class="cred" placeholder="Course" name="course">
-            <option disabled selected>Select a Course</option>
+            <select class="cred" placeholder="Course" name="course" required>
+            <option disabled selected value="">Select a Course</option>
                 {% for course in courses %}
                     <option value="{{course}}">{{course}}</option>
                 {% endfor %}
             </select>
-            <input class="cred" type="text" placeholder="Subject" name="assignmentSubject">
+            <input class="cred" type="text" placeholder="Subject" name="assignmentSubject" required>
             <br>
             <span>
-            <select class="cred" placeholder="Simulator" name="sim">
-                <option disabled selected>Select a Simulator</option>
+            <select class="cred" placeholder="Simulator" name="sim" required>
+                <option disabled selected value="">Select a Simulator</option>
                 {% for simulator in simulators %}
                 <option value="{{simulator}}">{{simulator}}</option>
                 {% endfor %}
             </select>
-            <select class="cred" >
-                <option selected disabled>Choose Controler</option>
+            <select class="cred" required>
+                <option selected disabled value="">Choose Controler</option>
                 <option value="P">P</option>
                 <option value="PI">PI</option>
                 <option value="PD">PD</option>
@@ -38,10 +38,41 @@
               </select>
             </span>
             <br>
-            <input class="cred" type="date" placeholder="dueDate" name="due">
+            <input class="cred" type="date" placeholder="dueDate" name="due" required>
             <br>
-            <textarea cols="30" rows="3" class="cred" type="textarea" placeholder="Describtion" name="desc"></textarea>
+            <select class="cred" required name="grading" id="grade" onchange="gradeSelect();">
+                <option value="" selected disabled>Select Grading option</option>
+                <option value="auto">Auto grade<br>      
+                <option value="receive">Receive Values<br>
+            </select>   
             <br>
+            <div class="grade" id="grade2" style="display: none;">
+                <h6>Transient and steady state response</h6>
+                <div class="input-group input-group-sm"> 
+                <label for="rise">Rise Time:</label>
+                <input type="number" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="rise" >
+                <div class="input-group-append" id="inputGroup-sizing-sm" >
+                    <span class="input-group-text">Seconds</span>
+                </div>
+                </div>
+                <div class="input-group input-group-sm"> 
+                <label for="settle">Settling Time:</label>
+                <input type="number" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="settle">
+                <div class="input-group-append" id="inputGroup-sizing-sm" >
+                    <span class="input-group-text">Seconds</span>
+                </div>
+                </div>
+                <div class="input-group input-group-sm"> 
+                <label for="overshoot">Percent Overshoot:</label>
+                <input type="number" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="overshoot">
+                <div class="input-group-append" id="inputGroup-sizing-sm" >
+                    <span class="input-group-text">%</span>
+                </div>
+                </div><div class="input-group input-group-sm"> 
+                <label for="error">Steady State Error:</label>
+                <input type="number" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="error">
+            </div>
+            </div>
             {% if message %}
             <h5 style="color: red;">{{message}}</h5>
             {% endif %}
@@ -55,7 +86,7 @@
         <form class="cred_form" action="{% url 'instructor' %}" method="POST">
             <h1 style="color: green;">New Course</h1>
             {% csrf_token %}
-            <input class="cred" type="text" placeholder="courseName" name="courseName">
+            <input class="cred" type="text" placeholder="courseName" name="courseName" required>
             <br>
             {% if message %}
             <h5 style="color: red;">{{message}}</h5>
