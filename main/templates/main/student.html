@@ -7,7 +7,7 @@
 {% block body %}
 <div class="profile" style="display:flex;">
     <span><img src="{% static 'main/images/profile.png' %}" alt="Student Photo" style="width:100px;height:100px"></span>
-    <span><h4>{{student.credentials.first_name}} {{student.credentials.last_name}}</h4><h4>Course:  <small style="color: black;">{{student.courses.name}}</small></h4><h4>Course Code:  <small style="color: black;">{{student.courses.code}}</small></h4></span>
+    <span><h4>{{student.credentials.first_name}} {{student.credentials.last_name}}</h4><h4>Course:  <small style="color: black;">{{student.courses.name}}</small></h4><h4>Course Code:  <small style="color: black; font-size: large;">{{student.courses.code}}</small></h4></span>
 </div>
 <div>
     <table class="table">
@@ -16,7 +16,13 @@
         </tr>
         {% for assignment in assignments %}
         <tr>
-            <td>{{assignment.subject}}</td>
+        {% if assignment.simulator == "Cruise Control" %}
+            <td><a href="{% url 'cruise' %}">{{assignment.subject}}</a></td>
+        {% elif assignment.simulator == "Adaptive Cruise control" %}
+             <td><a href="{% url 'adaptive' %}">{{assignment.subject}}</a></td>
+        {% elif assignment.simulator == "Servo Motor" %}
+         <td><a href="{% url 'servomotor' %}">{{assignment.subject}}</a></td>
+        {% endif %}
             <td>{{assignment.score}}</td>
             <td>Complete</td>
             <td>{{assignment.dueDate}}</td>

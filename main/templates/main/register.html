@@ -24,15 +24,15 @@
 <div class="container" id="studentForm" style="display: none;">
     <form class="cred_form" action="{% url 'register' %}" method="POST">
         {% csrf_token %}
-        <input class="cred" type="text" placeholder="Username" name="username">
+        <input class="cred" type="text" placeholder="Username" name="username" {% if studMSG %} value="{{username}}"{% endif %}>
         <br>
-        <input class="cred" type="text" placeholder="First Name" name="first">
+        <input class="cred" type="text" placeholder="First Name" name="first" {% if studMSG %} value="{{first}}"{% endif %}>
         <br>
-        <input class="cred" type="text" placeholder="Last Name" name="last">
+        <input class="cred" type="text" placeholder="Last Name" name="last" {% if studMSG %} value="{{last}}"{% endif %}>
         <br>
-        <input class="cred" type="email" placeholder="Email" name="email">
+        <input class="cred" type="email" placeholder="Email" name="email" {% if studMSG %} value="{{email}}"{% endif %}>
         <br>
-        <input class="cred" type="text" placeholder="Course Code" name="code">
+        <input class="cred" type="text" placeholder="Course Code" name="code" {% if studMSG %} value="{{code}}"{% endif %}>
         <br>
         <input class="cred" type="password" placeholder="Password" name="password">
         <br>
@@ -51,15 +51,15 @@
     <form class="cred_form" action="{% url 'register' %}" method="POST">
         {% csrf_token %}
         {% comment "Add First and Last name Later" %}Add First and Last name Later{% endcomment %} 
-        <input class="cred" type="text" placeholder="Username" name="username">
+        <input class="cred" type="text" placeholder="Username" name="username" {% if instMSG %} value="{{username}}"{% endif %}>
         <br>
-        <input class="cred" type="text" placeholder="First Name" name="first">
+        <input class="cred" type="text" placeholder="First Name" name="first" {% if instMSG %} value="{{first}}"{% endif %}>
         <br>
-        <input class="cred" type="text" placeholder="Last Name" name="last">
+        <input class="cred" type="text" placeholder="Last Name" name="last" {% if instMSG %} value="{{last}}"{% endif %}>
         <br>
-        <input class="cred" type="email" placeholder="Email" name="email">
+        <input class="cred" type="email" placeholder="Email" name="email" {% if instMSG %} value="{{email}}"{% endif %}>
         <br>
-        <input class="cred" type="text" placeholder="Major" name="major">
+        <input class="cred" type="text" placeholder="Major" name="major" {% if instMSG %} value="{{major}}"{% endif %}>
         <br>
         <input class="cred" type="password" placeholder="Password" name="password">
         <br>
