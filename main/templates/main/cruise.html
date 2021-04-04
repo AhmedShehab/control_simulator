@@ -1,22 +1,163 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 {% block head %}
-    <title>Cruise Control Simulator</title>
-    <meta charset="utf-8">     
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">     
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"></script>
+<title>Cruise Control Simulator</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"></script>
+<style>
+    .flex-child {
+        flex: 0 80em;
+        border: 2px solid green;
+    }
+
+    .flex-child:first-child {
+        margin-right: 20px;
+    }
+</style>
 {% endblock head %}
 {% block body %}
- <div>
-        Disable Animation <input type="checkbox" id="animation">
+<div class="flex-container" style="display: flex;">
+    <div class="flex-child" id="simulatorForm" style="flex:1;">
+        <form class="cred_form">
+            <h2 style=" display: inline;">Controller: </h2>
+            <select class="form-select form-select-lg mb-3 dropdown" style="display: inline; margin-bottom:20%"
+            aria-label=".form-select-lg example" onchange="display()" id="selector">
+            <option selected>No selected</option>
+            <option value="P">P</option>
+            <option value="PI">PI</option>
+            <option value="PD">PD</option>
+            <option value="PID">PID</option>
+            <option value="lag">Lag</option>
+            <option value="lead">Lead</option>
+            <option value="laglead">Lag-Lead</option>
+        </select>
+        <label for="disturbanceLevel">Disturbance level</label>
+        <select class="cred" name="disturbanceLevel" id="disturbanceLevel" required>
+            <option value="level1">Level 1</option>
+            <option value="level2">Level 2</option>
+            <option value="level3">Level 3</option>
+        </select>
+        <div id="P" style="display: none;">
+            <form class="cred_form" action="{% url 'test' %}" method="POST">
+                {% csrf_token %}
+                    <br>
+                    <h5 style="display: inline-block;">P:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="p">
+                    <br>
+                    <button class="button" type="submit"
+                        style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+                </form>
+            </div>
+            <div id="PI" style="display: none;">
+                <form class="cred_form" action="{% url 'test' %}" method="POST">
+                    {% csrf_token %}
+                    <br>
+                    <h5 style="display: inline-block;">P:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="p">
+                    <br>
+                    <h5 style="display: inline-block;">I:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="i">
+                    <br>
+                    <button class="button" type="submit"
+                        style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+                </form>
+            </div>
+            <div id="PD" style="display: none;">
+                <form class="cred_form" action="{% url 'test' %}" method="POST">
+                    {% csrf_token %}
+                    <br>
+                    <h5 style="display: inline-block;">P:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="p">
+                    <br>
+                    <h5 style="display: inline-block;">D:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="d">
+                    <br>
+                    <button class="button" type="submit"
+                        style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+                </form>
+            </div>
+            <div id="PID" style="display: none;">
+                <form class="cred_form" action="{% url 'test' %}" method="POST">
+                    {% csrf_token %}
+                    <br>
+                    <h5 style="display: inline-block;">P:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="p">
+                    <br>
+                    <h5 style="display: inline-block;">I:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="i">
+                    <br>
+                    <h5 style="display: inline-block;">D:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="d">
+                    <br>
+                    <button class="button" type="submit"
+                        style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+                </form>
+            </div>
+            <div id="lag" style="display: none;">
+                <form class="cred_form" action="{% url 'test' %}" method="POST">
+                    {% csrf_token %}
+                    <br>
+                    <h5 style="display: inline-block;">Zero:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="zero">
+                    <br>
+                    <h5 style="display: inline-block;">Pole:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="pole">
+                    <br>
+                    <h5 style="display: inline-block;">Gain:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001" required
+                        placeholder="Enter the value" name="gain">
+                    <br>
+                    <button class="button" type="submit"
+                        style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+                </form>
+            </div>
+            <div id="lead" style="display: none;">
+                <form class="cred_form" action="{% url 'test' %}" method="POST">
+                    {% csrf_token %}
+                    <br>
+                    <h5 style="display: inline-block;">Zero:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001"
+                        placeholder="Enter the value" name="zero" required>
+                    <br>
+                    <h5 style="display: inline-block;">Pole:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001"
+                        placeholder="Enter the value" name="pole" required>
+                    <br>
+                    <h5 style="display: inline-block;">Gain:</h5>
+                    <input class="cred" style="display: inline-block;" type="number" step="0.00001"
+                        placeholder="Enter the value" name="gain" required>
+                    <br>
+                    <button class="button" type="submit"
+                        style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+                </form>
+            </div>
+            <button class="button" type="submit" name="start" value="1" onclick="sim({speed_samples});">Start</button>
+            <input class="button" type="reset" value="Reset">
+            <br><br>
+            <button class="button" type="submit" name="Submit">Submit</button>
+        </form>
     </div>
-    <div>
-        <button onclick="sim({{speed_samples}});">Run</button>
+    <div class="flex-child">
+        <div>
+            Disable Animation <input type="checkbox" id="animation">
+        </div>
+        <div class='container'>
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
-    <div class = 'container'>
-        <canvas id="myChart"></canvas>
-    </div>
-    <script src=" {% static 'main/script/chart.js' %}"></script>
+</div>
+<script src=" {% static 'main/script/chart.js' %}"></script>
 {% endblock body%}

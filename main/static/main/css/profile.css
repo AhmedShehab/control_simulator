@@ -23,11 +23,16 @@ th{
     height: 100%;
     width: 100%;
 }
-.assign_child{
+.assign_child1,.assign_child2{
     padding: 20px;
     background-color: white;
     width: 40%;
     border: 2px solid green;
     border-radius: 60px;
-    transform: translate(75%,40%);
+}
+.assign_child1{
+    transform: translate(75%,25%);
+}
+.assign_child2{
+    transform: translate(75%,80%);
 }

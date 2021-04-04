@@ -3,6 +3,15 @@
         var lt = t.length;
         var duration = 2000;
     }
+    function display(){
+        var elements = document.getElementsByClassName("no");
+        for (var i=0; i<elements.length; i++) {
+            elements[i].style.display = 'none';
+        }
+        var name= document.getElementById("selector").value;
+        document.getElementById(name).style.display ="block";
+        
+    }
         function sim(v) {
             var ani = document.getElementById('animation')
             if (ani.checked == true)

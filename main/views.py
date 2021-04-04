@@ -274,7 +274,6 @@ def instructor(request):
             course.save
             return HttpResponseRedirect(reverse("instructor"))
     else:
-        print(assignmentSubmission)
         return render(request,"main/instructor.html",{
             "instructor":instructor,
             "assignments": assignments,

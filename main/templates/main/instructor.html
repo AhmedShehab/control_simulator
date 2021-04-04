@@ -7,22 +7,36 @@
 {% endblock head %}
 {% block body %}
 <div class="assign_form" style="display: none;" id="assignmentForm">
-    <div class="assign_child">
+    <div class="assign_child1">
         <form class="cred_form" action="{% url 'instructor' %}" method="POST">
             <h1 style="color: green;">New Assignment</h1>
             {% csrf_token %}
             <select class="cred" placeholder="Course" name="course">
+            <option disabled selected>Select a Course</option>
                 {% for course in courses %}
-                    <option value="{{course.name}}">{{course.name}}</option>
+                    <option value="{{course}}">{{course}}</option>
                 {% endfor %}
             </select>
             <input class="cred" type="text" placeholder="Subject" name="assignmentSubject">
             <br>
+            <span>
             <select class="cred" placeholder="Simulator" name="sim">
+                <option disabled selected>Select a Simulator</option>
                 {% for simulator in simulators %}
                 <option value="{{simulator}}">{{simulator}}</option>
                 {% endfor %}
             </select>
+            <select class="cred" >
+                <option selected disabled>Choose Controler</option>
+                <option value="P">P</option>
+                <option value="PI">PI</option>
+                <option value="PD">PD</option>
+                <option value="PID">PID</option>
+                <option value="lag">Lag</option>
+                <option value="lead">Lead</option>
+                <option value="laglead">Lag-Lead</option>
+              </select>
+            </span>
             <br>
             <input class="cred" type="date" placeholder="dueDate" name="due">
             <br>
@@ -37,7 +51,7 @@
     </div>
 </div>
 <div class="assign_form" style="display: none;" id="courseForm">
-    <div class="assign_child">
+    <div class="assign_child2">
         <form class="cred_form" action="{% url 'instructor' %}" method="POST">
             <h1 style="color: green;">New Course</h1>
             {% csrf_token %}
