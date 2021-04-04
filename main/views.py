@@ -7,6 +7,7 @@ from .models import User,Instructor,Student,Course,Assignment,Submission
 from uuid import UUID
 import simplejson as json
 from . import design_tool
+import numpy as np
 # Create your views here.
 def home(request):
     return render(request, "main/home.html")
@@ -15,19 +16,34 @@ def servomotor(request):
     return render(request, "main/servomotor.html")
 
 def test(request):
-    Gs, mag_comp, phase_comp, omega_comp, mag, phase, omega = design_tool.control()
+    num, den, omega, mag, phase,gm, pm, wg, wp= design_tool.Gs()
     if request.method == "POST":
-        z = request.POST["z"]
-        p = request.POST["p"]
-        k = request.POST["k"]
+        if request.POST.get("zero"):
+            z = float(request.POST.get("zero"))
+            p = float(request.POST.get("pole"))
+            k = float(request.POST.get("gain"))
+            z = np.array([z])
+            p = np.array([p])
+            omega_comp, mag_comp, phase_comp, gm, pm, wp, wg  = design_tool.zpk(z,p, k)
+        if request.POST.get("p"):
+            p = request.POST.get("p")
+            i = request.POST.get("i")
+            d = request.POST.get("d")
+            if not i:
+                i = 0
+            if not d:
+                d = 0
+            p = float(p)
+            i = float(i)
+            d = float(d)
+            omega_comp, mag_comp, phase_comp, gm, pm, wp, wg  = design_tool.pid(p, i, d)
         return render(request, "main/test.html", {
-                
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
                 "name": 'Servo Motor',
-                "numerator": "3",
-                "denominator": "3 +1",
+                "numerator": num,
+                "denominator": den,
                 "mag_comp": mag_comp,
                 "ph_comp": phase_comp,
                 "omega_comp":omega_comp
@@ -40,9 +56,8 @@ def test(request):
                 "name": 'Servo Motor',
                 "numerator": "3",
                 "denominator": "3s^2 +1",
-                "mag_comp": mag_comp,
-                "ph_comp": phase_comp,
-                "omega_comp":omega_comp
+                "pm": pm,
+                "gm": gm
             })
 
 def register(request):

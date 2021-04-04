@@ -11,6 +11,7 @@ window.onload = function () {
     var omega_comp = document.getElementById("omega_comp");
     var mag_comp = document.getElementById("mag_comp");
     var ph_comp = document.getElementById("ph_comp");
+    console.log("comp: "+omega_comp.value)
     var Mag, Ph;
     var magnitude = [];
     var phase = [];
@@ -83,7 +84,7 @@ window.onload = function () {
     };
     console.log(magnitude);
 
-    if (omega_comp != null){
+    if ((omega_comp.value != "" || omega_comp.value==null )){
         console.log("Nooooo!")
         console.log(magnitude)
         omega_comp = omega_comp.value;
@@ -93,8 +94,6 @@ window.onload = function () {
         ph_comp = ph_comp.match(/-?\d+(?:\.\d+)?/g).map(Number);
         mag_comp = mag_comp.match(/-?\d+(?:\.\d+)?/g).map(Number);
         var limit_comp = omega_comp.length;
-        var magnitude_comp = [];
-        var phase_comp = [];
         var dataSeries = { type: "line" };
         var dataPoints = [];
         for (var i = 0; i < limit_comp; i += 1) {
@@ -105,7 +104,7 @@ window.onload = function () {
             });
         }
         dataSeries.dataPoints = dataPoints;
-        magnitude_comp.push(dataSeries);
+        magnitude.push(dataSeries);
         var dataSeries = { type: "line" };
         var dataPoints = [];
         for (var i = 0; i < limit_comp; i += 1) {
@@ -116,8 +115,8 @@ window.onload = function () {
             });
         }
         dataSeries.dataPoints = dataPoints;
-        phase_comp.push(dataSeries);
-        
+        phase.push(dataSeries);
+        console.log(phase)
         Mag = {
             zoomEnabled: true,
             animationEnabled: true,
