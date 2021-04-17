@@ -1,13 +1,12 @@
 function openAssignmentForm(){
     document.getElementById("assignmentForm").style.display = "block";
-    window.scroll(0,92);
+    
 }
 function closeAssignmentForm(){
     document.getElementById("assignmentForm").style.display = "none";
 }
 function openCourseForm(){
     document.getElementById("courseForm").style.display = "block";
-    window.scroll(0,92);
 }
 function closeCourseForm(){
     document.getElementById("courseForm").style.display = "none";
@@ -50,12 +49,25 @@ function assignmentsSubmitted(){
 }
 function gradeSelect(){
     var grade = document.getElementById("grade").value
-    console.log(grade)
     if (grade=="auto"){
         document.getElementById("grade2").style.display="block"
+        document.getElementById("grade3").style.display="none"
+        document.getElementById("rise").required=true
+        document.getElementById("settle").required=true
+        document.getElementById("overshoot").required=true
+        document.getElementById("error").required=true
+        document.getElementById("grade3").required=false
+
+
     }
-    else{
+    if  (grade=="receive") {
         document.getElementById("grade2").style.display="none"
+        document.getElementById("grade3").style.display="block"
+        document.getElementById("rise").required=false
+        document.getElementById("settle").required=false
+        document.getElementById("overshoot").required=false
+        document.getElementById("error").required=false
+        document.getElementById("grade3").required=true
     }
 }
 

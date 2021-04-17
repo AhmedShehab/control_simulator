@@ -4,13 +4,17 @@
         var duration = 2000;
     }
     function display(){
-        var elements = document.getElementsByClassName("no");
-        for (var i=0; i<elements.length; i++) {
-            elements[i].style.display = 'none';
-        }
         var name= document.getElementById("selector").value;
-        document.getElementById(name).style.display ="block";
-        
+        var elements = document.getElementsByClassName("option")
+        for (let i = 0; i < elements.length; i++) {
+            var element = elements[i];
+            if (element.id==name){
+                document.getElementById(name).style.display ="block";
+            }
+            else{
+                element.style.display="none"
+            }
+        }
     }
         function sim(v) {/* 
             var ani = document.getElementById('animation')
@@ -68,3 +72,4 @@
                 counter++
             }, 100)
         }
+

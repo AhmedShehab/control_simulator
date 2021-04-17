@@ -2,7 +2,7 @@
     margin-left: 15%;
     margin-top: 30px;
 }
-.table{
+.table2{
     margin-left: 15%;
     width: 70%;
     text-align: center;
@@ -11,6 +11,9 @@ th{
     color: white;
     background-color: green;
 }
+tr{
+    border-bottom: green 1px solid;
+}
 #assignment:hover{
     cursor: pointer;
 }
@@ -18,12 +21,14 @@ th{
     width: 500px;
 }
 .assign_form{
-    position: absolute;
+    position: fixed;
     background-color: rgba(0, 0, 0, 0.658);
-    height: 100%;
-    width: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
-.assign_child1,.assign_child2{
+.assign_child1,.assign_child2,.assign_child3{
     padding: 20px;
     background-color: white;
     width: 30%;
@@ -34,5 +39,9 @@ th{
     transform: translate(120%,7%);
 }
 .assign_child2{
+    transform: translate(120%,80%);
+    text-align: center;
+}
+.assign_child3{
     transform: translate(120%,80%);
 }

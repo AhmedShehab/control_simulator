@@ -24,21 +24,33 @@
     border-bottom: green solid 3px;
     
 }
-.button{
-    color: green;
-    background-color:white;
+.button,.button2{
     border-radius: 5mm;
     border: solid green 1px;
     outline: none;
     margin-top: 10px;
     font: 16px arial,sans-serif;
-    padding: 5px;
+    padding: 10px;
+}
+.button{
+    color: green;
+    background-color:white;
+}
+.button2{
+    color: white;
+    background-color:green;
+}
+.button:hover.button2:hover{
+    cursor: pointer;
+    border-color: green;   
 }
 .button:hover{
-    cursor: pointer;
     color: white;
     background-color: green;
-    border-color: green;   
+}
+.button2:hover{
+    color: white;
+    background-color: green;
 }
 .link{
     color: green;

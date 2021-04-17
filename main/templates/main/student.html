@@ -3,33 +3,104 @@
 {% block head %}
 <title>Student Profile</title>
 <link href="{% static 'main/css/profile.css' %}" rel="stylesheet">
+<link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
 {% endblock head %}
 {% block body %}
 <div class="profile" style="display:flex;">
     <span><img src="{% static 'main/images/profile.png' %}" alt="Student Photo" style="width:100px;height:100px"></span>
-    <span><h4>{{student.credentials.first_name}} {{student.credentials.last_name}}</h4><h4>Course:  <small style="color: black;">{{student.courses.name}}</small></h4><h4>Course Code:  <small style="color: black; font-size: large;">{{student.courses.code}}</small></h4></span>
+    <span>
+        <h4>{{student.credentials.first_name}} {{student.credentials.last_name}}</h4>
+        <h4>Course: <small style="color: black;">{{student.courses.name}}</small></h4>
+        <h4>Course Code: <small style="color: black; font-size: large;">{{student.courses.code}}</small></h4>
+    </span>
 </div>
 <div>
-    <table class="table">
+    <table class="table2">
         <tr>
-            <th>Assignment</th><th>Score</th><th>Status</th><th>Due Date</th><th>Requirements</th>
+            <th>Assignment</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Requirements</th>
         </tr>
         {% for assignment in assignments %}
         <tr>
-        {% if assignment.simulator == "Cruise Control" %}
-            <td><a href="{% url 'cruise' %}">{{assignment.subject}}</a></td>
-        {% elif assignment.simulator == "Adaptive Cruise control" %}
-             <td><a href="{% url 'adaptive' %}">{{assignment.subject}}</a></td>
-        {% elif assignment.simulator == "Servo Motor" %}
-         <td><a href="{% url 'servomotor' %}">{{assignment.subject}}</a></td>
-        {% endif %}
+            <td>{{assignment.subject}}</td>
             <td>{{assignment.score}}</td>
             <td>Complete</td>
             <td>{{assignment.dueDate}}</td>
-            <td>{{assignment.describtion}}<td>
+            <td><button class="button" id="{{assignment.id}}" onclick="openReqForm({{assignment.id}});">Display Requirements</button></td>
         </tr>
         {% endfor %}
     </table>
 </div>
-
+{% for assignment in assignments %}
+{% if assignment.riseTime %}
+<div class="{{assignment.id}}"
+    style="display: none; position: fixed;background-color: rgba(0, 0, 0, 0.658);top: 0;left: 0;bottom: 0;right: 0;">
+    <div class="assign_child2">
+        <h3>System Requirements</h3>
+        System: {{assignment.simulator}}
+        <br>
+        Controller: {{assignment.controller}}
+        <br>
+        Rise Time = {{assignment.riseTime}}s
+        <br>
+        Settling Time = {{assignment.setTime}}s
+        <br>
+        Percent overshoot = {{assignment.pOvershoot}}%
+        <br>
+        steady state error = {{assignment.Ess}}
+        <br>
+        {% if assignment.simulator == "Cruise Control" %}
+        <form action="{% url 'student' %}" method="POST">
+        {% csrf_token %}
+        <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        </form>
+        {% elif assignment.simulator == "Adaptive Cruise control" %}
+        <form action="{% url 'student' %}" method="POST">
+        {% csrf_token %}
+        <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        </form>
+        {% elif assignment.simulator == "Servo Motor" %}
+        <form action="{% url 'student' %}" method="POST">
+            {% csrf_token %}
+            <button class="button2" name="assignment" value="{{assignment.id}}" type="submit">Submit Assignment</button>
+            </form>
+        {% endif %}
+        <button class="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
+    </div>
+</div>
+{% else %}
+<div class="{{assignment.id}}"
+    style="display: none; position: fixed;background-color: rgba(0, 0, 0, 0.658);top: 0;left: 0;bottom: 0;right: 0;">
+    <div class="assign_child2">
+        <h3>Requirements Describtion</h3>
+        System: {{assignment.simulator}}
+        <br>
+        Controller: {{assignment.controller}}
+        <br>
+        <p>{{assignment.describtion}}</p>
+        {% if assignment.simulator == "Cruise Control" %}
+        <form action="{% url 'student' %}" method="POST">
+        {% csrf_token %}
+        <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        </form>
+        {% elif assignment.simulator == "Adaptive Cruise control" %}
+        <form action="{% url 'student' %}" method="POST">
+        {% csrf_token %} 
+        <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        </form>
+        {% elif assignment.simulator == "Servo Motor" %}
+        <form action="{% url 'student' %}" method="POST">
+        {% csrf_token %}
+        <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        </form>
+        {% endif %}
+        <button class="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+<script src="{% static 'main/script/student.js' %}"></script>
 {% endblock body %}

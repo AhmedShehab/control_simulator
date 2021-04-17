@@ -11,20 +11,22 @@ class User(AbstractUser,models.Model):
     status     = models.CharField(max_length=5,choices=status_choices,default="s")
 
 class Assignment(models.Model):
-    subject    = models.CharField(max_length=64,null=True)
-    dueDate    = models.DateField()
-    score      = models.FloatField()
-    instructor = models.CharField(max_length=64,null=True) # Remove Nul =    True later
-    riseTime   = models.FloatField(null=True)
-    setTime    = models.FloatField(null=True)
-    Ess        = models.FloatField(null=True)
-    pOvershoot = models.FloatField(null=True)
+    subject     = models.CharField(max_length=64,null=True)
+    dueDate     = models.DateField()
+    score       = models.FloatField()
+    instructor  = models.CharField(max_length=64,null=True) # Remove Nul =    True later
+    riseTime    = models.FloatField(null=True)
+    setTime     = models.FloatField(null=True)
+    Ess         = models.FloatField(null=True)
+    pOvershoot  = models.FloatField(null=True)
+    describtion = models.TextField(null = True)
+    controller  = models.CharField(max_length=50, null=True)
     simulator_choices=[
         ("Cruise Control","Cruise Control"),
         ("Adaptive Cruise control","Adaptive Cruise control"),
         ("Servo Motor","Servo Motor")
     ]
-    simulator    = models.CharField(max_length=64,choices=simulator_choices,null=True) # Remove Null= True later
+    simulator   = models.CharField(max_length=64,choices=simulator_choices,null=True) # Remove Null= True later
     
     def __str__(self):
         return f"{self.subject}: {self.dueDate}"
