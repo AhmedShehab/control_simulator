@@ -305,7 +305,6 @@ def instructor(request):
 def cruise(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
-        controller = assignment.controller
         return render(request,"main/cruise.html",{
         "assignment":assignment,
     })
@@ -317,7 +316,6 @@ def cruise(request):
 def adaptive(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
-        controller = assignment.controller
         return render(request,"main/adaptive.html",{
         "assignment":assignment,
     })
@@ -330,7 +328,6 @@ def adaptive(request):
 def servomotor(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
-        controller = assignment.controller
         return render(request,"main/servomotor.html",{
         "assignment":assignment,
     })
