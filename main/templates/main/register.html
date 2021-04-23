@@ -5,15 +5,17 @@
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
 {% endblock head %}
 {% block body %}
-<h1 style="color: green;position: relative;left: 45%;margin-top: 7%;margin-bottom: -4%;">Sign up</h1>
-<div class="studentInstructorGrid" id="studInstForm">
-    <div class="studentGridItem" onclick="openStudentForm()" >
+<div class="studentInstructorGrid" >
+        <div class="flexBox">
+            <h1 style="color: green;">Sign up</h1>
+        </div>
+    <div class="studentGridItem" id="studForm" onclick="openStudentForm()" >
         <div class="child1">
             <h3 style="color: white;width: 250px; padding: 20px;">Student</h3>
             <img class="studImg" src="{% static 'main/images/studentIcon.png' %}" alt="Student Image">
         </div> 
         </div>
-    <div class="instructorGridItem" onclick="openInstructorForm()">
+    <div class="instructorGridItem" id="instForm" onclick="openInstructorForm()">
         <div class="child2">
             <h3 style="color: white;width: 250px; padding: 20px;">Instructor</h3>
             <img class="instImg" src="{% static 'main/images/instructorIcon.png' %}" alt="Professor Image">

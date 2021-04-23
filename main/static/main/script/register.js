@@ -1,6 +1,7 @@
 function openStudentForm(){
     document.getElementById("studentForm").style.display = "block";
-    document.getElementById("studInstForm").style.display = "none";
+    document.getElementById("studForm").style.display = "none";
+    document.getElementById("instForm").style.display = "none";
 }
 
 /* function closeStudentForm(){
@@ -10,7 +11,8 @@ function openStudentForm(){
 function openInstructorForm(){
     status = "i";
     document.getElementById("instructorForm").style.display = "block";
-    document.getElementById("studInstForm").style.display = "none";
+    document.getElementById("studForm").style.display = "none";
+    document.getElementById("instForm").style.display = "none";
 }
 /* 
 function closeInstructorForm(){

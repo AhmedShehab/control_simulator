@@ -1,18 +1,6 @@
 .cred_form{
     text-align: center;
 }
-@media screen and (max-width: 600px) {
-    .cred_form{
-        height: 60vh;
-    }
-    .studentInstructorGrid{
-        margin-left: 10px;
-        grid-template-columns: 100%;
-    }
-    .studentGridItem,.instructorGridItem{
-        width: 100%;
-    }
-}
 .cred{
     border-top:none ;
     border-left: none;
@@ -75,18 +63,24 @@
     color: green;
     opacity: 1;
 }
-.container{ 
-    margin: 0;
+.container{
     position: relative;
     top: 50%;
     left:50%;
-    transform: translate(-50%,18%);
-    width:400px;
-    height: 400px;
+    transform: translate(-50%,0%);
+    width:30%;
     border-radius: 20px;
     margin-left: -3px;
 }
-
+@media screen and (max-width: 600px){
+    .container{
+        width:80%;
+        transform: translate(-50%,-3%);
+    }
+    .studentInstructorGrid{
+        transform: translate(0%,0%);
+    }
+}
 .signup{
     color: green;
     text-decoration: none;
@@ -96,13 +90,15 @@
     text-decoration: underline;
     background-color: snow;
 }
-
+.flexBox{
+    margin-top: 5%;
+    flex-basis: calc(100%);
+    text-align: center;
+}
 .studentInstructorGrid{
-    display: grid;
-    grid-template-columns: 300px 300px;
-    padding: 50px;
-    margin-top: 2%;
-    margin-left: 29%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .studentGridItem,.instructorGridItem{
     background-color: green;
@@ -117,7 +113,7 @@
     border: black solid
 }
 .studentGridItem{
-    margin-left: 0%;
+    margin-right: 10px;
 }
 .child1{
     position: relative;
