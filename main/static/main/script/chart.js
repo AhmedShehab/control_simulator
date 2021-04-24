@@ -16,7 +16,7 @@
             }
         }
     }
-        function sim(v) {/* 
+        function sim() {/* 
             var ani = document.getElementById('animation')
             if (ani.checked == true) */
                 duration = 0;

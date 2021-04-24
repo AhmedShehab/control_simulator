@@ -25,7 +25,7 @@
                     The system is a servomechanism that takes over the throttle of the car to maintain a steady speed as set
                     by the driver.
                 </p>
-                    <form action="#">
+                    <form action="{% url 'cruise' %}">
                        <button type="submit" class="btn btn-outline-success" >Run Simulation</button>
                     </form>                   
             </div>
@@ -45,8 +45,8 @@
                     it is also called by 20 unique names that describe that basic functionality.This is also known as Dynamic cruise
                     control.
                 </p>
-                    <form action="#">
-                       <button type="submit" class="btn btn-outline-success" >Run Simulation</button>
+                    <form action="{% url 'adaptive' %}">
+                       <button type="submit" class="btn btn-outline-success">Run Simulation</button>
                     </form>                   
             </div>
         </div>
