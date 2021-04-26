@@ -1,11 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User,Instructor,Student,Course,Assignment,Submission    
+from .models import User, Instructor, Student, Course, Assignment, Submission
 from uuid import UUID
-import simplejson as json
 from . import design_tool
 import numpy as np
 # Create your views here.
@@ -14,7 +13,7 @@ def home(request):
 
 
 def test(request):
-    num, den, omega, mag, phase,gm, pm, wg, wp= design_tool.Gs()
+    num, den, omega, mag, phase, gm, pm, wg, wp= design_tool.Gs()
     if request.method == "POST":
         if request.POST.get("zero"):
             z = float(request.POST.get("zero"))
@@ -280,7 +279,7 @@ def instructor(request):
                 assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=4,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller) #Scoere Adjust
                 assign.save()
             elif req.get("grade")=="receive":
-                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=4,instructor=request.user.username,describtion=desc,controller=controller) #Scoere Adjust
+                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=4, instructor=request.user.username,describtion=desc,controller=controller) #Scoere Adjust
                 assign.save()
             course=Course.objects.get(name=course)
             course.assignments.add(assign)
@@ -288,51 +287,54 @@ def instructor(request):
         if req.get("courseName"):
         # Reminder: Check if there are missing fields
             courseName = req.get("courseName")
-            course=Course.objects.create(name=courseName,instructor=request.user)
+            course=Course.objects.create(name=courseName, instructor=request.user)
             course.save
             return HttpResponseRedirect(reverse("instructor"))
     else:
-        return render(request,"main/instructor.html",{
-            "instructor":instructor,
+        return render(request, "main/instructor.html", {
+            "instructor": instructor,
             "assignments": assignments,
             "simulators": simulators,
-            "courseAssignment":courseAssignment,
-            "courses":courses,
-            "assignmentSubmission":assignmentSubmission,
-        }) 
+            "courseAssignment": courseAssignment,
+            "courses": courses,
+            "assignmentSubmission": assignmentSubmission,
+        })
 
 
 def cruise(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
-        return render(request,"main/cruise.html",{
-        "assignment":assignment,
-    })
-    except: 
+        return render(request, "main/cruise.html", {
+            "assignment": assignment,
+        })
+    except IntegrityError:
         controller = ""
-    return render(request,"main/cruise.html",{
-    "controller":controller,
+    return render(request, "main/cruise.html", {
+        "controller": controller,
     })
+
+
 def adaptive(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
-        return render(request,"main/adaptive.html",{
-        "assignment":assignment,
-    })
-    except: 
+        return render(request, "main/adaptive.html", {
+            "assignment": assignment,
+        })
+    except IntegrityError:
         controller = ""
-    return render(request,"main/adaptive.html",{
-    "controller":controller,
+    return render(request, "main/adaptive.html", {
+        "controller": controller,
     })
-    
+
+
 def servomotor(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
-        return render(request,"main/servomotor.html",{
-        "assignment":assignment,
-    })
-    except: 
+        return render(request, "main/servomotor.html", {
+            "assignment": assignment,
+        })
+    except IntegrityError:
         controller = ""
-    return render(request,"main/servomotor.html",{
-    "controller":controller,
+    return render(request, "main/servomotor.html", {
+        "controller": controller,
     })
