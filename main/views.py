@@ -7,7 +7,7 @@ from .models import User, Instructor, Student, Course, Assignment, Submission
 from uuid import UUID
 from . import design_tool
 import numpy as np
-# Create your views here.
+
 def home(request):
     return render(request, "main/home.html")
 
@@ -110,7 +110,7 @@ def register(request):
                     user.save()
                     instructor=Instructor.objects.create(credentials=user,major=major)
                     instructor.save()
-                except IntegrityError:
+                except:
                     return render(request, "main/register.html", {
                         "instMSG": "Username already taken.",
                         "first": first,
@@ -167,7 +167,7 @@ def register(request):
                     user.save()
                     student=Student.objects.create(credentials=user,courses=course)
                     student.save()
-                except IntegrityError:
+                except:
                     return render(request, "main/register.html", {
                         "studMSG": "Username already taken.",
                         "username": username,
@@ -264,7 +264,6 @@ def instructor(request):
         simulators.append(choice[0])
     if req:
         if req.get("sim"):
-            # Reminder: Check if there are missing fields
             sim = req.get("sim")
             course = req.get("course")
             due = req.get("due")
@@ -276,16 +275,15 @@ def instructor(request):
             desc = req.get("desc")
             controller= req.get("controller")
             if req.get("grade")=="auto": 
-                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=4,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller) #Scoere Adjust
+                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=4,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller)
                 assign.save()
             elif req.get("grade")=="receive":
-                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=4, instructor=request.user.username,describtion=desc,controller=controller) #Scoere Adjust
+                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=4, instructor=request.user.username,describtion=desc,controller=controller)
                 assign.save()
             course=Course.objects.get(name=course)
             course.assignments.add(assign)
             return HttpResponseRedirect(reverse("instructor"))
         if req.get("courseName"):
-        # Reminder: Check if there are missing fields
             courseName = req.get("courseName")
             course=Course.objects.create(name=courseName, instructor=request.user)
             course.save
@@ -304,10 +302,14 @@ def instructor(request):
 def cruise(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
-        return render(request, "main/cruise.html", {
-            "assignment": assignment,
-        })
-    except IntegrityError:
+        if assignment.simulator=="Cruise Control":
+            return render(request, "main/cruise.html", {
+                "assignment": assignment,
+            })
+        else:
+            return render(request, "main/cruise.html", {
+            })
+    except:
         controller = ""
     return render(request, "main/cruise.html", {
         "controller": controller,
@@ -320,7 +322,7 @@ def adaptive(request):
         return render(request, "main/adaptive.html", {
             "assignment": assignment,
         })
-    except IntegrityError:
+    except:
         controller = ""
     return render(request, "main/adaptive.html", {
         "controller": controller,
@@ -328,12 +330,37 @@ def adaptive(request):
 
 
 def servomotor(request):
+    if request.POST:
+        zero = request.POST.get("zero")
+        pole = request.POST.get("pole")
+        gain = request.POST.get("gain")
+        p = request.POST.get("p")
+        i = request.POST.get("i")
+        d = request.POST.get("d")
+        submit= request.POST.get("submit")
+        if submit==1:
+            if p and not i and not d:
+                return
+            if p and d and not i:
+                return
+        else:
+            if p and not i and not d:
+                return
+            if p and d and not i:
+                return
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
         return render(request, "main/servomotor.html", {
             "assignment": assignment,
         })
-    except IntegrityError:
+        if assignment.simulator=="Servo Motor":
+            return render(request, "main/cruise.html", {
+                "assignment": assignment,
+            })
+        else:
+            return render(request, "main/cruise.html", {
+            })
+    except:
         controller = ""
     return render(request, "main/servomotor.html", {
         "controller": controller,

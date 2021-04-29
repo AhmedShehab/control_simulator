@@ -5,15 +5,15 @@ function openStudentForm() {
 }
 
  function closeRegisterForm(){
-     location.reload();
-} 
+    location.reload();
+}
+
 function openInstructorForm() {
     status = "i";
     document.getElementById("instructorForm").style.display = "block";
     document.getElementById("studForm").style.display = "none";
     document.getElementById("instForm").style.display = "none";
 }
-
 
 if (document.getElementById("instMSG")) {
     openInstructorForm();
