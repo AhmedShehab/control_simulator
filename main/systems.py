@@ -54,10 +54,45 @@ def margin_Gs(sys):
     return gm, pm, wg, wp
 
 
-
-
 def bode_zpk(sys, z, p, k):
-    return
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+
+    ## define compensator transfer function
+    # convert zero and pole to numpy arrays
+    z = np.array([z])
+    p = np.array([p])
+    num, den = matlab.zpk2tf(z, p, k)
+    Ds = matlab.tf(num, den)
+
+    # Compensated open-loop transfer function
+    DsGs = Ds*Gs
+
+    ## bode plot lists
+    omega = np.logspace(-2,2,2000)
+    mag, phase, omega = control.bode(DsGs, omega=omega)
+    mag = 20 * np.log10(mag) # mag in db
+    phase= np.degrees(phase) # phase in degrees
+
+    # convert numpy arrays to lists    
+    omega = list(omega)
+    phase = list(phase)
+    mag = list(mag)
+    
+    # round lists to 5 decimal floating digits
+    no_digits = 5
+    omega = [round(num, no_digits) for num in omega]
+    phase = [round(num, no_digits) for num in phase]
+    mag = [round(num, no_digits) for num in mag]
+    
+    return omega, mag, phase
+
 
 def bode_pid(sys, p, i, d):
     return
