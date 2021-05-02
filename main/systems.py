@@ -45,7 +45,7 @@ def margin_Gs(sys):
     gm, pm, wg, wp = control.margin(Gs)
 
     # round phase & gain margin variables
-    no_digits = 4
+    no_digits = 2
     gm = round(gm, no_digits)
     pm = round(pm, no_digits)
     wg = round(wg, no_digits)
@@ -92,6 +92,38 @@ def bode_zpk(sys, z, p, k):
     mag = [round(num, no_digits) for num in mag]
     
     return omega, mag, phase
+
+def margin_zpk(sys, z, p, k):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+
+    ## define compensator transfer function
+    # convert zero and pole to numpy arrays
+    z = np.array([z])
+    p = np.array([p])
+    num, den = matlab.zpk2tf(z, p, k)
+    Ds = matlab.tf(num, den)
+
+    # Compensated open-loop transfer function
+    DsGs = Ds*Gs
+
+    # phase & gain margins
+    gm, pm, wg, wp = control.margin(DsGs)
+
+    # round phase & gain margin variables
+    no_digits = 2
+    gm = round(gm, no_digits)
+    pm = round(pm, no_digits)
+    wg = round(wg, no_digits)
+    wp = round(wp, no_digits)
+
+    return gm, pm, wg, wp
 
 
 def bode_pid(sys, p, i, d):
