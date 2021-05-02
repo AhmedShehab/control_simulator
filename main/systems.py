@@ -32,7 +32,29 @@ def bode_Gs(sys):
     return omega, mag, phase
 
 def margin_Gs(sys):
-    return
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+    
+    # phase & gain margins
+    gm, pm, wg, wp = control.margin(Gs)
+
+    # round phase & gain margin variables
+    no_digits = 4
+    gm = round(gm, no_digits)
+    pm = round(pm, no_digits)
+    wg = round(wg, no_digits)
+    wp = round(wp, no_digits)
+
+    return gm, pm, wg, wp
+
+
+
 
 def bode_zpk(sys, z, p, k):
     return
