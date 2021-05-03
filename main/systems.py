@@ -319,8 +319,30 @@ def stepinfo_sys(sys):
     return spec
 
 def stepinfo_zpk(sys, z, p, k):
-    
-    return
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+
+    ## define compensator transfer function
+    # convert zero and pole to numpy arrays
+    z = np.array([z])
+    p = np.array([p])
+    num, den = matlab.zpk2tf(z, p, k)
+    Ds = matlab.tf(num, den)
+
+    # Compensated open-loop transfer function
+    DsGs = Ds*Gs
+
+    # closed-loop unity-feedback transfer function
+    Ts = control.feedback(DsGs, 1)
+    spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+
+    return spec
 
 def stepinfo_pid(sys, p, i, d):
     return
