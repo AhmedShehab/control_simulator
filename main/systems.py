@@ -24,10 +24,10 @@ def bode_sys(sys):
     mag = list(mag)
     
     # round lists to 5 decimal floating digits
-    no_digits = 5
-    omega = [round(num, no_digits) for num in omega]
-    phase = [round(num, no_digits) for num in phase]
-    mag = [round(num, no_digits) for num in mag]
+    ndigits = 6
+    omega = [round(num, ndigits) for num in omega]
+    phase = [round(num, ndigits) for num in phase]
+    mag = [round(num, ndigits) for num in mag]
     
     return omega, mag, phase
 
@@ -45,11 +45,11 @@ def margin_sys(sys):
     gm, pm, wg, wp = control.margin(Gs)
 
     # round phase & gain margin variables
-    no_digits = 2
-    gm = round(gm, no_digits)
-    pm = round(pm, no_digits)
-    wg = round(wg, no_digits)
-    wp = round(wp, no_digits)
+    ndigits = 2
+    gm = round(gm, ndigits)
+    pm = round(pm, ndigits)
+    wg = round(wg, ndigits)
+    wp = round(wp, ndigits)
 
     return gm, pm, wg, wp
 
@@ -86,10 +86,10 @@ def bode_zpk(sys, z, p, k):
     mag = list(mag)
     
     # round lists to 5 decimal floating digits
-    no_digits = 5
-    omega = [round(num, no_digits) for num in omega]
-    phase = [round(num, no_digits) for num in phase]
-    mag = [round(num, no_digits) for num in mag]
+    ndigits = 6
+    omega = [round(num, ndigits) for num in omega]
+    phase = [round(num, ndigits) for num in phase]
+    mag = [round(num, ndigits) for num in mag]
     
     return omega, mag, phase
 
@@ -117,11 +117,11 @@ def margin_zpk(sys, z, p, k):
     gm, pm, wg, wp = control.margin(DsGs)
 
     # round phase & gain margin variables
-    no_digits = 2
-    gm = round(gm, no_digits)
-    pm = round(pm, no_digits)
-    wg = round(wg, no_digits)
-    wp = round(wp, no_digits)
+    ndigits = 2
+    gm = round(gm, ndigits)
+    pm = round(pm, ndigits)
+    wg = round(wg, ndigits)
+    wp = round(wp, ndigits)
 
     return gm, pm, wg, wp
 
@@ -155,10 +155,10 @@ def bode_pid(sys, Kp, Ki, Kd):
     mag = list(mag)
     
     # round lists to 5 decimal floating digits
-    no_digits = 5
-    omega = [round(num, no_digits) for num in omega]
-    phase = [round(num, no_digits) for num in phase]
-    mag = [round(num, no_digits) for num in mag]
+    ndigits = 6
+    omega = [round(num, ndigits) for num in omega]
+    phase = [round(num, ndigits) for num in phase]
+    mag = [round(num, ndigits) for num in mag]
     
     return omega, mag, phase
 
@@ -184,11 +184,11 @@ def margin_pid(sys, Kp, Ki, Kd):
     gm, pm, wg, wp = control.margin(DsGs)
 
     # round phase & gain margin variables
-    no_digits = 2
-    gm = round(gm, no_digits)
-    pm = round(pm, no_digits)
-    wg = round(wg, no_digits)
-    wp = round(wp, no_digits)
+    ndigits = 2
+    gm = round(gm, ndigits)
+    pm = round(pm, ndigits)
+    wg = round(wg, ndigits)
+    wp = round(wp, ndigits)
 
     return gm, pm, wg, wp
 
