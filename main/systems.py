@@ -192,6 +192,37 @@ def margin_pid(sys, Kp, Ki, Kd):
 
     return gm, pm, wg, wp
 
+def step_sys(sys, final_time, setpoint):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+    
+    # closed-loop unity-feedback transfer function
+    Ts = control.feedback(Gs, 1)
+
+    # simulation time parameters
+    initial_time = 0
+    nsteps = 2000   # number of time steps
+    t = np.linspace(initial_time, final_time, nsteps)
+    output, t = matlab.step(Ts, t)
+    output = setpoint*output
+
+    # covert numpy arrays to lists
+    t = list(t)
+    output = list(output)
+
+    # round lists to 5 decimal digits
+    ndigits = 6
+    t = [round(num, ndigits) for num in t]
+    output = [round(num, ndigits) for num in output]
+
+    return t, output
+
 def step_zpk(sys, z, p, k):
     return
 
