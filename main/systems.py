@@ -12,7 +12,7 @@ def bode_Gs(sys):
         return
     Gs = control.tf(num, den)
 
-    ## bode plot lists
+    ## bode plot arrays
     omega = np.logspace(-2,2,2000)
     mag, phase, omega = control.bode(Gs, omega=omega)
     mag = 20 * np.log10(mag) # mag in db
@@ -74,7 +74,7 @@ def bode_zpk(sys, z, p, k):
     # Compensated open-loop transfer function
     DsGs = Ds*Gs
 
-    ## bode plot lists
+    ## bode plot arrays
     omega = np.logspace(-2,2,2000)
     mag, phase, omega = control.bode(DsGs, omega=omega)
     mag = 20 * np.log10(mag) # mag in db
@@ -126,8 +126,71 @@ def margin_zpk(sys, z, p, k):
     return gm, pm, wg, wp
 
 
-def bode_pid(sys, p, i, d):
-    return
+def bode_pid(sys, Kp, Ki, Kd):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+
+    # PID Controller
+    s = matlab.tf('s')
+    Ds = Kp + Ki/s + Kd*s
+
+    # Compensated open-loop transfer function
+    DsGs = Ds*Gs
+
+    ## bode plot arrays
+    omega = np.logspace(-2,2,2000)
+    mag, phase, omega = control.bode(DsGs, omega=omega)
+    mag = 20 * np.log10(mag) # mag in db
+    phase= np.degrees(phase) # phase in degrees
+
+    # convert numpy arrays to lists    
+    omega = list(omega)
+    phase = list(phase)
+    mag = list(mag)
+    
+    # round lists to 5 decimal floating digits
+    no_digits = 5
+    omega = [round(num, no_digits) for num in omega]
+    phase = [round(num, no_digits) for num in phase]
+    mag = [round(num, no_digits) for num in mag]
+    
+    return omega, mag, phase
+
+
+def margin_pid(sys, Kp, Ki, Kd):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+
+    # PID Controller
+    s = matlab.tf('s')
+    Ds = Kp + Ki/s + Kd*s
+
+    # Compensated open-loop transfer function
+    DsGs = Ds*Gs
+
+    # phase & gain margins
+    gm, pm, wg, wp = control.margin(DsGs)
+
+    # round phase & gain margin variables
+    no_digits = 2
+    gm = round(gm, no_digits)
+    pm = round(pm, no_digits)
+    wg = round(wg, no_digits)
+    wp = round(wp, no_digits)
+
+    return gm, pm, wg, wp
 
 def step_zpk(sys, z, p, k):
     return
