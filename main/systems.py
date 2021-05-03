@@ -344,8 +344,28 @@ def stepinfo_zpk(sys, z, p, k):
 
     return spec
 
-def stepinfo_pid(sys, p, i, d):
-    return
+def stepinfo_pid(sys, Kp, Ki, Kd):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+
+    # PID Controller
+    s = matlab.tf('s')
+    Ds = Kp + Ki/s + Kd*s
+
+    # Compensated open-loop transfer function
+    DsGs = Ds*Gs
+
+    # closed-loop unity-feedback transfer function
+    Ts = control.feedback(DsGs, 1)
+    spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+
+    return spec
 
 def model(sys):
     if sys == 'cruise':
