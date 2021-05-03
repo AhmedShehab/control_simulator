@@ -264,8 +264,43 @@ def step_zpk(sys, final_time, setpoint, z, p, k):
 
     return t, output
 
-def step_pid(sys, p, i, d):
-    return
+def step_pid(sys, final_time, setpoint, Kp, Ki, Kd):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+
+    # PID Controller
+    s = matlab.tf('s')
+    Ds = Kp + Ki/s + Kd*s
+
+    # Compensated open-loop transfer function
+    DsGs = Ds*Gs
+
+    # closed-loop unity-feedback transfer function
+    Ts = control.feedback(DsGs, 1)
+
+    # simulation time parameters
+    initial_time = 0
+    nsteps = 2000   # number of time steps
+    t = np.linspace(initial_time, final_time, nsteps)
+    output, t = matlab.step(Ts, t)
+    output = setpoint*output
+
+    # covert numpy arrays to lists
+    t = list(t)
+    output = list(output)
+
+    # round lists to 5 decimal digits
+    ndigits = 6
+    t = [round(num, ndigits) for num in t]
+    output = [round(num, ndigits) for num in output]
+
+    return t, output
 
 def stepinfo_Gs(sys):
     return
