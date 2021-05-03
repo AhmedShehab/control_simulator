@@ -2,7 +2,7 @@ import numpy as np
 import control
 import control.matlab as matlab
 
-def bode_Gs(sys):
+def bode_sys(sys):
     ## open-loop system transfer function
     try:
         num, den = model(sys)
@@ -31,7 +31,7 @@ def bode_Gs(sys):
     
     return omega, mag, phase
 
-def margin_Gs(sys):
+def margin_sys(sys):
     ## open-loop system transfer function
     try:
         num, den = model(sys)
@@ -302,10 +302,24 @@ def step_pid(sys, final_time, setpoint, Kp, Ki, Kd):
 
     return t, output
 
-def stepinfo_Gs(sys):
-    return
+def stepinfo_sys(sys):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+    
+    # closed-loop unity-feedback transfer function
+    Ts = control.feedback(Gs, 1)
+    spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+    
+    return spec
 
 def stepinfo_zpk(sys, z, p, k):
+    
     return
 
 def stepinfo_pid(sys, p, i, d):
