@@ -316,15 +316,15 @@ def cruise(request):
     })
 
 
-def adaptive(request):
+def water(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
-        return render(request, "main/adaptive.html", {
+        return render(request, "main/water.html", {
             "assignment": assignment,
         })
     except:
         controller = ""
-    return render(request, "main/adaptive.html", {
+    return render(request, "main/water.html", {
         "controller": controller,
     })
 
@@ -338,7 +338,7 @@ def servomotor(request):
         i = request.POST.get("i")
         d = request.POST.get("d")
         submit= request.POST.get("submit")
-        if submit==1:
+        if submit== "1":
             if p and not i and not d:
                 return
             if p and d and not i:
