@@ -1,6 +1,7 @@
 import numpy as np
 import control
 import control.matlab as matlab
+from sympy import Symbol, limit
 
 def bode_sys(sys):
     ## open-loop system transfer function

@@ -26,8 +26,9 @@
 {% endblock head %}
 {% block body %}
 {% if assignment.riseTime %}
-<div class="{{assignment.id}} assignPosition">
-        <div class="assign_child">
+<div class="{{assignment.id}}"
+        style="display: none; position: fixed;background-color: rgba(0, 0, 0, 0.658);top: 0;left: 0;bottom: 0;right: 0;">
+        <div class="assign_child2">
                 <h3>System Requirements</h3>
                 Rise Time = {{assignment.riseTime}}s
                 <br>
@@ -41,8 +42,9 @@
         </div>
 </div>
 {% else %}
-<div class="{{assignment.id}} assignPosition">
-        <div class="assign_child">
+<div class="{{assignment.id}}"
+        style="display: none; position: fixed;background-color: rgba(0, 0, 0, 0.658);top: 0;left: 0;bottom: 0;right: 0;">
+        <div class="assign_child2">
                 <h3>Requirements Describtion</h3>
                 <p>{{assignment.describtion}}</p>
                 <br>
@@ -54,7 +56,7 @@
         <div class="flex-child" id="simulatorForm" style="flex:1;">
                 <form class="cred_form">
                         {% if assignment %}
-                        <h5>Assignment: {{assignment.subject}}<button type="button" class="button" id="{{assignment.id}}"
+                        <h5>Assignment: {{assignment.subject}}<button class="button" id="{{assignment.id}}"
                                         onclick="openReqForm({{assignment.id}});">Display Requirements</button></h5>
                         {% endif %}
                         <h2 style=" display: inline;">Controller: </h2>
@@ -199,6 +201,7 @@
                         <canvas id="myChart"></canvas>
                 </div>
         </div>
+        
 </div>
 <div style="text-align: center;">
         <a class="btn draw" href="{% url 'design' %}" >Design by Frequency</button>

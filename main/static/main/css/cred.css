@@ -22,11 +22,10 @@
     
 }
 .button,.button2{
-    border-radius: 1mm;
+    border-radius: 5mm;
     border: solid #28a745 1px;
     outline: none;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
     font: 16px arial,sans-serif;
     padding: 10px;
 }
@@ -38,7 +37,7 @@
     color: white;
     background-color:#28a745;
 }
-.button:hover,.button2:hover{
+.button:hover.button2:hover{
     cursor: pointer;
     border-color: #28a745;   
 }
