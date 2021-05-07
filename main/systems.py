@@ -368,6 +368,37 @@ def stepinfo_pid(sys, Kp, Ki, Kd):
 
     return spec
 
+def ess_step(tf, amp):
+    # convert numerator and denumerator to lists
+    num = list(tf.num[0][0])
+    den = list(tf.den[0][0])
+
+    # define symbolic numerator
+    s = Symbol('s')
+    sym_num = 0
+    for p in range(len(num)):
+        sym_num += num[p]*s**p
+
+    # define symbolic denumerator
+    sym_den = 0
+    for p in range(len(den)):
+        sym_den += den[p]*s**p
+
+    # define symbolic transfer function
+    sym_Gs = sym_num/sym_den
+
+    # define input function in s-domain
+    sym_Rs = amp/s
+
+    # steady-state error
+    sym_ess = (s*sym_Rs)/(1+sym_Gs)
+
+    # calculate steady state error
+    ess = limit(sym_ess, s, 0)
+
+    return ess
+
+
 def model(sys):
     if sys == 'cruise':
         num = None
