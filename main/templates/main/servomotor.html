@@ -9,6 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"></script>
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
 <link href="{% static 'main/css/profile.css' %}" rel="stylesheet">
+<link href="{% static 'main/css/Layout.css' %}" rel="stylesheet">
 <style>
         .flex-child {
                 margin-top: 5%;
@@ -17,7 +18,7 @@
         }
 
         .flex-child:first-child {
-                border-right: 2px solid green;
+                border-right: 2px solid #28a745;
                 padding:3% 5% 2% 4%;
                 margin-right: 20px;
         }
@@ -194,6 +195,10 @@
                         <canvas id="myChart"></canvas>
                 </div>
         </div>
+        
+</div>
+<div style="text-align: center;">
+        <a class="btn draw" href="{% url 'design' %}" >Design by Frequency</button>
 </div>
 <script src=" {% static 'main/script/chart.js' %}"></script>
 <script src=" {% static 'main/script/student.js' %}"></script>

@@ -9,10 +9,10 @@
 }
 th{
     color: white;
-    background-color: green;
+    background-color: #28a745;
 }
 tr{
-    border-bottom: green 1px solid;
+    border-bottom: #28a745 1px solid;
 }
 #assignment:hover{
     cursor: pointer;
@@ -32,7 +32,7 @@ tr{
     padding: 20px;
     background-color: white;
     width: 30%;
-    border: 2px solid green;
+    border: 2px solid #28a745;
     border-radius: 60px;
 }
 .assign_child1{

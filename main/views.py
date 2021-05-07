@@ -10,10 +10,12 @@ from . import design_tool
 import numpy as np
 # Create your views here.
 def home(request):
-    return render(request, "main/home.html")
+    return render(request, "main/home.html",{
+        "home": True
+    })
 
 
-def test(request):
+def design(request):
     num, den, omega, mag, phase,gm, pm, wg, wp= design_tool.Gs()
     if request.method == "POST":
         if request.POST.get("zero"):
@@ -34,8 +36,8 @@ def test(request):
             p = float(p)
             i = float(i)
             d = float(d)
-            omega_comp, mag_comp, phase_comp, gm, pm, wp, wg  = design_tool.pid(p, i, d)
-        return render(request, "main/test.html", {
+            omega_comp, mag_comp, phase_comp, gm_comp, pm_comp, wp, wg  = design_tool.pid(p, i, d)
+        return render(request, "main/design.html", {
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
@@ -44,16 +46,18 @@ def test(request):
                 "denominator": den,
                 "mag_comp": mag_comp,
                 "ph_comp": phase_comp,
-                "omega_comp":omega_comp
+                "omega_comp":omega_comp,
+                "pm_comp": pm_comp,
+                "gm_comp": gm_comp
             })
-    return render(request, "main/test.html", {
+    return render(request, "main/design.html", {
                 
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
                 "name": 'Servo Motor',
-                "numerator": "3",
-                "denominator": "3s^2 +1",
+                "numerator": num,
+                "denominator": den,
                 "pm": pm,
                 "gm": gm
             })

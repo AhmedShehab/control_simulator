@@ -2,16 +2,31 @@ window.onload = function () {
     var omega = document.getElementById("omega").value;
     var mag = document.getElementById("mag").value;
     var ph = document.getElementById("ph").value;
+    var pm = document.getElementById("pm").value;
+    var gm = document.getElementById("gm").value;
+    
+    if (parseFloat(pm)!= NaN){
+        pm = parseFloat(pm).toFixed(3);
+    }
+    var p =parseFloat(pm);
+    if(!isNaN(p)){
+        pm = parseFloat(pm).toFixed(3); 
+    }
+    var g =parseFloat(gm);
+    if(!isNaN(g)){
+        gm = parseFloat(gm).toFixed(3);  
+    }
+    
+
     omega = omega.match(/-?\d+(?:\.\d+)?/g).map(Number);
     ph = ph.match(/-?\d+(?:\.\d+)?/g).map(Number);
     mag = mag.match(/-?\d+(?:\.\d+)?/g).map(Number);
     var limit = omega.length;
 
-
     var omega_comp = document.getElementById("omega_comp");
     var mag_comp = document.getElementById("mag_comp");
     var ph_comp = document.getElementById("ph_comp");
-    console.log("comp: "+omega_comp.value)
+
     var Mag, Ph;
     var magnitude = [];
     var phase = [];
@@ -44,11 +59,14 @@ window.onload = function () {
         animationEnabled: true,
         theme: "light",
         title: {
-            text: "Bode Diagram"
+            display: true,
+            text: "Gain margin =" +gm +" dB/ Phase margin ="+pm +" degrees",
+            fontSize: 20
         },
+
         axisX:{
             logarithmic: true,
-            title: "Frequency (Log)",
+            title: "Frequency",
             gridThickness: 1
             
         },
@@ -70,7 +88,7 @@ window.onload = function () {
         },
         axisX:{
             logarithmic: true,
-            title: "Frequency (Log)",
+            title: "Frequency",
             gridThickness: 1
             
         },
@@ -85,14 +103,28 @@ window.onload = function () {
     console.log(magnitude);
 
     if ((omega_comp.value != "" || omega_comp.value==null )){
-        console.log("Nooooo!")
-        console.log(magnitude)
         omega_comp = omega_comp.value;
         mag_comp = mag_comp.value;
         ph_comp = ph_comp.value;
         omega_comp = omega_comp.match(/-?\d+(?:\.\d+)?/g).map(Number);
         ph_comp = ph_comp.match(/-?\d+(?:\.\d+)?/g).map(Number);
         mag_comp = mag_comp.match(/-?\d+(?:\.\d+)?/g).map(Number);
+
+        var pm = document.getElementById("pm_comp").value;
+        var gm = document.getElementById("gm_comp").value;
+        
+        if (parseFloat(pm)!= NaN){
+            pm = parseFloat(pm).toFixed(3);
+        }
+        var p =parseFloat(pm);
+        if(!isNaN(p)){
+            pm = parseFloat(pm).toFixed(3); 
+        }
+        var g =parseFloat(gm);
+        if(!isNaN(g)){
+            gm = parseFloat(gm).toFixed(3);  
+        }
+        
         var limit_comp = omega_comp.length;
         var dataSeries = { type: "line" };
         var dataPoints = [];
@@ -122,11 +154,13 @@ window.onload = function () {
             animationEnabled: true,
             theme: "light",
             title: {
-                text: "Bode Diagram"
+                display: true,
+                text: "Gain margin =" +gm +" dB/ Phase margin ="+pm +" degrees",
+                fontSize: 20
             },
             axisX:{
                 logarithmic: true,
-                title: "Frequency (Log)",
+                title: "Frequency",
                 gridThickness: 1
                 
             },
@@ -151,7 +185,7 @@ window.onload = function () {
             },
             axisX:{
                 logarithmic: true,
-                title: "Frequency (Log)",
+                title: "Frequency ",
                 gridThickness: 1
                 
             },

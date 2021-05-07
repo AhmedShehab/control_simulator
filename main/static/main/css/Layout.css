@@ -61,7 +61,7 @@ p
 }
 .test5
 {
-    background: #145A32;
+    background: #28a745;
     padding: 30px;
 }
 .logo
@@ -80,9 +80,33 @@ p
     font-size: medium;
     padding: 5px;
 }
+.nav-link {
+    color: #28a745 !important;
+    }
 a:hover, a:active
 {
     text-decoration: none;
-    background-color: green;
+    background-color: #28a745;
+    color: white !important;
+    border-radius: 5px;
+
+}
+.nav-item:hover > .dropdown{
+
+    cursor: pointer;
+    border-radius: 7px;
+}
+.nav-right{
+    padding: 0 50px 0 0 ;
+}
+.draw{
+    color: #28a745;
+    font-weight:500;
+    border: solid 1px #28a745;
+}
+.draw:hover{
+    transition: 0.3s; outline:none; 
+    background-color: #28a745;
     color: white;
 }
+

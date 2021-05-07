@@ -5,7 +5,7 @@
     border-top:none ;
     border-left: none;
     border-right: none;
-    border-bottom: green solid 3px;
+    border-bottom: #28a745 solid 3px;
     outline: none;
     width: 93%;
     height: 7%;
@@ -21,46 +21,46 @@
 }
 .grade{
     display: grid;
-    border-bottom: green solid 3px;
+    border-bottom: #28a745 solid 3px;
     
 }
 .button,.button2{
     border-radius: 5mm;
-    border: solid green 1px;
+    border: solid #28a745 1px;
     outline: none;
     margin-top: 10px;
     font: 16px arial,sans-serif;
     padding: 10px;
 }
 .button{
-    color: green;
+    color: #28a745;
     background-color:white;
 }
 .button2{
     color: white;
-    background-color:green;
+    background-color:#28a745;
 }
 .button:hover.button2:hover{
     cursor: pointer;
-    border-color: green;   
+    border-color: #28a745;   
 }
 .button:hover{
     color: white;
-    background-color: green;
+    background-color: #28a745;
 }
 .button2:hover{
     color: white;
-    background-color: green;
+    background-color: #28a745;
 }
 .link{
-    color: green;
+    color: #28a745;
     text-decoration: none;
 }
 .link:hover{
     text-decoration: underline;
 }
 ::placeholder {
-    color: green;
+    color: #28a745;
     opacity: 1;
 }
 .container{
@@ -82,11 +82,11 @@
     }
 }
 .signup{
-    color: green;
+    color: #28a745;
     text-decoration: none;
 }
 .signup:hover{
-    color: green;
+    color: #28a745;
     text-decoration: underline;
     background-color: snow;
 }
@@ -101,9 +101,9 @@
     justify-content: center;
 }
 .studentGridItem,.instructorGridItem{
-    background-color: green;
+    background-color: #28a745;
     padding: 10px;
-    border: green solid;
+    border: #28a745 solid;
     border-radius: 30px;
     width: 250px;
     margin-top: 10px;
