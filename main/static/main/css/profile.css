@@ -28,12 +28,12 @@ tr{
     justify-content: center;
     align-items: center;
 }
-.assign_child,.assign_child3{
+.assign_child{
     padding: 20px;
     background-color: white;
     width: 30%;
     border: 2px solid #28a745;
-    border-radius: 60px;
+    border-radius: 20px;
     padding: auto;
     text-align: center;
 }

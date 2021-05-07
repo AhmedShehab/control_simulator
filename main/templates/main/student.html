@@ -55,19 +55,21 @@
         <form action="{% url 'student' %}" method="POST">
         {% csrf_token %}
         <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        <button class="button" type="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
         </form>
-        {% elif assignment.simulator == "Adaptive Cruise control" %}
+        {% elif assignment.simulator == "Water" %}
         <form action="{% url 'student' %}" method="POST">
         {% csrf_token %}
         <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        <button class="button" type="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
         </form>
         {% elif assignment.simulator == "Servo Motor" %}
         <form action="{% url 'student' %}" method="POST">
             {% csrf_token %}
             <button class="button2" name="assignment" value="{{assignment.id}}" type="submit">Submit Assignment</button>
-            </form>
+            <button class="button"  type ="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
+        </form>
         {% endif %}
-        <button class="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
     </div>
 </div>
 {% else %}
@@ -84,19 +86,21 @@
         <form action="{% url 'student' %}" method="POST">
         {% csrf_token %}
         <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        <button class="button" type="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
         </form>
         {% elif assignment.simulator == "Water" %}
         <form action="{% url 'student' %}" method="POST">
         {% csrf_token %} 
         <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        <button class="button" type="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
         </form>
         {% elif assignment.simulator == "Servo Motor" %}
         <form action="{% url 'student' %}" method="POST">
         {% csrf_token %}
         <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+        <button class="button" type="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
         </form>
         {% endif %}
-        <button class="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
     </div>
 </div>
 {% endif %}
