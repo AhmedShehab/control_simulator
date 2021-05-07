@@ -86,7 +86,7 @@
         {% csrf_token %}
         <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
         </form>
-        {% elif assignment.simulator == "Adaptive Cruise control" %}
+        {% elif assignment.simulator == "Water" %}
         <form action="{% url 'student' %}" method="POST">
         {% csrf_token %} 
         <button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
