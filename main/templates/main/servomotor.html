@@ -67,19 +67,25 @@
                                 <option value="PID">PID</option>
                                 <option value="lag">Lag</option>
                                 <option value="lead">Lead</option>
-                                <option value="laglead">Lag-Lead</option>
                         </select>
+                        {% comment %} Dummy Form Temporary fix for some unknown bug {% endcomment %}
+                        <div id="dummy" style="display: none;" class="option"> 
+                                <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+                                        {% csrf_token %}
+                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
+                                </form>
+                        </div>
                         <div id="P" style="display: none;" class="option">
                                 <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
                                         {% csrf_token %}
-                                        <h5 style="display: inline;">P:</h5>
+                                        <h5>P:</h5>
                                         <input class="cred" type="number" step="0.00001" required
                                                 placeholder="Enter the value" name="p">
                                         <br>
                                         {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="1">Submit</button>
+                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
                                         {% endif %}
-                                        <button class="button" type="button" onclick="sim();">Start</button>
+                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
                                         <input class="button" type="button" value="Reset">
                                 </form>
                         </div>
@@ -95,9 +101,9 @@
                                                 placeholder="Enter the value" name="i">
                                         <br>
                                         {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="1">Submit</button>
+                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
                                         {% endif %}
-                                        <button class="button" type="button" onclick="sim();">Start</button>
+                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
                                         <input class="button" type="button" value="Reset">
                                 </form>
                         </div>
@@ -113,9 +119,9 @@
                                                 placeholder="Enter the value" name="d">
                                         <br>
                                         {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="1">Submit</button>
+                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
                                         {% endif %}
-                                        <button class="button" type="button" onclick="sim();">Start</button>
+                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
                                         <input class="button" type="button" value="Reset">
                                 </form>
                         </div>
@@ -135,9 +141,9 @@
                                                 placeholder="Enter the value" name="d">
                                         <br>
                                         {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="1">Submit</button>
+                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
                                         {% endif %}
-                                        <button class="button" type="button" onclick="sim();">Start</button>
+                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
                                         <input class="button" type="button" value="Reset">
                                 </form>
                         </div>
@@ -157,9 +163,9 @@
                                                 placeholder="Enter the value" name="gain">
                                         <br>
                                         {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="1">Submit</button>
+                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
                                         {% endif %}
-                                        <button class="button" type="button" onclick="sim();">Start</button>
+                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
                                         <input class="button" type="button" value="Reset">
                                 </form>
                         </div>
@@ -179,7 +185,7 @@
                                                 name="gain" required>
                                         <br>
                                         {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="1">Submit</button>
+                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
                                         {% endif %}
                                         <button class="button" type="button" onclick="sim()">Start</button>
                                         <input class="button" type="button" value="Reset">

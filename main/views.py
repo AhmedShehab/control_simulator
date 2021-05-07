@@ -7,6 +7,7 @@ from .models import User, Instructor, Student, Course, Assignment, Submission
 from uuid import UUID
 from . import design_tool
 import numpy as np
+from .systems import *
 
 def home(request):
     return render(request, "main/home.html")
@@ -331,25 +332,25 @@ def water(request):
 
 def servomotor(request):
     if request.POST:
-        zero = request.POST.get("zero")
-        pole = request.POST.get("pole")
-        gain = request.POST.get("gain")
-        p = request.POST.get("p")
-        i = request.POST.get("i")
-        d = request.POST.get("d")
+        zero = float(request.POST.get("zero",0))
+        pole = float(request.POST.get("pole",0))
+        gain = float(request.POST.get("gain",0))
+        p = float(request.POST.get("p",0))
+        i = float(request.POST.get("i",0))
+        d = float(request.POST.get("d",0))
         submit= request.POST.get("submit")
-        if submit== "1":
-            if p and not i and not d:
-                return
-            if p and d and not i:
-                return
-        else:
-            if p and not i and not d:
-                return
-            if p and d and not i:
-                return
+        if submit== "submit":
+            if p or i or d:   # PID Controller
+                return     
+        elif submit == "simulate":
+            if p or i or d:   # PID Controller
+                print(p,i,d)
+                print(step_pid("servo", 10, 50, p, i, d))
+                return render(request, "main/servomotor.html", {
+            })
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
+        del request.session["id"]
         return render(request, "main/servomotor.html", {
             "assignment": assignment,
         })

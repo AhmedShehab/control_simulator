@@ -7,11 +7,8 @@
     border-right: none;
     border-bottom: green solid 3px;
     outline: none;
-    width: 93%;
-    height: 7%;
+    width: 34ch;
     margin: 10px;
-    padding: 5px;
-    grid-area: 1/2;
 }
 .form-control{
     border-top:none ;
@@ -72,15 +69,6 @@
     border-radius: 20px;
     margin-left: -3px;
 }
-@media screen and (max-width: 600px){
-    .container{
-        width:80%;
-        transform: translate(-50%,-3%);
-    }
-    .studentInstructorGrid{
-        transform: translate(0%,0%);
-    }
-}
 .signup{
     color: green;
     text-decoration: none;
@@ -133,3 +121,12 @@
     height: 100px;
     margin-left:18% ;
 } 
+@media screen and (max-width: 600px){
+    .container{
+        width:80%;
+        transform: translate(-50%,-3%);
+    }
+    .studentInstructorGrid{
+        transform: translate(0%,0%);
+    }
+}

@@ -1,12 +1,12 @@
 function openAssignmentForm(){
-    document.getElementById("assignmentForm").style.display = "block";
+    document.getElementById("assignmentForm").style.display = "flex";
     
 }
 function closeAssignmentForm(){
     document.getElementById("assignmentForm").style.display = "none";
 }
 function openCourseForm(){
-    document.getElementById("courseForm").style.display = "block";
+    document.getElementById("courseForm").style.display = "flex";
 }
 function closeCourseForm(){
     document.getElementById("courseForm").style.display = "none";

@@ -36,9 +36,8 @@
 </div>
 {% for assignment in assignments %}
 {% if assignment.riseTime %}
-<div class="{{assignment.id}}"
-    style="display: none; position: fixed;background-color: rgba(0, 0, 0, 0.658);top: 0;left: 0;bottom: 0;right: 0;">
-    <div class="assign_child2">
+<div class="{{assignment.id}} assignPosition">
+    <div class="assign_child">
         <h3>System Requirements</h3>
         System: {{assignment.simulator}}
         <br>
@@ -72,9 +71,9 @@
     </div>
 </div>
 {% else %}
-<div class="{{assignment.id}}"
+<div class="{{assignment.id}} assignPosition"
     style="display: none; position: fixed;background-color: rgba(0, 0, 0, 0.658);top: 0;left: 0;bottom: 0;right: 0;">
-    <div class="assign_child2">
+    <div class="assign_child">
         <h3>Requirements Describtion</h3>
         System: {{assignment.simulator}}
         <br>
