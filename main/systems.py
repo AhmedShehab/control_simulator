@@ -375,4 +375,5 @@ def model(sys):
     elif sys == 'servo':
         num = 36
         den = [1, 3.6, 0]
-        return num, den
+    
+    return num, den
