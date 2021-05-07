@@ -25,7 +25,6 @@
         {% endblock head %}
     </head>
     <body>
-<<<<<<< HEAD
         <nav class="navbar navbar-expand-md bg-transperent navbar-light nav-right">
           <!-- Brand -->
           <div class = 'nav'>
@@ -47,7 +46,7 @@
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
                         <a class="dropdown-item" href="{% url 'cruise' %}">Basic Cruise Control Simulator</a>
-                        <a class="dropdown-item" href="{% url 'adaptive' %}">Adaptive Cruise Control Simulator</a>
+                        <a class="dropdown-item" href="{% url 'water' %}">Water Tank</a>
                         <a class="dropdown-item" href="{% url 'servomotor' %}">Servomotor Control Simulator</a>
                       </ul>
                   </div>
@@ -80,50 +79,7 @@
             </ul>
           </div>
         </nav>
-=======
-        <div class = 'row'>
-            <div class = 'col-6 nav'>
-                <img class = 'logo2' src="{% static 'main/images/log2.png'%}" alt='logo'>
-            </div>
-            <div class = 'col-3 nav'>
-                <form action="{% url 'home' %}">
-                    <button type="submit" class="btn btn-outline-success">Home</button>
-                </form>
-                <div class="dropdown">
-                    <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Control System Simulator
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="{% url 'cruise' %}">Basic Cruise Control Simulator</a>
-                      <a class="dropdown-item" href="{% url 'water' %}">Water Tank</a>
-                      <a class="dropdown-item" href="{% url 'servomotor' %}">Servomotor Control Simulator</a>
-                    </ul>
-                </div>
-            </div>
-                {% if not user.is_authenticated %}
-                <form action="{% url 'register' %}">
-                    <button type="submit" class="btn btn-outline-success">Sign up</button>
-                </form>
-                {% elif user.status == "i" %}
-                <form action="{% url 'instructor' %}">
-                    <button type="submit" class="btn btn-outline-success">Profile</button>
-                </form>
-                {% elif user.status == "s" %}
-                <form action="{% url 'student' %}">
-                    <button type="submit" class="btn btn-outline-success">Profile</button>
-                </form>
-                {% endif %}
-                {% if user.is_authenticated %}
-                <form action="{% url 'logout' %}">
-                    <button type="submit" class="btn btn-outline-success">Logout</button>
-                </form>
-                {% else %}
-                <form action="{% url 'login' %}">
-                    <button type="submit" class="btn btn-outline-success">Login</button>
-                </form>
-                {% endif %}
-        </div>
->>>>>>> d4b11b0a12946d9568d8bd112bb01e08b0475122
+
         {% block body %}
         {% endblock body %}
     </body>

@@ -62,6 +62,10 @@ def design(request):
                 "gm": gm
             })
 
+
+
+
+
 def register(request):
     try: # Check if already logged in and have an account
         user = User.objects.get(username=request.user)
