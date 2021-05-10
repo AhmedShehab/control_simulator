@@ -1,3 +1,6 @@
+:root{
+    --main-color:#28a745;
+}
 .cred_form{
     text-align: center;
 }
@@ -5,7 +8,7 @@
     border-top:none ;
     border-left: none;
     border-right: none;
-    border-bottom: #28a745 solid 3px;
+    border-bottom: var(--main-color) solid 3px;
     outline: none;
     width: 34ch;
     margin: 10px;
@@ -18,63 +21,58 @@
 }
 .grade{
     display: grid;
-    border-bottom: #28a745 solid 3px;
+    border-bottom: var(--main-color) solid 3px;
     
 }
 .button,.button2{
     border-radius: 5mm;
-    border: solid #28a745 1px;
+    border: solid var(--main-color) 1px;
     outline: none;
     margin-top: 10px;
     font: 16px arial,sans-serif;
     padding: 10px;
 }
 .button{
-    color: #28a745;
+    color: var(--main-color);
     background-color:white;
 }
 .button2{
     color: white;
-    background-color:#28a745;
+    background-color:var(--main-color);
 }
 .button:hover.button2:hover{
     cursor: pointer;
-    border-color: #28a745;   
+    border-color: var(--main-color);   
 }
 .button:hover{
     color: white;
-    background-color: #28a745;
+    background-color: var(--main-color);
 }
 .button2:hover{
     color: white;
-    background-color: #28a745;
+    background-color: var(--main-color);
 }
 .link{
-    color: #28a745;
+    color: var(--main-color);
     text-decoration: none;
 }
 .link:hover{
     text-decoration: underline;
 }
 ::placeholder {
-    color: #28a745;
+    color: var(--main-color);
     opacity: 1;
 }
 .container{
-    position: relative;
-    top: 50%;
-    left:50%;
-    transform: translate(-50%,0%);
-    width:30%;
-    border-radius: 20px;
-    margin-left: -3px;
+    display: none;
+    justify-content: center;
 }
 .signup{
-    color: #28a745;
+    color: var(--main-color);
     text-decoration: none;
 }
 .signup:hover{
-    color: #28a745;
+    color: var(--main-color);
     text-decoration: underline;
     background-color: snow;
 }
@@ -89,11 +87,11 @@
     justify-content: center;
 }
 .studentGridItem,.instructorGridItem{
-    background-color: #28a745;
-    padding: 10px;
-    border: #28a745 solid;
+    background-color: var(--main-color);
+    border: var(--main-color) solid;
     border-radius: 30px;
     width: 250px;
+    height: 200px;
     margin-top: 10px;
 }
 .studentGridItem:hover,.instructorGridItem:hover{
@@ -103,30 +101,20 @@
 .studentGridItem{
     margin-right: 10px;
 }
-.child1{
-    position: relative;
-    margin-left: 20%;
+.child{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
-.child2{
-    position: relative;
-    margin-left: 10%;
+.child div{
+    padding: 5px;
 }
 .studImg{
     width: 100px;
     height: 100px;
-    margin-left:7% ;
 } 
 .instImg{
     width: 100px;
     height: 100px;
-    margin-left:18% ;
-} 
-@media screen and (max-width: 600px){
-    .container{
-        width:80%;
-        transform: translate(-50%,-3%);
-    }
-    .studentInstructorGrid{
-        transform: translate(0%,0%);
-    }
 }

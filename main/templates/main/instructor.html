@@ -6,7 +6,7 @@
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
 {% endblock head %}
 {% block body %}
-<div class="assignPosition"id="assignmentForm">
+<div class="assignPosition" id="assignmentForm">
     <div class="assign_child">
         <form class="cred_form" action="{% url 'instructor' %}" method="POST">
             <h1 style="color: #28a745;">New Assignment</h1>
@@ -59,7 +59,7 @@
                 <div class="input-group input-group-sm">
                     <label for="settle">Settling Time:</label>
                     <input type="number" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm" name="settle"  id="settle">
+                        aria-describedby="inputGroup-sizing-sm" name="settle" id="settle">
                     <div class="input-group-append" id="inputGroup-sizing-sm">
                         <span class="input-group-text">Seconds</span>
                     </div>
@@ -79,13 +79,14 @@
                 </div>
             </div>
             <div class="grade" id="grade3" style="display: none;">
-                <textarea style="border: 1px #28a745 solid; padding: 5px; border-radius: 5px;" name="desc" cols="50" rows="5"placeholder="Describtion"></textarea>
+                <textarea style="border: 1px #28a745 solid; padding: 5px; border-radius: 5px;" name="desc" cols="50"
+                    rows="5" placeholder="Describtion"></textarea>
             </div>
             {% if message %}
             <h5 style="color: red;">{{message}}</h5>
             {% endif %}
-            <button type="button" class="button" onclick="closeAssignmentForm()">Cancel</button>
             <button class="button" type="submit">Save</button>
+            <button type="button" class="button" onclick="closeAssignmentForm()">Cancel</button>
         </form>
     </div>
 </div>
@@ -99,53 +100,56 @@
             {% if message %}
             <h5 style="color: red;">{{message}}</h5>
             {% endif %}
-            <button type="button" class="button" onclick="closeCourseForm()">Cancel</button>
             <button class="button" type="submit">Save</button>
+            <button type="button" class="button" onclick="closeCourseForm()">Cancel</button>
         </form>
     </div>
 </div>
-
-<div class="profile" style="display:flex;">
-    <span><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo"
-            style="width:100px;height:100px"></span>
-    <span>
-        <h4>{{instructor.credentials.first_name}} {{instructor.credentials.last_name}}</h4>
-        <h4>Major: <small style="color: black;">{{instructor.major}}</small></h4>
-    </span>
-</div>
-<div class="profile" style="display:flex;" id="assignment">
-    <span onclick="openCourseForm()"><img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo"
-            style="width:25px;height:25px"></span>
-    <span onclick="openCourseForm()">
-        <h6>New Course</h6>
-    </span>
-    <span onclick="openAssignmentForm()"><img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo"
-            style="width:25px;height:25px"></span>
-    <span onclick="openAssignmentForm()">
-        <h6>New Assignment</h6>
-    </span>
-</div>
-<div class="profile" style="margin-top: -10px;">
-    <form action="{% url 'instructor' %}" method="POST">
-        {% csrf_token %}
-        <h4>See Student Submissions:</h4>
-        <select onchange="courseSelector({{courses}});" id="courseSelect" name="course"
-            style=" border: #28a745 solid 1px; border-radius: 10px;outline:none">
-            <option disabled selected>Select a Course</option>
-            {% for course,value in courseAssignment.items %}
-            <option value="{{course}}">{{course}}</option>
-            {% endfor %}
-        </select>
-        <select onchange="assignmentsSubmitted()" name="assign" id="assignmentSelect"
-            style=" border: #28a745 solid 1px; border-radius: 10px;outline:none">
-            <option value="Select an Assignment" disabled selected>Select an Assignment</option>
-            {% for course,values in courseAssignment.items %}
-            {% for value in values %}
-            <option style="display: none;" class="{{course}}" value="{{value}}">{{value}}</option>
-            {% endfor %}
-            {% endfor %}
-        </select>
-    </form>
+<div class="wrapper">
+    <div class="profile" style="display:flex;height: 80px;">
+        <div><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo"
+                style="height:100px;width:auto;"></div>
+        <div style="margin-left: 20px;">
+            <h4>{{instructor.credentials.first_name}} {{instructor.credentials.last_name}}</h4>
+            <h4>Major: <small style="color: black;">{{instructor.major}}</small></h4>
+        </div>
+    </div>
+    <div class="profile" style="display:flex; height: 50px;" id="assignment">
+        <div onclick="openCourseForm()">
+            <img src="{% static 'main/images/plus.png' %}"alt="instructor's Photo" style="width:25px;height: auto;">
+        </div>
+        <div style="margin-left: 10px;" onclick="openCourseForm()">
+            <h6>New Course</h6>
+        </div>
+        <div onclick="openAssignmentForm()">
+            <img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo" style="width:25px;height: auto;margin-left: 30px;">
+        </div>
+        <div style="margin-left:10px;" onclick="openAssignmentForm()">
+            <h6>New Assignment</h6>
+        </div>
+    </div>
+    <div class="profile" style="margin-top: -10px;">
+        <form action="{% url 'instructor' %}" method="POST">
+            {% csrf_token %}
+            <h4>See Student Submissions:</h4>
+            <select onchange="courseSelector({{courses}});" id="courseSelect" name="course"
+                style=" border: #28a745 solid 1px; border-radius: 10px;outline:none">
+                <option disabled selected>Select a Course</option>
+                {% for course,value in courseAssignment.items %}
+                <option value="{{course}}">{{course}}</option>
+                {% endfor %}
+            </select>
+            <select onchange="assignmentsSubmitted()" name="assign" id="assignmentSelect"
+                style=" border: #28a745 solid 1px; border-radius: 10px;outline:none">
+                <option value="Select an Assignment" disabled selected>Select an Assignment</option>
+                {% for course,values in courseAssignment.items %}
+                {% for value in values %}
+                <option style="display: none;" class="{{course}}" value="{{value}}">{{value}}</option>
+                {% endfor %}
+                {% endfor %}
+            </select>
+        </form>
+    </div>
 </div>
 <table class="table2">
     <tr>

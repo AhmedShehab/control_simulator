@@ -1,5 +1,5 @@
 function openStudentForm() {
-    document.getElementById("studentForm").style.display = "block";
+    document.getElementById("studentForm").style.display = "flex";
     document.getElementById("studForm").style.display = "none";
     document.getElementById("instForm").style.display = "none";
 }
@@ -10,7 +10,7 @@ function openStudentForm() {
 
 function openInstructorForm() {
     status = "i";
-    document.getElementById("instructorForm").style.display = "block";
+    document.getElementById("instructorForm").style.display = "flex";
     document.getElementById("studForm").style.display = "none";
     document.getElementById("instForm").style.display = "none";
 }

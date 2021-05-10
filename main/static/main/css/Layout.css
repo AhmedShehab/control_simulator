@@ -1,8 +1,11 @@
+:root{
+    --main-color:#28a745;
+}
 *
 {
     margin: 0;
     padding: 2px 0;
-    color: #28a745;
+    color:var(--main-color);
 }
 html,body{
     scroll-behavior: smooth;
@@ -14,6 +17,9 @@ body{
 .nav
 {
     height: auto;
+}
+.flex div{
+    padding: 1.5rem;
 }
 .logo2
 {
@@ -61,7 +67,7 @@ p
 }
 .test5
 {
-    background: #28a745;
+    background: var(--main-color);
     padding: 30px;
 }
 .logo
@@ -81,12 +87,12 @@ p
     padding: 5px;
 }
 .nav-link {
-    color: #28a745 !important;
+    color: var(--main-color) !important;
     }
 a:hover, a:active
 {
     text-decoration: none;
-    background-color: #28a745;
+    background-color: var(--main-color);
     color: white !important;
     border-radius: 5px;
 
@@ -100,18 +106,15 @@ a:hover, a:active
     padding: 0 50px 0 0 ;
 }
 .draw{
-    color: #28a745;
+    color: var(--main-color);
     font-weight:500;
-    border: solid 1px #28a745;
+    border: solid 1px var(--main-color);
 }
 .draw:hover{
     transition: 0.3s; outline:none; 
-    background-color: #28a745;
+    background-color: var(--main-color);
     color: white;
 }
-<<<<<<< HEAD
-
-=======
 .hidden{
     display: none;
 }
@@ -127,8 +130,6 @@ a:hover, a:active
     }
     .img{
         width: 60%;
-    }
-    img{
         height: 550px;
         margin-top: 20px;
         margin-bottom: 80px;
@@ -156,4 +157,3 @@ a:hover, a:active
         margin-left: 100px;
     }
 }
->>>>>>> 1b2c5d761ef76dfe6d897d2ce092857ed0034970
