@@ -176,5 +176,6 @@ footer div{
     }
     footer{
         justify-content: space-evenly;
+        flex-wrap: nowrap;
     }
 }
