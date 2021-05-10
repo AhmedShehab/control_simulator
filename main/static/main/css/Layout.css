@@ -72,19 +72,18 @@ p
 }
 .logo
 {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: auto;
 }
 .icon
 {
     width: 30px;
-    height: 30px;
+    height: auto;
 }
 .footer, span 
 {
     color: #ECF0F1;
     font-size: medium;
-    padding: 5px;
 }
 .nav-link {
     color: var(--main-color) !important;
@@ -117,6 +116,25 @@ a:hover, a:active
 }
 .hidden{
     display: none;
+}
+footer{
+    background-color: var(--main-color);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+footer .first{
+    width: 60ch;
+}
+footer .second{
+    width: 50ch;
+}
+footer .third{
+    width: 30%;
+}
+footer div{
+    padding: 10px;
 }
 @media (min-width:600px) {
     .page-wrapper{
@@ -155,5 +173,8 @@ a:hover, a:active
     }
     .img2{
         margin-left: 100px;
+    }
+    footer{
+        justify-content: space-evenly;
     }
 }
