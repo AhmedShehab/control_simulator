@@ -14,7 +14,6 @@ def home(request):
         "home": True
     })
 
-
 def design(request):
     num, den, omega, mag, phase,gm, pm, wg, wp= design_tool.Gs()
     if request.method == "POST":
@@ -228,8 +227,8 @@ def student(request):
             return HttpResponseRedirect(reverse(servomotor))
         elif assignment.simulator=="Cruise Control":
             return HttpResponseRedirect(reverse(cruise))
-        elif assignment.simulator=="Adaptive cruise Control":
-            return HttpResponseRedirect(reverse(adaptive))
+        elif assignment.simulator=="Water":
+            return HttpResponseRedirect(reverse(water))
     try:
         assignments=[]
         student=Student.objects.get(credentials=request.user)
@@ -284,10 +283,10 @@ def instructor(request):
             desc = req.get("desc")
             controller= req.get("controller")
             if req.get("grade")=="auto": 
-                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=4,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller)
+                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=5,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller)
                 assign.save()
             elif req.get("grade")=="receive":
-                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=4, instructor=request.user.username,describtion=desc,controller=controller)
+                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=5, instructor=request.user.username,describtion=desc,controller=controller)
                 assign.save()
             course=Course.objects.get(name=course)
             course.assignments.add(assign)
@@ -339,6 +338,19 @@ def water(request):
 
 
 def servomotor(request):
+    try:
+        assignment = Assignment.objects.get(id=request.session["id"])
+        if not assignment.describtion:
+            assignmentRequirements={
+                "RiseTime":assignment.riseTime,
+                "SettlingTime":assignment.setTime,
+                "SteadyStateError":assignment.Ess,
+                "Overshoot":assignment.pOvershoot
+            }
+        pass
+    except:
+        assignment=""
+        pass
     if request.POST:
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
@@ -346,31 +358,31 @@ def servomotor(request):
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
+        PIDController={
+            "Controller":"PID",
+            "Zero":zero,
+            "Pole":pole,
+            "Gain":gain,
+        }
+        ZPKController={
+            "Controller":"ZPK",
+            "P":p,
+            "I":i,
+            "D":d,
+        }
         submit= request.POST.get("submit")
         if submit== "submit":
             if p or i or d:   # PID Controller
-                return     
+                print(stepinfo_pid("servo", p, i, d))
+                return render(request, "main/servomotor.html", {
+                })     
         elif submit == "simulate":
             if p or i or d:   # PID Controller
                 print(p,i,d)
                 print(step_pid("servo", 10, 50, p, i, d))
                 return render(request, "main/servomotor.html", {
             })
-    try:
-        assignment = Assignment.objects.get(id=request.session["id"])
-        del request.session["id"]
+    else:
         return render(request, "main/servomotor.html", {
-            "assignment": assignment,
+            "assignment":assignment,
         })
-        if assignment.simulator=="Servo Motor":
-            return render(request, "main/cruise.html", {
-                "assignment": assignment,
-            })
-        else:
-            return render(request, "main/cruise.html", {
-            })
-    except:
-        controller = ""
-    return render(request, "main/servomotor.html", {
-        "controller": controller,
-    })
