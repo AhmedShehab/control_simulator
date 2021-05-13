@@ -360,15 +360,15 @@ def servomotor(request):
         d = float(request.POST.get("d",0))
         PIDController={
             "Controller":"PID",
-            "Zero":zero,
-            "Pole":pole,
-            "Gain":gain,
-        }
-        ZPKController={
-            "Controller":"ZPK",
             "P":p,
             "I":i,
             "D":d,
+        }
+        ZPKController={
+            "Controller":"ZPK",
+            "Zero":zero,
+            "Pole":pole,
+            "Gain":gain,
         }
         submit= request.POST.get("submit")
         if submit== "submit":
