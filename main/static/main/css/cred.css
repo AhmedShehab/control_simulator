@@ -93,13 +93,14 @@
     width: 250px;
     height: 200px;
     margin-top: 10px;
+    transition:transform 100ms ease-in;
 }
 .studentGridItem:hover,.instructorGridItem:hover{
     cursor: pointer;
-    border: black solid
+    transform: scale(1.08);
 }
 .studentGridItem{
-    margin-right: 10px;
+    margin-right: 20px;
 }
 .child{
     display: flex;
