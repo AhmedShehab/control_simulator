@@ -42,8 +42,8 @@
             <br>
             <select class="cred" name="grade" id="grade" onchange="gradeSelect();" required>
                 <option value="" selected disabled>Select Grading option</option>
-                <option value="auto">Auto grade<br>
-                <option value="receive">Receive Values<br>
+                <option value="auto">Auto grade </option>
+                <option value="receive">Receive Values</option>
             </select>
             <br>
             <div class="grade" id="grade2" style="display: none;">
@@ -128,7 +128,7 @@
             <h6>New Assignment</h6>
         </div>
     </div>
-    <div class="profile" style="margin-top: -10px;">
+    <div class="profile">
         <form action="{% url 'instructor' %}" method="POST">
             {% csrf_token %}
             <h4>See Student Submissions:</h4>
@@ -156,24 +156,48 @@
         <th>Assignment</th>
         <th>Students</th>
         <th>Score</th>
+        <th>Status</th>
+        <th>Parameters</th>
         <th>Date Submitted / Due</th>
     </tr>
     {% for key,values in assignmentSubmission.items %}
-    <tr class="tr" id="{{key}}" style="display: none;">
         {% if values %}
-        {% for value in values %}
-        <td>{{value.assignment.subject}}</td>
-        <td>{{value.student}}</td>
-        <td>{{value.score}}/{{value.assignment.score}}</td>
-        <td>{{value.dateSubmitted}}/{{value.assignment.dueDate}}</td>
-        {% endfor %}
+            {% for value in values %}         
+                <div class="{{value.assignment.id}} assignPosition">
+                    <div class="assign_child">
+                        <h3>Submitted Parameters</h3>
+                        <p>{{value.parameters}}</p>
+                        <button class="button" type="button" onclick="closeReqForm({{value.assignment.id}});">Cancel</button>
+                    </div>
+                </div>
+                <tr class="tr" id="{{key}}" style="display: none;">
+                    <td>{{value.assignment.subject}}</td>
+                    <td>{{value.student}}</td>
+                    {% if value.score %}
+                        <td>{{value.score}}/{{value.assignment.score}}</td>
+                    {% else %}
+                        <td>-/-</td>
+                    {% endif %}
+                    {% if value.Pass %}
+                        <td>{{value.Pass}}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                    <td><button class="button" id="{{value.assignment.id}}" onclick="openReqForm({{value.assignment.id}})";>Display Parameters</button></td>
+                    <td>{{value.dateSubmitted}} / {{value.assignment.dueDate}}</td>
+                </tr>
+            {% endfor %}
         {% else %}
-        <td>
-            <h3>No Submissions Yet</h3>
-        </td>
+            <tr class="tr" id="{{key}}" style="display: none;">
+                <td colspan="7">
+                    <h3>No Submissions Yet</h3>
+                </td>
+            </tr>
         {% endif %}
-    </tr>
     {% endfor %}
 </table>
 <script src="{% static 'main/script/instructor.js' %}"></script>
+
+<script src="{% static 'main/script/student.js' %}"></script>
 {% endblock body %}
+.

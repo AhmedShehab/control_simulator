@@ -1,3 +1,5 @@
+from control.lti import zero
+from django.http import response
 import numpy as np
 import control
 import control.matlab as matlab
@@ -377,3 +379,34 @@ def model(sys):
         den = [1, 3.6, 0]
     
     return num, den
+    
+# Auto grading function for student submissions
+def isPass(parameters, requirements):
+    controller = parameters["Controller"]
+    score= 0
+    Pass="Pass"
+    sim= parameters["Simulator"]
+    if controller == "PID":
+        p=parameters["P"]
+        i=parameters["I"]
+        d=parameters["D"]
+        response= stepinfo_pid(sim,p,i,d)
+    elif controller == "ZPK":
+        z=parameters["Zero"]
+        p=parameters["Pole"]
+        k=parameters["Gain"]
+        response= stepinfo_zpk(sim,z,p,k)
+    errorPercent=(response["SteadyStateValue"]-parameters["StepInput"])*100
+    if response["RiseTime"] >= 0.9 * requirements["RiseTime"] and response["RiseTime"] <= 1.1 * requirements["RiseTime"]:
+        score+=1
+    if response["SettlingTime"] >= 0.9 * requirements["SettlingTime"] and response["SettlingTime"] <= 1.1 * requirements["SettlingTime"]:
+        score+=1
+    if response["Overshoot"] >= 0.9 * requirements["Overshoot"] and response["Overshoot"] <= 1.1 * requirements["Overshoot"]:
+        score+=1
+    if errorPercent<= 1.1*requirements["SteadyStateError"]:
+        score+=1
+    if score >=2:
+        Pass ="Pass"
+    else:
+        Pass="Fail"
+    return score,Pass

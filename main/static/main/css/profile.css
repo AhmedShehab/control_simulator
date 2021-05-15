@@ -10,6 +10,7 @@
 .wrapper{
     display: flex;
     flex-direction: column;
+    margin-top: 3%;
 }
 .wrapper span{
     display: inline;
@@ -40,7 +41,7 @@ tr{
     background-color: white;
     width: 30%;
     border: 2px solid #28a745;
-    border-radius: 60px;
+    border-radius: 10px;
     padding: auto;
     text-align: center;
 }

@@ -1,14 +1,16 @@
+from django import http
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from scipy.linalg.basic import pinv
 from .models import User, Instructor, Student, Course, Assignment, Submission
 from uuid import UUID
 from . import design_tool
 import numpy as np
 from .systems import *
-
+from datetime import date
 def home(request):
     return render(request, "main/home.html",{
         "home": True
@@ -231,14 +233,23 @@ def student(request):
             return HttpResponseRedirect(reverse(water))
     try:
         assignments=[]
+        submitted=[]
         student=Student.objects.get(credentials=request.user)
+        studentSubmissions= Submission.objects.filter(student=student)
         for something in student.courses.assignments.filter():
             assignments.append(something)
+        for submission in studentSubmissions:
+            submitted.append(submission)
+            try:
+                assignments.remove(submission.assignment)
+            except:
+                pass
     except:
         return HttpResponseRedirect(reverse("home"))
     return render(request,"main/student.html",{
             "student":student,
-            "assignments": assignments
+            "assignments": assignments,
+            "submitted":submitted,
         }) 
 
 def instructor(request):
@@ -340,12 +351,17 @@ def water(request):
 def servomotor(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
+        student = Student.objects.get(credentials=request.user)
         if not assignment.describtion:
             assignmentRequirements={
                 "RiseTime":assignment.riseTime,
                 "SettlingTime":assignment.setTime,
                 "SteadyStateError":assignment.Ess,
                 "Overshoot":assignment.pOvershoot
+            }
+        else:
+            assignmentRequirements={
+                "Describtion":assignment.describtion
             }
         pass
     except:
@@ -359,12 +375,16 @@ def servomotor(request):
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
         PIDController={
+            "StepInput":1,
+            "Simulator":"servo",
             "Controller":"PID",
             "P":p,
             "I":i,
             "D":d,
         }
         ZPKController={
+            "StepInput":1,
+            "Simulator":"servo",
             "Controller":"ZPK",
             "Zero":zero,
             "Pole":pole,
@@ -372,16 +392,35 @@ def servomotor(request):
         }
         submit= request.POST.get("submit")
         if submit== "submit":
+            del request.session["id"]
+            if Submission.objects.filter(assignment=assignment):
+                test = Submission.objects.filter(assignment=assignment)
+                for something in test:
+                    if something.student==student:
+                        return render(request,"main/servomotor.html",{
+                            "duplicateAssignment":"Sorry you can't submit the same assignment twice",
+                        })
+            subDate = date.today().strftime("%Y-%m-%d")
+            PIDParamaters= f"Propotional Constant(P): {p} \n Differential Constant(D): {i} \n Integral Constant(I): {d}"
+            ZPkParamaters= f"Gain: {gain} \n Pole: {pole} \n Zero: {zero}"
             if p or i or d:   # PID Controller
-                print(stepinfo_pid("servo", p, i, d))
-                return render(request, "main/servomotor.html", {
-                })     
+                controller = PIDController
+                parameters = PIDParamaters
+            else:             # ZPK Controller
+                controller = ZPKController
+                parameters = ZPkParamaters
+            if assignmentRequirements.get("Describtion",0):
+                submission = Submission.objects.create(student=student,assignment=assignment,dateSubmitted=subDate,parameters=parameters)
+                submission.save()
+            elif assignmentRequirements.get("RiseTime"):
+                score,Pass =isPass(controller,assignmentRequirements)
+                submission = Submission.objects.create(student=student,assignment=assignment,score=score,Pass=Pass,dateSubmitted=subDate,parameters=parameters)
+                submission.save()
+            
+            return HttpResponseRedirect(reverse("servomotor"))                     
         elif submit == "simulate":
             if p or i or d:   # PID Controller
-                print(p,i,d)
-                print(step_pid("servo", 10, 50, p, i, d))
-                return render(request, "main/servomotor.html", {
-            })
+                return
     else:
         return render(request, "main/servomotor.html", {
             "assignment":assignment,

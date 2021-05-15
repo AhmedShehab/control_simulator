@@ -1,3 +1,4 @@
+from main.systems import model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
@@ -59,9 +60,10 @@ class Instructor(models.Model):
 class Submission(models.Model):
     student      = models.ForeignKey(Student,on_delete=models.CASCADE)
     assignment   = models.ForeignKey(Assignment,on_delete=models.CASCADE)
-    score        = models.FloatField()
+    score        = models.FloatField(null=True)
     dateSubmitted= models.DateField()
-
+    Pass         = models.CharField(max_length=5,null=True)
+    parameters   = models.TextField(null=True)
     def __str__(self):
         return f"{self.student.credentials.username}: {self.assignment.subject}"
     

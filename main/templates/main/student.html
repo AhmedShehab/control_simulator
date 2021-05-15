@@ -6,15 +6,15 @@
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
 {% endblock head %}
 {% block body %}
-<div class="profile" style="display:flex;">
+<div class="profile" style="display:flex;margin-top:5%">
     <span><img src="{% static 'main/images/profile.png' %}" alt="Student Photo" style="width:100px;height:100px"></span>
-    <span>
+    <span style="margin-left:20px;">
         <h4>{{student.credentials.first_name}} {{student.credentials.last_name}}</h4>
         <h4>Course: <small style="color: black;">{{student.courses.name}}</small></h4>
         <h4>Course Code: <small style="color: black; font-size: large;">{{student.courses.code}}</small></h4>
     </span>
 </div>
-<div>
+<div style="margin-top:2%">
     <table class="table2">
         <tr>
             <th>Assignment</th>
@@ -27,7 +27,7 @@
         <tr>
             <td>{{assignment.subject}}</td>
             <td>{{assignment.score}}</td>
-            <td>Complete</td>
+            <td>Pending</td>
             <td>{{assignment.dueDate}}</td>
             <td><button class="button" id="{{assignment.id}}" onclick="openReqForm({{assignment.id}});">Display Requirements</button></td>
         </tr>
@@ -71,8 +71,7 @@
     </div>
 </div>
 {% else %}
-<div class="{{assignment.id}} assignPosition"
-    style="display: none; position: fixed;background-color: rgba(0, 0, 0, 0.658);top: 0;left: 0;bottom: 0;right: 0;">
+<div class="{{assignment.id}} assignPosition">
     <div class="assign_child">
         <h3>Requirements Describtion</h3>
         System: {{assignment.simulator}}
