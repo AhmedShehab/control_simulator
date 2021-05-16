@@ -132,15 +132,13 @@
         <form action="{% url 'instructor' %}" method="POST">
             {% csrf_token %}
             <h4>See Student Submissions:</h4>
-            <select onchange="courseSelector({{courses}});" id="courseSelect" name="course"
-                style=" border: #28a745 solid 1px; border-radius: 10px;outline:none">
+            <select onchange="courseSelector({{courses}});" id="courseSelect" name="course" class="select">
                 <option disabled selected>Select a Course</option>
                 {% for course,value in courseAssignment.items %}
                 <option value="{{course}}">{{course}}</option>
                 {% endfor %}
             </select>
-            <select onchange="assignmentsSubmitted()" name="assign" id="assignmentSelect"
-                style=" border: #28a745 solid 1px; border-radius: 10px;outline:none">
+            <select onchange="assignmentsSubmitted()" name="assign" id="assignmentSelect" class="select">
                 <option value="Select an Assignment" disabled selected>Select an Assignment</option>
                 {% for course,values in courseAssignment.items %}
                 {% for value in values %}
@@ -151,7 +149,7 @@
         </form>
     </div>
 </div>
-<table class="table2">
+<table>
     <tr>
         <th>Assignment</th>
         <th>Students</th>
@@ -197,7 +195,6 @@
     {% endfor %}
 </table>
 <script src="{% static 'main/script/instructor.js' %}"></script>
-
 <script src="{% static 'main/script/student.js' %}"></script>
 {% endblock body %}
 .
