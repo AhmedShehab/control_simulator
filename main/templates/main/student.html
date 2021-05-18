@@ -9,13 +9,13 @@
 <div class="profile" style="display:flex;margin-top:5%">
     <span><img src="{% static 'main/images/profile.png' %}" alt="Student Photo" style="width:100px;height:100px"></span>
     <span style="margin-left:20px;">
-        <h4>{{student.credentials.first_name}} {{student.credentials.last_name}}</h4>
+        <h3><strong>{{student.credentials.first_name}} {{student.credentials.last_name}}</strong></h3>
         <h4>Course: <small style="color: black;">{{student.courses.name}}</small></h4>
         <h4>Course Code: <small style="color: black; font-size: large;">{{student.courses.code}}</small></h4>
     </span>
 </div>
 <div class="status">
-    <h3>Assignmnet Status:</h3>
+    <h3>Assignment Status:</h3>
     <select class="select" name="status" onchange="tableSelect();" id="status">
         <option value="pending">Pending</option>
         <option value="submitted">Submitted</option>
@@ -30,15 +30,21 @@
             <th>Due Date</th>
             <th>Requirements</th>
         </tr>
-        {% for assignment in assignments %}
-        <tr>
-            <td>{{assignment.subject}}</td>
-            <td>{{assignment.score}}</td>
-            <td>Pending</td>
-            <td>{{assignment.dueDate}}</td>
-            <td><button class="button" id="{{assignment.id}}" onclick="openReqForm({{assignment.id}});">Display Requirements</button></td>
-        </tr>
-        {% endfor %}
+        {% if assignment %}
+            {% for assignment in assignments %}
+                <tr>
+                    <td>{{assignment.subject}}</td>
+                    <td>{{assignment.score}}</td>
+                    <td>Pending</td>
+                    <td>{{assignment.dueDate}}</td>
+                    <td><button class="button" id="{{assignment.id}}" onclick="openReqForm({{assignment.id}});">Display Requirements</button></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                    <td colspan="7"><h3>No pending assignments</h3></td>
+            </tr>
+        {% endif %}
     </table>
 </div>
 <div id="submittedTable" style='display: none;'>
@@ -49,14 +55,20 @@
             <th>Status</th>
             <th>Date Submitted</th>
         </tr>
-        {% for submission in submitted %}
-        <tr>
-            <td>{{submission.assignment.subject}}</td>
-            <td>{{submission.score}}</td>
-            <td>Submitted</td>
-            <td>{{submission.dateSubmitted}}</td>
-        </tr>
-        {% endfor %}
+            {% if submitted %}
+                {% for submission in submitted %}
+                    <tr>
+                        <td>{{submission.assignment.subject}}</td>
+                        <td>{{submission.score}}</td>
+                        <td>Submitted</td>
+                        <td>{{submission.dateSubmitted}}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7"><h3>No assignments submitted yet</h3></td>
+                </tr>
+            {% endif %}
     </table>
 </div>
 {% for assignment in assignments %}

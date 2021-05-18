@@ -401,8 +401,8 @@ def servomotor(request):
                             "duplicateAssignment":"Sorry you can't submit the same assignment twice",
                         })
             subDate = date.today().strftime("%Y-%m-%d")
-            PIDParamaters= f"Propotional Constant(P): {p} \n Differential Constant(D): {i} \n Integral Constant(I): {d}"
-            ZPkParamaters= f"Gain: {gain} \n Pole: {pole} \n Zero: {zero}"
+            PIDParamaters= f"Propotional Constant(P): {p}, \n Differential Constant(D): {i}, \n Integral Constant(I): {d},"
+            ZPkParamaters= f"Gain: {gain}, \n Pole: {pole}, \n Zero: {zero}"
             if p or i or d:   # PID Controller
                 controller = PIDController
                 parameters = PIDParamaters
