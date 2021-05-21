@@ -293,7 +293,7 @@ def instructor(request):
             error = req.get("error")
             desc = req.get("desc")
             controller= req.get("controller")
-            if req.get("grade")=="auto": 
+            if req.get("grade")=="auto":
                 assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=5,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller)
                 assign.save()
             elif req.get("grade")=="receive":
