@@ -374,18 +374,23 @@ def servomotor(request):
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
+        step = float(request.POST.get("step",0))
+        setTime = float(request.POST.get("set",0))
+        initPoint = float(request.POST.get("init",0))
         PIDController={
-            "StepInput":1,
             "Simulator":"servo",
             "Controller":"PID",
+            "StepInput":step,
+            "setTime":setTime,
             "P":p,
             "I":i,
             "D":d,
         }
         ZPKController={
-            "StepInput":1,
             "Simulator":"servo",
             "Controller":"ZPK",
+            "StepInput":step,
+            "setTime":setTime,
             "Zero":zero,
             "Pole":pole,
             "Gain":gain,
@@ -416,7 +421,6 @@ def servomotor(request):
                 score,Pass =isPass(controller,assignmentRequirements)
                 submission = Submission.objects.create(student=student,assignment=assignment,score=score,Pass=Pass,dateSubmitted=subDate,parameters=parameters)
                 submission.save()
-            
             return HttpResponseRedirect(reverse("servomotor"))                     
         elif submit == "simulate":
             if p or i or d:   # PID Controller

@@ -25,7 +25,7 @@ body{
 {
     width: 54px;
     height: auto;
-    margin: 0 50px;
+    margin-right: 50px;
 }
 button
 {
@@ -103,7 +103,7 @@ a:hover, a:active
     border-radius: 7px;
 }
 .nav-right{
-    padding: 0 50px 0 0 ;
+    padding: 0 50px ;
 }
 .draw{
     color: var(--main-color);
