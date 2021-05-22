@@ -370,6 +370,13 @@ def stepinfo_pid(sys, Kp, Ki, Kd):
     return spec
 
 def model(sys):
+
+    # check if sys is a transfer function
+    if type(sys) == type(control.tf(1, 1)):
+        # return num and den directly
+        num = list(sys.num[0][0])
+        den = list(sys.den[0][0])   
+
     if sys == 'cruise':
         num = None
         den = None
