@@ -1,74 +1,78 @@
-.profile{
-    margin-left: 15%;
-    margin-top: 30px;
+.profile {
+	margin-left: 15%;
+	margin-top: 30px;
 }
-.status{
-    margin-left: 15%;
+.status {
+	margin-left: 15%;
 }
-.select{
-    border: #28a745 solid 1px;
-    border-radius: 10px;
-    outline:none;
-    padding: 5px;
+.select {
+	border: #28a745 solid 1px;
+	border-radius: 10px;
+	outline: none;
+	padding: 5px;
 }
-table{
-    margin-left: 15%;
-    width: 70%;
-    text-align: center;
+table {
+	margin-left: 15%;
+	width: 70%;
+	text-align: center;
 }
-.wrapper{
-    display: flex;
-    flex-direction: column;
-    margin-top: 3%;
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	margin-top: 3%;
 }
-.wrapper span{
-    display: inline;
+.wrapper span {
+	display: inline;
 }
-th{
-    color: white;
-    background-color: #28a745;
+th {
+	color: white;
+	background-color: #28a745;
 }
-tr{
-    border-bottom: #28a745 1px solid;
+tr {
+	border-bottom: #28a745 1px solid;
 }
-#assignment:hover{
-    cursor: pointer;
+#assignment:hover {
+	cursor: pointer;
 }
-#assignment{
-    width: 500px;
-}   
-.assignPosition{
-    display: none; 
-    position: fixed;
-    background-color: rgba(0, 0, 0, 0.658);
-    top: 0;left: 0;bottom: 0;right: 0;
-    justify-content: center;
-    align-items: center;
+#assignment {
+	width: 500px;
 }
-.assign_child,.assign_child3{
-    padding: 20px;
-    background-color: white;
-    width: 30%;
-    border: 2px solid #28a745;
-    border-radius: 10px;
-    padding: auto;
-    text-align: center;
+.assignPosition {
+	display: none;
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.658);
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	justify-content: center;
+	align-items: center;
 }
-@media screen and (max-width: 600px){
-    .assign_child{
-        padding: auto;
-        text-align: center;
-        width: 100%;
-        border-radius: 10px;
-    }
-    .table2{
-        margin:0 0 1rem 0;
-        width: 100%;
-        text-align: center;
-    }
-    .profile{
-        margin-left: 0;
-        margin-top: 0px;
-        margin: 0  0  1rem 0;
-    }
+.assign_child,
+.assign_child3 {
+	padding: 20px;
+	background-color: white;
+	width: 30%;
+	border: 2px solid #28a745;
+	border-radius: 10px;
+	padding: auto;
+	text-align: center;
+}
+@media screen and (max-width: 600px) {
+	.assign_child {
+		padding: auto;
+		text-align: center;
+		width: 100%;
+		border-radius: 10px;
+	}
+	.table2 {
+		margin: 0 0 1rem 0;
+		width: 100%;
+		text-align: center;
+	}
+	.profile {
+		margin-left: 0;
+		margin-top: 0px;
+		margin: 0 0 1rem 0;
+	}
 }

@@ -1,200 +1,210 @@
-{% extends 'main/layout.html' %}
-{% load static %}
-{% block head %}
+{% extends 'main/layout.html' %} {% load static %} {% block head %}
 <title>Instructor Profile</title>
-<link href="{% static 'main/css/profile.css' %}" rel="stylesheet">
-<link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
-{% endblock head %}
-{% block body %}
+<link href="{% static 'main/css/profile.css' %}" rel="stylesheet" />
+<link href="{% static 'main/css/cred.css' %}" rel="stylesheet" />
+{% endblock head %} {% block body %}
 <div class="assignPosition" id="assignmentForm">
-    <div class="assign_child">
-        <form class="cred_form" action="{% url 'instructor' %}" method="POST">
-            <h1 style="color: #28a745;">New Assignment</h1>
-            {% csrf_token %}
-            <select class="cred" placeholder="Course" name="course" required>
-                <option disabled selected value="">Select a Course</option>
-                {% for course in courses %}
-                <option value="{{course}}">{{course}}</option>
-                {% endfor %}
-            </select>
-            <input class="cred" type="text" placeholder="Subject" name="assignmentSubject" required>
-            <br>
-            <span>
-                <select class="cred" placeholder="Simulator" name="sim" required>
-                    <option disabled selected value="">Select a Simulator</option>
-                    {% for simulator in simulators %}
-                    <option value="{{simulator}}">{{simulator}}</option>
-                    {% endfor %}
-                </select>
-                <select class="cred" required name="controller">
-                    <option selected disabled value="">Choose Controler</option>
-                    <option value="P">P</option>
-                    <option value="PI">PI</option>
-                    <option value="PD">PD</option>
-                    <option value="PID">PID</option>
-                    <option value="lag">Lag</option>
-                    <option value="lead">Lead</option>
-                    <option value="laglead">Lag-Lead</option>
-                </select>
-            </span>
-            <br>
-            <input class="cred" type="date" placeholder="dueDate" name="due" required>
-            <br>
-            <select class="cred" name="grade" id="grade" onchange="gradeSelect();" required>
-                <option value="" selected disabled>Select Grading option</option>
-                <option value="auto">Auto grade </option>
-                <option value="receive">Receive Values</option>
-            </select>
-            <br>
-            <div class="grade" id="grade2" style="display: none;">
-                <h6>Transient and steady state response</h6>
-                <div class="input-group input-group-sm">
-                    <label for="rise">Rise Time:</label>
-                    <input type="number" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm" name="rise" id="rise">
-                    <div class="input-group-append" id="inputGroup-sizing-sm">
-                        <span class="input-group-text">Seconds</span>
-                    </div>
-                </div>
-                <div class="input-group input-group-sm">
-                    <label for="settle">Settling Time:</label>
-                    <input type="number" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm" name="settle" id="settle">
-                    <div class="input-group-append" id="inputGroup-sizing-sm">
-                        <span class="input-group-text">Seconds</span>
-                    </div>
-                </div>
-                <div class="input-group input-group-sm">
-                    <label for="overshoot">Percent Overshoot:</label>
-                    <input type="number" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm" name="overshoot" id="overshoot">
-                    <div class="input-group-append" id="inputGroup-sizing-sm">
-                        <span class="input-group-text">%</span>
-                    </div>
-                </div>
-                <div class="input-group input-group-sm">
-                    <label for="error">Steady State Error:</label>
-                    <input type="number" class="form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm" name="error" id="error">
-                </div>
-            </div>
-            <div class="grade" id="grade3" style="display: none;">
-                <textarea style="border: 1px #28a745 solid; padding: 5px; border-radius: 5px;" name="desc" cols="30"
-                    rows="5" placeholder="Describtion"></textarea>
-            </div>
-            {% if message %}
-            <h5 style="color: red;">{{message}}</h5>
-            {% endif %}
-            <button class="button" type="submit">Save</button>
-            <button type="button" class="button" onclick="closeAssignmentForm()">Cancel</button>
-        </form>
-    </div>
+	<div class="assign_child">
+		<form class="cred_form" action="{% url 'instructor' %}" method="POST">
+			<h1 style="color: #28a745">New Assignment</h1>
+			{% csrf_token %}
+			<select class="cred" placeholder="Course" name="course" required>
+				<option disabled selected value="">Select a Course</option>
+				{% for course in courses %}
+				<option value="{{course}}">{{course}}</option>
+				{% endfor %}
+			</select>
+			<input class="cred" type="text" placeholder="Subject" name="assignmentSubject" required />
+			<br />
+			<span>
+				<select class="cred" placeholder="Simulator" name="sim" required>
+					<option disabled selected value="">Select a Simulator</option>
+					{% for simulator in simulators %}
+					<option value="{{simulator}}">{{simulator}}</option>
+					{% endfor %}
+				</select>
+				<select class="cred" required name="controller">
+					<option selected disabled value="">Choose Controler</option>
+					<option value="P">P</option>
+					<option value="PI">PI</option>
+					<option value="PD">PD</option>
+					<option value="PID">PID</option>
+					<option value="lag">Lag</option>
+					<option value="lead">Lead</option>
+					<option value="laglead">Lag-Lead</option>
+				</select>
+			</span>
+			<br />
+			<input class="cred" type="date" placeholder="dueDate" name="due" required />
+			<br />
+			<select class="cred" name="grade" id="grade" onchange="gradeSelect();" required>
+				<option value="" selected disabled>Select Grading option</option>
+				<option value="auto">Auto grade</option>
+				<option value="receive">Receive Values</option>
+			</select>
+			<br />
+			<div class="grade" id="grade2" style="display: none">
+				<h6>Transient and steady state response</h6>
+				<div class="input-group input-group-sm">
+					<label for="rise">Rise Time:</label>
+					<input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="rise" id="rise" />
+					<div class="input-group-append" id="inputGroup-sizing-sm">
+						<span class="input-group-text">Seconds</span>
+					</div>
+				</div>
+				<div class="input-group input-group-sm">
+					<label for="settle">Settling Time:</label>
+					<input
+						type="number"
+						class="form-control"
+						aria-label="Sizing example input"
+						aria-describedby="inputGroup-sizing-sm"
+						name="settle"
+						id="settle"
+					/>
+					<div class="input-group-append" id="inputGroup-sizing-sm">
+						<span class="input-group-text">Seconds</span>
+					</div>
+				</div>
+				<div class="input-group input-group-sm">
+					<label for="overshoot">Percent Overshoot:</label>
+					<input
+						type="number"
+						class="form-control"
+						aria-label="Sizing example input"
+						aria-describedby="inputGroup-sizing-sm"
+						name="overshoot"
+						id="overshoot"
+					/>
+					<div class="input-group-append" id="inputGroup-sizing-sm">
+						<span class="input-group-text">%</span>
+					</div>
+				</div>
+				<div class="input-group input-group-sm">
+					<label for="error">Steady State Error:</label>
+					<input
+						type="number"
+						class="form-control"
+						aria-label="Sizing example input"
+						aria-describedby="inputGroup-sizing-sm"
+						name="error"
+						id="error"
+					/>
+				</div>
+			</div>
+			<div class="grade" id="grade3" style="display: none">
+				<textarea
+					style="border: 1px #28a745 solid; padding: 5px; border-radius: 5px"
+					name="desc"
+					cols="30"
+					rows="5"
+					placeholder="Describtion"
+				></textarea>
+			</div>
+			{% if message %}
+			<h5 style="color: red">{{message}}</h5>
+			{% endif %}
+			<button class="button" type="submit">Save</button>
+			<button type="button" class="button" onclick="closeAssignmentForm()">Cancel</button>
+		</form>
+	</div>
 </div>
-<div class="assignPosition" style="display: none;" id="courseForm">
-    <div class="assign_child">
-        <form class="cred_form" action="{% url 'instructor' %}" method="POST">
-            <h1 style="color: #28a745;">New Course</h1>
-            {% csrf_token %}
-            <input class="cred" type="text" placeholder="courseName" name="courseName" required>
-            <br>
-            {% if message %}
-            <h5 style="color: red;">{{message}}</h5>
-            {% endif %}
-            <button class="button" type="submit">Save</button>
-            <button type="button" class="button" onclick="closeCourseForm()">Cancel</button>
-        </form>
-    </div>
+<div class="assignPosition" style="display: none" id="courseForm">
+	<div class="assign_child">
+		<form class="cred_form" action="{% url 'instructor' %}" method="POST">
+			<h1 style="color: #28a745">New Course</h1>
+			{% csrf_token %}
+			<input class="cred" type="text" placeholder="courseName" name="courseName" required />
+			<br />
+			{% if message %}
+			<h5 style="color: red">{{message}}</h5>
+			{% endif %}
+			<button class="button" type="submit">Save</button>
+			<button type="button" class="button" onclick="closeCourseForm()">Cancel</button>
+		</form>
+	</div>
 </div>
 <div class="wrapper">
-    <div class="profile" style="display:flex;height: 80px;">
-        <div><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo"
-                style="height:100px;width:auto;"></div>
-        <div style="margin-left: 20px;">
-            <h3><strong>{{instructor.credentials.first_name}} {{instructor.credentials.last_name}}</strong></h3>
-            <h4>Major: <small style="color: black;">{{instructor.major}}</small></h4>
-        </div>
-    </div>
-    <div class="profile" style="display:flex; height: 50px;" id="assignment">
-        <div onclick="openCourseForm()">
-            <img src="{% static 'main/images/plus.png' %}"alt="instructor's Photo" style="width:25px;height: auto;">
-        </div>
-        <div style="margin-left: 10px;" onclick="openCourseForm()">
-            <h6>New Course</h6>
-        </div>
-        <div onclick="openAssignmentForm()">
-            <img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo" style="width:25px;height: auto;margin-left: 30px;">
-        </div>
-        <div style="margin-left:10px;" onclick="openAssignmentForm()">
-            <h6>New Assignment</h6>
-        </div>
-    </div>
-    <div class="profile">
-        <form action="{% url 'instructor' %}" method="POST">
-            {% csrf_token %}
-            <h4>See Student Submissions:</h4>
-            <select onchange="courseSelector({{courses}});" id="courseSelect" name="course" class="select">
-                <option disabled selected>Select a Course</option>
-                {% for course,value in courseAssignment.items %}
-                <option value="{{course}}">{{course}}</option>
-                {% endfor %}
-            </select>
-            <select onchange="assignmentsSubmitted()" name="assign" id="assignmentSelect" class="select">
-                <option value="Select an Assignment" disabled selected>Select an Assignment</option>
-                {% for course,values in courseAssignment.items %}
-                {% for value in values %}
-                <option style="display: none;" class="{{course}}" value="{{value}}">{{value}}</option>
-                {% endfor %}
-                {% endfor %}
-            </select>
-        </form>
-    </div>
+	<div class="profile" style="display: flex; height: 80px">
+		<div><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo" style="height: 100px; width: auto" /></div>
+		<div style="margin-left: 20px">
+			<h3><strong>{{instructor.credentials.first_name}} {{instructor.credentials.last_name}}</strong></h3>
+			<h4>Major: <small style="color: black">{{instructor.major}}</small></h4>
+		</div>
+	</div>
+	<div class="profile" style="display: flex; height: 50px" id="assignment">
+		<div onclick="openCourseForm()">
+			<img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo" style="width: 25px; height: auto" />
+		</div>
+		<div style="margin-left: 10px" onclick="openCourseForm()">
+			<h6>New Course</h6>
+		</div>
+		<div onclick="openAssignmentForm()">
+			<img src="{% static 'main/images/plus.png' %}" alt="instructor's Photo" style="width: 25px; height: auto; margin-left: 30px" />
+		</div>
+		<div style="margin-left: 10px" onclick="openAssignmentForm()">
+			<h6>New Assignment</h6>
+		</div>
+	</div>
+	<div class="profile">
+		<form action="{% url 'instructor' %}" method="POST">
+			{% csrf_token %}
+			<h4>See Student Submissions:</h4>
+			<select onchange="courseSelector({{courses}});" id="courseSelect" name="course" class="select">
+				<option disabled selected>Select a Course</option>
+				{% for course,value in courseAssignment.items %}
+				<option value="{{course}}">{{course}}</option>
+				{% endfor %}
+			</select>
+			<select onchange="assignmentsSubmitted()" name="assign" id="assignmentSelect" class="select">
+				<option value="Select an Assignment" disabled selected>Select an Assignment</option>
+				{% for course,values in courseAssignment.items %} {% for value in values %}
+				<option style="display: none" class="{{course}}" value="{{value}}">{{value}}</option>
+				{% endfor %} {% endfor %}
+			</select>
+		</form>
+	</div>
 </div>
 <table>
-    <tr>
-        <th>Assignment</th>
-        <th>Students</th>
-        <th>Score</th>
-        <th>Status</th>
-        <th>Parameters</th>
-        <th>Date Submitted / Due</th>
-    </tr>
-    {% for key,values in assignmentSubmission.items %}
-        {% if values %}
-            {% for value in values %}         
-                <div class="{{value.assignment.id}} assignPosition">
-                    <div class="assign_child">
-                        <h3>Submitted Parameters</h3>
-                        <p>{{value.parameters}}</p>
-                        <button class="button" type="button" onclick="closeReqForm({{value.assignment.id}});">Cancel</button>
-                    </div>
-                </div>
-                <tr class="tr" id="{{key}}" style="display: none;">
-                    <td>{{value.assignment.subject}}</td>
-                    <td>{{value.student}}</td>
-                    {% if value.score %}
-                        <td>{{value.score}}/{{value.assignment.score}}</td>
-                    {% else %}
-                        <td>-/-</td>
-                    {% endif %}
-                    {% if value.Pass %}
-                        <td>{{value.Pass}}</td>
-                    {% else %}
-                        <td>-</td>
-                    {% endif %}
-                    <td><button class="button" id="{{value.assignment.id}}" onclick="openReqForm({{value.assignment.id}})";>Display Parameters</button></td>
-                    <td>{{value.dateSubmitted}} / {{value.assignment.dueDate}}</td>
-                </tr>
-            {% endfor %}
-        {% else %}
-            <tr class="tr" id="{{key}}" style="display: none;">
-                <td colspan="7">
-                    <h3>No Submissions Yet</h3>
-                </td>
-            </tr>
-        {% endif %}
-    {% endfor %}
+	<tr>
+		<th>Assignment</th>
+		<th>Students</th>
+		<th>Score</th>
+		<th>Status</th>
+		<th>Parameters</th>
+		<th>Date Submitted / Due</th>
+	</tr>
+	{% for key,values in assignmentSubmission.items %} {% if values %} {% for value in values %}
+	<div class="{{value.assignment.id}} assignPosition">
+		<div class="assign_child">
+			<h3>Submitted Parameters</h3>
+			<p>{{value.parameters}}</p>
+			<button class="button" type="button" onclick="closeReqForm({{value.assignment.id}});">Cancel</button>
+		</div>
+	</div>
+	<tr class="tr" id="{{key}}" style="display: none">
+		<td>{{value.assignment.subject}}</td>
+		<td>{{value.student}}</td>
+		{% if value.score %}
+		<td>{{value.score}}/{{value.assignment.score}}</td>
+		{% else %}
+		<td>-/-</td>
+		{% endif %} {% if value.Pass %}
+		<td>{{value.Pass}}</td>
+		{% else %}
+		<td>-</td>
+		{% endif %}
+		<td><button class="button" id="{{value.assignment.id}}" onclick="openReqForm({{value.assignment.id}})" ;>Display Parameters</button></td>
+		<td>{{value.dateSubmitted}} / {{value.assignment.dueDate}}</td>
+	</tr>
+	{% endfor %} {% else %}
+	<tr class="tr" id="{{key}}" style="display: none">
+		<td colspan="7">
+			<h3>No Submissions Yet</h3>
+		</td>
+	</tr>
+	{% endif %} {% endfor %}
 </table>
 <script src="{% static 'main/script/instructor.js' %}"></script>
 <script src="{% static 'main/script/student.js' %}"></script>
-{% endblock body %}
-.
+{% endblock body %} .

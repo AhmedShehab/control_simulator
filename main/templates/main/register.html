@@ -1,93 +1,89 @@
-{% extends 'main/layout.html' %}
-{% load static %}
-{% block head %}
+{% extends 'main/layout.html' %} {% load static %} {% block head %}
 <title>Register</title>
-<link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
-{% endblock head %}
-{% block body %}
-<div class="studentInstructorGrid" >
-        <div class="flexBox">
-            <h1 style="color: #28a745;">Sign up</h1>
-        </div>
-    <div class="studentGridItem" id="studForm" onclick="openStudentForm()" >
-        <div class="child">
-            <div>
-            <h3 style="color: white;">Student</h3>
-            </div>
-            <div>
-            <img class="studImg" src="{% static 'main/images/studentIcon.png' %}" alt="Student Image">
-            </div>
-        </div> 
-        </div>
-    <div class="instructorGridItem" id="instForm" onclick="openInstructorForm()">
-        <div class="child">
-            <div>
-            <h3 style="color: white;">Instructor</h3>
-        </div>
-        <div>
-            <img class="instImg" src="{% static 'main/images/instructorIcon.png' %}" alt="Professor Image">
-        </div>
-        </div>
-        </div>
+<link href="{% static 'main/css/cred.css' %}" rel="stylesheet" />
+{% endblock head %} {% block body %}
+<div class="studentInstructorGrid">
+	<div class="flexBox">
+		<h1 style="color: #28a745">Sign up</h1>
+	</div>
+	<div class="studentGridItem" id="studForm" onclick="openStudentForm()">
+		<div class="child">
+			<div>
+				<h3 style="color: white">Student</h3>
+			</div>
+			<div>
+				<img class="studImg" src="{% static 'main/images/studentIcon.png' %}" alt="Student Image" />
+			</div>
+		</div>
+	</div>
+	<div class="instructorGridItem" id="instForm" onclick="openInstructorForm()">
+		<div class="child">
+			<div>
+				<h3 style="color: white">Instructor</h3>
+			</div>
+			<div>
+				<img class="instImg" src="{% static 'main/images/instructorIcon.png' %}" alt="Professor Image" />
+			</div>
+		</div>
+	</div>
 </div>
+<div class="container" id="studentForm" style="display: none">
+	<div>
+		<form class="cred_form" action="{% url 'register' %}" method="POST">
+			{% csrf_token %}
+			<input class="cred" type="text" placeholder="Username" name="username" {% if studMSG %} value="{{username}}" {% endif %} required />
+			<br />
+			<input class="cred" type="text" placeholder="First Name" name="first" {% if studMSG %} value="{{first}}" {% endif %} required />
+			<br />
+			<input class="cred" type="text" placeholder="Last Name" name="last" {% if studMSG %} value="{{last}}" {% endif %} required />
+			<br />
+			<input class="cred" type="email" placeholder="Email" name="email" {% if studMSG %} value="{{email}}" {% endif %} required />
+			<br />
+			<input class="cred" type="text" placeholder="Course Code" name="code" {% if studMSG %} value="{{code}}" {% endif %} required />
+			<br />
+			<input class="cred" type="password" placeholder="Password" name="password" required />
+			<br />
+			<input class="cred" type="password" placeholder="Confirm Password" name="confirmation" required />
+			<br />
+			{% if studMSG %}
+			<h5 id="studMSG" style="color: red">{{studMSG}}</h5>
+			{% endif %}
+			<input type="checkbox" name="agree" />
+			<span style="color: green">I agree to the terms and privacy policy</span>
+			<br />
+			<button class="button" type="submit" name="student" value="1">Sign up</button>
+			<button class="button" type="button" onclick="closeRegisterForm();">Cancel</button>
+		</form>
+	</div>
 </div>
-<div class="container" id="studentForm" style="display: none;">
-    <div>
-    <form class="cred_form" action="{% url 'register' %}" method="POST">
-        {% csrf_token %}
-        <input class="cred" type="text" placeholder="Username" name="username" {% if studMSG %} value="{{username}}"{% endif %} required>
-        <br>
-        <input class="cred" type="text" placeholder="First Name" name="first" {% if studMSG %} value="{{first}}"{% endif %} required>
-        <br>
-        <input class="cred" type="text" placeholder="Last Name" name="last" {% if studMSG %} value="{{last}}"{% endif %} required>
-        <br>
-        <input class="cred" type="email" placeholder="Email" name="email" {% if studMSG %} value="{{email}}"{% endif %} required>
-        <br>
-        <input class="cred" type="text" placeholder="Course Code" name="code" {% if studMSG %} value="{{code}}"{% endif %} required>
-        <br>
-        <input class="cred" type="password" placeholder="Password" name="password" required>
-        <br>
-        <input class="cred" type="password" placeholder="Confirm Password" name="confirmation" required>
-        <br>
-        {% if studMSG %}
-        <h5 id="studMSG" style="color: red;">{{studMSG}}</h5>
-        {% endif %}
-        <input type="checkbox" name="agree">
-        <span style="color: green;">I agree to the terms and privacy policy</span>
-        <br>
-        <button class="button" type="submit" name="student" value="1">Sign up</button>
-        <button class="button" type="button" onclick="closeRegisterForm();">Cancel</button>
-    </form>
-</div>
-</div>
-<div class="container" id="instructorForm" style="display: none;">
-    <div>
-    <form class="cred_form" action="{% url 'register' %}" method="POST">
-        {% csrf_token %}
-        <input class="cred" type="text" placeholder="Username" name="username" {% if instMSG %} value="{{username}}"{% endif %} required>
-        <br>
-        <input class="cred" type="text" placeholder="First Name" name="first" {% if instMSG %} value="{{first}}"{% endif %} required>
-        <br>
-        <input class="cred" type="text" placeholder="Last Name" name="last" {% if instMSG %} value="{{last}}"{% endif %} required>
-        <br>
-        <input class="cred" type="email" placeholder="Email" name="email" {% if instMSG %} value="{{email}}"{% endif %} required>
-        <br>
-        <input class="cred" type="text" placeholder="Major" name="major" {% if instMSG %} value="{{major}}"{% endif %} required>
-        <br>
-        <input class="cred" type="password" placeholder="Password" name="password" required>
-        <br>
-        <input class="cred" type="password" placeholder="Confirm Password" name="confirmation" required>
-        <br>
-        {% if instMSG %}
-        <h5  id="instMSG" style="color: red;">{{instMSG}}</h5>
-        {% endif %}
-        <input type="checkbox" name="agree">
-        <span style="color: green;">I agree to the terms and privacy policy</span>
-        <br>
-        <button class="button" type="submit" name="instructor" value="1">Sign up</button>
-        <button class="button" type="button" onclick="closeRegisterForm();">Cancel</button>
-    </form>
-</div>
-<script src="{% static 'main/script/register.js' %}"></script>
+<div class="container" id="instructorForm" style="display: none">
+	<div>
+		<form class="cred_form" action="{% url 'register' %}" method="POST">
+			{% csrf_token %}
+			<input class="cred" type="text" placeholder="Username" name="username" {% if instMSG %} value="{{username}}" {% endif %} required />
+			<br />
+			<input class="cred" type="text" placeholder="First Name" name="first" {% if instMSG %} value="{{first}}" {% endif %} required />
+			<br />
+			<input class="cred" type="text" placeholder="Last Name" name="last" {% if instMSG %} value="{{last}}" {% endif %} required />
+			<br />
+			<input class="cred" type="email" placeholder="Email" name="email" {% if instMSG %} value="{{email}}" {% endif %} required />
+			<br />
+			<input class="cred" type="text" placeholder="Major" name="major" {% if instMSG %} value="{{major}}" {% endif %} required />
+			<br />
+			<input class="cred" type="password" placeholder="Password" name="password" required />
+			<br />
+			<input class="cred" type="password" placeholder="Confirm Password" name="confirmation" required />
+			<br />
+			{% if instMSG %}
+			<h5 id="instMSG" style="color: red">{{instMSG}}</h5>
+			{% endif %}
+			<input type="checkbox" name="agree" />
+			<span style="color: green">I agree to the terms and privacy policy</span>
+			<br />
+			<button class="button" type="submit" name="instructor" value="1">Sign up</button>
+			<button class="button" type="button" onclick="closeRegisterForm();">Cancel</button>
+		</form>
+	</div>
+	<script src="{% static 'main/script/register.js' %}"></script>
 </div>
 {% endblock body %}
