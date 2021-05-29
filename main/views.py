@@ -229,8 +229,6 @@ def student(request):
             return HttpResponseRedirect(reverse(servomotor))
         elif assignment.simulator=="Cruise Control":
             return HttpResponseRedirect(reverse(cruise))
-        elif assignment.simulator=="Water":
-            return HttpResponseRedirect(reverse(water))
     try:
         assignments=[]
         submitted=[]
@@ -319,54 +317,74 @@ def instructor(request):
 
 
 def cruise(request):
-    try:
-        assignment = Assignment.objects.get(id=request.session["id"])
-        if assignment.simulator=="Cruise Control":
-            return render(request, "main/cruise.html", {
-                "assignment": assignment,
-            })
-        else:
-            return render(request, "main/cruise.html", {
-            })
-    except:
-        controller = ""
-    return render(request, "main/cruise.html", {
-        "controller": controller,
-    })
-
-
-def water(request):
-    try:
-        assignment = Assignment.objects.get(id=request.session["id"])
-        return render(request, "main/water.html", {
-            "assignment": assignment,
+    assignment, student, assignmentRequirements = checkAssignment(request)
+    if request.POST:
+        zero = float(request.POST.get("zero",0))
+        pole = float(request.POST.get("pole",0))
+        gain = float(request.POST.get("gain",0))
+        p = float(request.POST.get("p",0))
+        i = float(request.POST.get("i",0))
+        d = float(request.POST.get("d",0))
+        step = float(request.POST.get("step",0))
+        setTime = float(request.POST.get("set",0))
+        initPoint = float(request.POST.get("init",0))
+        PIDController={
+            "Simulator":"cruise",
+            "Controller":"PID",
+            "StepInput":step,
+            "setTime":setTime,
+            "P":p,
+            "I":i,
+            "D":d,
+        }
+        ZPKController={
+            "Simulator":"cruise",
+            "Controller":"ZPK",
+            "StepInput":step,
+            "setTime":setTime,
+            "Zero":zero,
+            "Pole":pole,
+            "Gain":gain,
+        }
+        submit= request.POST.get("submit")
+        if submit== "submit":
+            del request.session["id"]
+            if Submission.objects.filter(assignment=assignment):
+                test = Submission.objects.filter(assignment=assignment)
+                for something in test:
+                    if something.student==student:
+                        return render(request,"main/cruise.html",{
+                            "duplicateAssignment":"Sorry you can't submit the same assignment twice",
+                        })
+            subDate = date.today().strftime("%Y-%m-%d")
+            PIDParamaters= f"Propotional Constant(P): {p}, \n Differential Constant(D): {i}, \n Integral Constant(I): {d},"
+            ZPkParamaters= f"Gain: {gain}, \n Pole: {pole}, \n Zero: {zero}"
+            if p or i or d:   # PID Controller
+                controller = PIDController
+                parameters = PIDParamaters
+            else:             # ZPK Controller
+                controller = ZPKController
+                parameters = ZPkParamaters
+            if assignmentRequirements.get("Describtion",0):
+                submission = Submission.objects.create(student=student,assignment=assignment,dateSubmitted=subDate,parameters=parameters)
+                submission.save()
+            elif assignmentRequirements.get("RiseTime"):
+                score,Pass =isPass(controller,assignmentRequirements)
+                submission = Submission.objects.create(student=student,assignment=assignment,score=score,Pass=Pass,dateSubmitted=subDate,parameters=parameters)
+                submission.save()
+            return HttpResponseRedirect(reverse("cruise"))                     
+        elif submit == "simulate":
+            if p or i or d:   # PID Controller
+                return
+    else:
+        return render(request, "main/cruise.html", {
+            "assignment":assignment,
         })
-    except:
-        controller = ""
-    return render(request, "main/water.html", {
-        "controller": controller,
-    })
+
 
 
 def servomotor(request):
-    try:
-        assignment = Assignment.objects.get(id=request.session["id"])
-        student = Student.objects.get(credentials=request.user)
-        if not assignment.describtion:
-            assignmentRequirements={
-                "RiseTime":assignment.riseTime,
-                "SettlingTime":assignment.setTime,
-                "SteadyStateError":assignment.Ess,
-                "Overshoot":assignment.pOvershoot
-            }
-        else:
-            assignmentRequirements={
-                "Describtion":assignment.describtion
-            }
-        pass
-    except:
-        assignment=""
-        pass
+    assignment, student, assignmentRequirements = checkAssignment(request)
     if request.POST:
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
@@ -429,3 +447,24 @@ def servomotor(request):
         return render(request, "main/servomotor.html", {
             "assignment":assignment,
         })
+
+def checkAssignment(request):
+    try:
+        assignment = Assignment.objects.get(id=request.session["id"])
+        student = Student.objects.get(credentials=request.user)
+        if not assignment.describtion:
+            assignmentRequirements={
+                "RiseTime":assignment.riseTime,
+                "SettlingTime":assignment.setTime,
+                "SteadyStateError":assignment.Ess,
+                "Overshoot":assignment.pOvershoot
+            }
+        else:
+            assignmentRequirements={
+                "Describtion":assignment.describtion
+            }
+        pass
+    except:
+        assignment=""
+        pass
+    return assignment,student,assignmentRequirements
