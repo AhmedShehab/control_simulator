@@ -1,0 +1,59 @@
+:root {
+	--main-color: #28a745;
+}
+body {
+	overflow-y: scroll;
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+body::-webkit-scrollbar {
+	display: none;
+}
+.desc {
+	width: 100%;
+	background-color: var(--main-color);
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.descButton {
+	padding: 0.5rem;
+	outline: none;
+	border-radius: 5px;
+	border: 1px white solid;
+	font: 15px sans-serif, arial;
+}
+.arrowUp {
+	border: solid var(--main-color);
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	padding: 3px;
+	transform: rotate(-135deg);
+	-webkit-transform: rotate(-135deg);
+	margin-left: -8px;
+	opacity: 0;
+	transition: ease-in-out 50ms;
+}
+.arrowDown {
+	border: solid var(--main-color);
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	padding: 3px;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	margin-left: -8px;
+	opacity: 0;
+	transition: ease-in-out 50ms;
+}
+.descButton:hover span {
+	opacity: 1;
+	margin-left: 8px;
+}
+#pdf {
+	position: absolute;
+	height: 0;
+	left: 0;
+	width: 100%;
+}

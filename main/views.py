@@ -143,16 +143,6 @@ def register(request):
                         "major": major,
                         "email": email,
                     })
-                # Ensure that the user agrees to all terms and privacy policy
-                if not request.POST.get("agree")=="on":
-                    return render(request, "main/register.html", {
-                        "instMSG": "You need to agree on the terms in order to sign up.",
-                        "username": username,
-                        "first": first,
-                        "last": last,
-                        "major": major,
-                        "email": email,
-                    })
                 try:
                     user = User.objects.create_user(username, email, password,status="i",first_name=first,last_name=last)
                     user.save()

@@ -8,6 +8,7 @@
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet" />
 <link href="{% static 'main/css/profile.css' %}" rel="stylesheet" />
 <link href="{% static 'main/css/Layout.css' %}" rel="stylesheet" />
+<link href="{% static 'main/css/simulator.css' %}" rel="stylesheet" />
 <style>
 	.flex-child {
 		margin-top: 5%;
@@ -186,9 +187,15 @@
 <div style="text-align: center">
 	<a class="btn draw" href="{% url 'design'  %}?name=Servomotor">Design by Frequency</a>
 </div>
-<embed src="{% static 'main/pdf/test.pdf' %}" width="500" height="375" />
+<div class="desc" id="desc">
+	<button id="descButton" class="descButton" onclick="run();">Show System Description<span class="arrowUp"></span></button>
+	<div class="content">
+		<iframe id="pdf" src="{% static 'main/pdf/test.pdf' %}"></iframe>
+	</div>
+</div>
 <script src=" {% static 'main/script/chart.js' %}"></script>
 <script src=" {% static 'main/script/student.js' %}"></script>
+<script src=" {% static 'main/script/simulator.js' %}"></script>
 <script>
 	window.addEventListener("load", (event) => {
 		if ("{{assignment.controller}}" != "") {
