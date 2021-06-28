@@ -210,12 +210,20 @@ window.onload = function () {
     
     }
     
-    function display(){
-        var elements = document.getElementsByClassName("no");
-        for (var i=0; i<elements.length; i++) {
-            elements[i].style.display = 'none';
-        }
-        var name= document.getElementById("selector").value;
-        document.getElementById(name).style.display ="block";
-        
+function display(){
+    var elements = document.getElementsByClassName("no");
+    for (var i=0; i<elements.length; i++) {
+        elements[i].style.display = 'none';
     }
+    var name= document.getElementById("selector").value;
+    document.getElementById(name).style.display ="block";
+    
+}
+function openForm(){
+    document.getElementById("edit").style.display="block";
+    document.getElementById("tf").style.display="none";
+}
+function close(){
+    document.getElementById('edit').style.display='none'; 
+    document.getElementById('tf').style.display='block';
+}

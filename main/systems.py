@@ -1,3 +1,4 @@
+
 from control.lti import zero
 from django.http import response
 import numpy as np
@@ -370,6 +371,13 @@ def stepinfo_pid(sys, Kp, Ki, Kd):
     return spec
 
 def model(sys):
+
+    # check if sys is a transfer function
+    if type(sys) == type(control.tf(1, 1)):
+        # return num and den directly
+        num = list(sys.num[0][0])
+        den = list(sys.den[0][0])   
+
     if sys == 'cruise':
         num = None
         den = None
@@ -379,6 +387,38 @@ def model(sys):
         den = [1, 3.6, 0]
     
     return num, den
+def tf(sys):
+    if sys == 'cruise':
+        num = None
+        den = None
+    elif sys == 'servo':
+        num = "1"
+        den  = "s^2 + 3.6s"
+    
+    return num, den
+def arrayToString(array):
+    s=""
+    for index,val in enumerate(array):
+        i = len(array)-index-1
+        if val !=0:
+            if index>0 and i>=0:
+                s+=" + "
+            if val==1:
+                if i==0:
+                    s+=f"{val}"
+                elif i==1:
+                    s+=f"S"
+                else:
+                    s+=f"S^{i}"
+            else:
+                if i==0:
+                    s+=f"{val}"
+                elif i==1:
+                    s+=f"{val}S"
+                else:
+                    s+=f"{val}S^{i}"
+        i-=1
+    return s
     
 # Auto grading function for student submissions
 def isPass(parameters, requirements):
