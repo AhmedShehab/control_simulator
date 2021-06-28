@@ -317,7 +317,24 @@ def instructor(request):
 
 
 def cruise(request):
-    assignment, student, assignmentRequirements = checkAssignment(request)
+    try:
+        assignment = Assignment.objects.get(id=request.session["id"])
+        student = Student.objects.get(credentials=request.user)
+        if not assignment.describtion:
+            assignmentRequirements={
+                "RiseTime":assignment.riseTime,
+                "SettlingTime":assignment.setTime,
+                "SteadyStateError":assignment.Ess,
+                "Overshoot":assignment.pOvershoot
+            }
+        else:
+            assignmentRequirements={
+                "Describtion":assignment.describtion
+            }
+        pass
+    except:
+        assignment=""
+        pass
     if request.POST:
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
@@ -384,7 +401,24 @@ def cruise(request):
 
 
 def servomotor(request):
-    assignment, student, assignmentRequirements = checkAssignment(request)
+    try:
+        assignment = Assignment.objects.get(id=request.session["id"])
+        student = Student.objects.get(credentials=request.user)
+        if not assignment.describtion:
+            assignmentRequirements={
+                "RiseTime":assignment.riseTime,
+                "SettlingTime":assignment.setTime,
+                "SteadyStateError":assignment.Ess,
+                "Overshoot":assignment.pOvershoot
+            }
+        else:
+            assignmentRequirements={
+                "Describtion":assignment.describtion
+            }
+        pass
+    except:
+        assignment=""
+        pass
     if request.POST:
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
@@ -447,24 +481,4 @@ def servomotor(request):
         return render(request, "main/servomotor.html", {
             "assignment":assignment,
         })
-
-def checkAssignment(request):
-    try:
-        assignment = Assignment.objects.get(id=request.session["id"])
-        student = Student.objects.get(credentials=request.user)
-        if not assignment.describtion:
-            assignmentRequirements={
-                "RiseTime":assignment.riseTime,
-                "SettlingTime":assignment.setTime,
-                "SteadyStateError":assignment.Ess,
-                "Overshoot":assignment.pOvershoot
-            }
-        else:
-            assignmentRequirements={
-                "Describtion":assignment.describtion
-            }
-        pass
-    except:
-        assignment=""
-        pass
-    return assignment,student,assignmentRequirements
+ 
