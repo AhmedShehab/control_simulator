@@ -1,23 +1,23 @@
 function openStudentForm() {
-    document.getElementById("studentForm").style.display = "flex";
-    document.getElementById("studForm").style.display = "none";
-    document.getElementById("instForm").style.display = "none";
+	document.getElementById("studentForm").style.display = "flex";
+	document.getElementById("studForm").style.display = "none";
+	document.getElementById("instForm").style.display = "none";
 }
 
- function closeRegisterForm(){
-    location.reload();
+function closeRegisterForm() {
+	location.reload();
 }
 
 function openInstructorForm() {
-    status = "i";
-    document.getElementById("instructorForm").style.display = "flex";
-    document.getElementById("studForm").style.display = "none";
-    document.getElementById("instForm").style.display = "none";
+	status = "i";
+	document.getElementById("instructorForm").style.display = "flex";
+	document.getElementById("studForm").style.display = "none";
+	document.getElementById("instForm").style.display = "none";
 }
 
 if (document.getElementById("instMSG")) {
-    openInstructorForm();
+	openInstructorForm();
 }
 if (document.getElementById("studMSG")) {
-    openStudentForm();
+	openStudentForm();
 }

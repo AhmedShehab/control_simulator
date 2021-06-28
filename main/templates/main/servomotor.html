@@ -1,205 +1,187 @@
-{% extends 'main/layout.html' %}
-{% load static %}
-{% block head %}
+{% extends 'main/layout.html' %} {% load static %} {% block head %}
 <title>Servomotor Simulator</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"></script>
-<link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
-<link href="{% static 'main/css/profile.css' %}" rel="stylesheet">
-<link href="{% static 'main/css/Layout.css' %}" rel="stylesheet">
+<link href="{% static 'main/css/cred.css' %}" rel="stylesheet" />
+<link href="{% static 'main/css/profile.css' %}" rel="stylesheet" />
+<link href="{% static 'main/css/Layout.css' %}" rel="stylesheet" />
 <style>
-        .flex-child {
-                margin-top: 5%;
-                flex: 0 70em;
+	.flex-child {
+		margin-top: 5%;
+		flex: 0 70em;
+	}
 
-        }
-
-        .flex-child:first-child {
-                border-right: 2px solid #28a745;
-                padding:3% 5% 2% 4%;
-                margin-right: 20px;
-        }
+	.flex-child:first-child {
+		border-right: 2px solid #28a745;
+		padding: 3% 5% 2% 4%;
+		margin-right: 20px;
+	}
 </style>
-{% endblock head %}
-{% block body %}
-{{duplicateAssignment}}
-{% if assignment.riseTime %}
+{% endblock head %} {% block body %} {{duplicateAssignment}} {% if assignment.riseTime %}
 <div class="{{assignment.id}} assignPosition">
-        <div class="assign_child">
-                <h3>System Requirements</h3>
-                Rise Time = {{assignment.riseTime}}s
-                <br>
-                Settling Time = {{assignment.setTime}}s
-                <br>
-                Percent overshoot = {{assignment.pOvershoot}}%
-                <br>
-                steady state error = {{assignment.Ess}}
-                <br>
-                <button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
-        </div>
+	<div class="assign_child">
+		<h3>System Requirements</h3>
+		Rise Time = {{assignment.riseTime}}s
+		<br />
+		Settling Time = {{assignment.setTime}}s
+		<br />
+		Percent overshoot = {{assignment.pOvershoot}}%
+		<br />
+		steady state error = {{assignment.Ess}}
+		<br />
+		<button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
+	</div>
 </div>
 {% else %}
 <div class="{{assignment.id}} assignPosition">
-        <div class="assign_child">
-                <h3>Requirements Describtion</h3>
-                <p>{{assignment.describtion}}</p>
-                <br>
-                <button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
-        </div>
+	<div class="assign_child">
+		<h3>Requirements Describtion</h3>
+		<p>{{assignment.describtion}}</p>
+		<br />
+		<button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
+	</div>
 </div>
 {% endif %}
-<div class="flex-container" style="display: flex;">
-        <div class="flex-child" id="simulatorForm" style="flex:1;">
-                <form class="cred_form">
-                        {% if assignment %}
-                        <h5>Assignment: {{assignment.subject}}<button class="button" id="{{assignment.id}}" type="button" onclick="openReqForm({{assignment.id}});">Display Requirements</button></h5>
-                        {% endif %}
-                        <h2 style=" display: inline;">Controller: </h2>
-                        <select class="cred" onchange="display();" id="selector">
-                                <option selected disabled>No selected</option>
-                                <option value="P">P</option>
-                                <option value="PI">PI</option>
-                                <option value="PD">PD</option>
-                                <option value="PID">PID</option>
-                                <option value="lag">Lag</option>
-                                <option value="lead">Lead</option>
-                        </select>
-                        {% comment %} Dummy Form Temporary fix for some unknown bug {% endcomment %}
-                        <div id="dummy" style="display: none;" class="option"> 
-                                <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
-                                        {% csrf_token %}
-                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
-                                </form>
-                        </div>
-                        <div id="P" style="display: none;" class="option">
-                                <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
-                                        {% csrf_token %}
-                                        <h5>P:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="p">
-                                        <br>
-                                        {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
-                                        {% endif %}
-                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
-                                        <input class="button" type="button" value="Reset">
-                                </form>
-                        </div>
-                        <div id="PI" style="display: none;" class="option">
-                                <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
-                                        {% csrf_token %}
-                                        <h5>P:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="p">
-                                        <br>
-                                        <h5>I:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="i">
-                                        <br>
-                                        {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
-                                        {% endif %}
-                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
-                                        <input class="button" type="button" value="Reset">
-                                </form>
-                        </div>
-                        <div id="PD" style="display: none;" class="option">
-                                <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
-                                        {% csrf_token %}
-                                        <h5>P:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="p">
-                                        <br>
-                                        <h5>D:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="d">
-                                        <br>
-                                        {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
-                                        {% endif %}
-                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
-                                        <input class="button" type="button" value="Reset">
-                                </form>
-                        </div>
-                        <div id="PID" style="display: none;" class="option">
-                                <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
-                                        {% csrf_token %}
-                                        <h5>P:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="p">
-                                        <br>
-                                        <h5>I:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="i">
-                                        <br>
-                                        <h5>D:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="d">
-                                        <br>
-                                        {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
-                                        {% endif %}
-                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
-                                        <input class="button" type="button" value="Reset">
-                                </form>
-                        </div>
-                        <div id="lag" style="display: none;" class="option">
-                                <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
-                                        {% csrf_token %}
-                                        <h5>Zero:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="zero">
-                                        <br>
-                                        <h5>Pole:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="pole">
-                                        <br>
-                                        <h5>Gain:</h5>
-                                        <input class="cred" type="number" step="0.00001" required
-                                                placeholder="Enter the value" name="gain">
-                                        <br>
-                                        {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
-                                        {% endif %}
-                                        <button class="button" type="submit" name="submit" value="simulate">Start</button>
-                                        <input class="button" type="button" value="Reset">
-                                </form>
-                        </div>
-                        <div id="lead" style="display: none;" class="option">
-                                <form class="cred_form" action="{% url 'servomotor' %}" method="POST">
-                                        {% csrf_token %}
-                                        <h5>Zero:</h5>
-                                        <input class="cred" type="number" step="0.00001" placeholder="Enter the value"
-                                                name="zero" required>
-                                        <br>
-                                        <h5>Pole:</h5>
-                                        <input class="cred" type="number" step="0.00001" placeholder="Enter the value"
-                                                name="pole" required>
-                                        <br>
-                                        <h5>Gain:</h5>
-                                        <input class="cred" type="number" step="0.00001" placeholder="Enter the value"
-                                                name="gain" required>
-                                        <br>
-                                        {% if assignment %}
-                                        <button class="button" type="submit" name="submit" value="submit">Submit</button>
-                                        {% endif %}
-                                        <button class="button" type="button" onclick="sim()">Start</button>
-                                        <input class="button" type="button" value="Reset">
-                                </form>
-                        </div>
-
-                </form>
-        </div>
-        <div class="flex-child" style="text-align: center;">
-                <div>
-                        <h1>System Response</h1>
-                        <canvas id="myChart"></canvas>
-                </div>
-        </div>
-        
+<div class="flex-container" style="display: flex">
+	<div class="flex-child" id="simulatorForm" style="flex: 1">
+		<form class="cred_form">
+			{% if assignment %}
+			<h5>
+				Assignment: {{assignment.subject}}<button class="button" id="{{assignment.id}}" type="button" onclick="openReqForm({{assignment.id}});">
+					Display Requirements
+				</button>
+			</h5>
+			{% endif %}
+			<h2 style="display: inline">Controller:</h2>
+			<select class="cred" onchange="display();" id="selector">
+				<option selected disabled>No selected</option>
+				<option value="P">P</option>
+				<option value="PI">PI</option>
+				<option value="PD">PD</option>
+				<option value="PID">PID</option>
+				<option value="lag">Lag</option>
+				<option value="lead">Lead</option>
+			</select>
+			{% comment %} Dummy Form Temporary fix for some unknown bug {% endcomment %}
+			<div id="dummy" style="display: none" class="option">
+				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+					{% csrf_token %}
+					<button class="button" type="submit" name="submit" value="submit">Submit</button>
+				</form>
+			</div>
+			<div id="P" style="display: none" class="option">
+				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+					{% csrf_token %}
+					<h5>P:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="p" />
+					<br />
+					{% if assignment %}
+					<button class="button" type="submit" name="submit" value="submit">Submit</button>
+					{% endif %}
+					<button class="button" type="submit" name="submit" value="simulate">Start</button>
+					<input class="button" type="button" value="Reset" />
+				</form>
+			</div>
+			<div id="PI" style="display: none" class="option">
+				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+					{% csrf_token %}
+					<h5>P:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="p" />
+					<br />
+					<h5>I:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="i" />
+					<br />
+					{% if assignment %}
+					<button class="button" type="submit" name="submit" value="submit">Submit</button>
+					{% endif %}
+					<button class="button" type="submit" name="submit" value="simulate">Start</button>
+					<input class="button" type="button" value="Reset" />
+				</form>
+			</div>
+			<div id="PD" style="display: none" class="option">
+				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+					{% csrf_token %}
+					<h5>P:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="p" />
+					<br />
+					<h5>D:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="d" />
+					<br />
+					{% if assignment %}
+					<button class="button" type="submit" name="submit" value="submit">Submit</button>
+					{% endif %}
+					<button class="button" type="submit" name="submit" value="simulate">Start</button>
+					<input class="button" type="button" value="Reset" />
+				</form>
+			</div>
+			<div id="PID" style="display: none" class="option">
+				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+					{% csrf_token %}
+					<h5>P:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="p" />
+					<br />
+					<h5>I:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="i" />
+					<br />
+					<h5>D:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="d" />
+					<br />
+					{% if assignment %}
+					<button class="button" type="submit" name="submit" value="submit">Submit</button>
+					{% endif %}
+					<button class="button" type="submit" name="submit" value="simulate">Start</button>
+					<input class="button" type="button" value="Reset" />
+				</form>
+			</div>
+			<div id="lag" style="display: none" class="option">
+				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+					{% csrf_token %}
+					<h5>Zero:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="zero" />
+					<br />
+					<h5>Pole:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="pole" />
+					<br />
+					<h5>Gain:</h5>
+					<input class="cred" type="number" step="0.00001" required placeholder="Enter the value" name="gain" />
+					<br />
+					{% if assignment %}
+					<button class="button" type="submit" name="submit" value="submit">Submit</button>
+					{% endif %}
+					<button class="button" type="submit" name="submit" value="simulate">Start</button>
+					<input class="button" type="button" value="Reset" />
+				</form>
+			</div>
+			<div id="lead" style="display: none" class="option">
+				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+					{% csrf_token %}
+					<h5>Zero:</h5>
+					<input class="cred" type="number" step="0.00001" placeholder="Enter the value" name="zero" required />
+					<br />
+					<h5>Pole:</h5>
+					<input class="cred" type="number" step="0.00001" placeholder="Enter the value" name="pole" required />
+					<br />
+					<h5>Gain:</h5>
+					<input class="cred" type="number" step="0.00001" placeholder="Enter the value" name="gain" required />
+					<br />
+					{% if assignment %}
+					<button class="button" type="submit" name="submit" value="submit">Submit</button>
+					{% endif %}
+					<button class="button" type="button" onclick="sim()">Start</button>
+					<input class="button" type="button" value="Reset" />
+				</form>
+			</div>
+		</form>
+	</div>
+	<div class="flex-child" style="text-align: center">
+		<div>
+			<h1>System Response</h1>
+			<canvas id="myChart"></canvas>
+		</div>
+	</div>
 </div>
 <div style="text-align: center;">
        <a class="btn draw" href="{% url 'design'  %}?name=Servomotor" >Design by Frequency</a>
@@ -207,11 +189,11 @@
 <script src=" {% static 'main/script/chart.js' %}"></script>
 <script src=" {% static 'main/script/student.js' %}"></script>
 <script>
-        window.addEventListener('load', (event) => {
-                if ("{{assignment.controller}}" != "") {
-                        document.getElementById("selector").value = "{{assignment.controller}}"
-                        display();
-                }
-        });
+	window.addEventListener("load", (event) => {
+		if ("{{assignment.controller}}" != "") {
+			document.getElementById("selector").value = "{{assignment.controller}}";
+			display();
+		}
+	});
 </script>
 {% endblock body %}

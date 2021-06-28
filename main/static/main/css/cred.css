@@ -1,121 +1,123 @@
-:root{
-    --main-color:#28a745;
+:root {
+	--main-color: #28a745;
 }
-.cred_form{
-    text-align: center;
+.cred_form {
+	text-align: center;
 }
-.cred{
-    border-top:none ;
-    border-left: none;
-    border-right: none;
-    border-bottom: var(--main-color) solid 3px;
-    outline: none;
-    width: 34ch;
-    margin: 10px;
+.cred {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: var(--main-color) solid 3px;
+	outline: none;
+	width: 34ch;
+	margin: 10px;
 }
-.form-control{
-    border-top:none ;
-    border-left: none;
-    border-right: #ced4da none;
-    outline: none;
+.form-control {
+	border-top: none;
+	border-left: none;
+	border-right: #ced4da none;
+	outline: none;
 }
-.grade{
-    display: grid;
-    border-bottom: var(--main-color) solid 3px;
-    
+.grade {
+	display: grid;
+	border-bottom: var(--main-color) solid 3px;
 }
-.button,.button2{
-    border-radius: 1mm;
-    border: solid var(--main-color) 1px;
-    outline: none;
-    margin-top: 10px;
-    font: 16px arial,sans-serif;
-    padding: 10px;
+.button,
+.button2 {
+	border-radius: 1mm;
+	border: solid var(--main-color) 1px;
+	outline: none;
+	margin-top: 10px;
+	font: 16px arial, sans-serif;
+	padding: 10px;
 }
-.button{
-    color: var(--main-color);
-    background-color:white;
+.button {
+	color: var(--main-color);
+	background-color: white;
 }
-.button2{
-    color: white;
-    background-color:var(--main-color);
+.button2 {
+	color: white;
+	background-color: var(--main-color);
 }
-.button:hover.button2:hover{
-    cursor: pointer;
-    border-color: var(--main-color);   
+.button:hover.button2:hover {
+	cursor: pointer;
+	border-color: var(--main-color);
 }
-.button:hover{
-    color: white;
-    background-color: var(--main-color);
+.button:hover {
+	color: white;
+	background-color: var(--main-color);
 }
-.button2:hover{
-    color: white;
-    background-color: var(--main-color);
+.button2:hover {
+	color: white;
+	background-color: var(--main-color);
 }
-.link{
-    color: var(--main-color);
-    text-decoration: none;
+.link {
+	color: var(--main-color);
+	text-decoration: none;
 }
-.link:hover{
-    text-decoration: underline;
+.link:hover {
+	text-decoration: underline;
 }
 ::placeholder {
-    color: var(--main-color);
-    opacity: 1;
+	color: var(--main-color);
+	opacity: 1;
 }
-.container{
-    display: none;
-    justify-content: center;
+.container {
+	display: none;
+	justify-content: center;
 }
-.signup{
-    color: var(--main-color);
-    text-decoration: none;
+.signup {
+	color: var(--main-color);
+	text-decoration: none;
 }
-.signup:hover{
-    color: var(--main-color);
-    text-decoration: underline;
-    background-color: snow;
+.signup:hover {
+	color: var(--main-color);
+	text-decoration: underline;
+	background-color: snow;
 }
-.flexBox{
-    margin-top: 5%;
-    flex-basis: calc(100%);
-    text-align: center;
+.flexBox {
+	margin-top: 5%;
+	flex-basis: calc(100%);
+	text-align: center;
 }
-.studentInstructorGrid{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.studentInstructorGrid {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 }
-.studentGridItem,.instructorGridItem{
-    background-color: var(--main-color);
-    border: var(--main-color) solid;
-    border-radius: 30px;
-    width: 250px;
-    height: 200px;
-    margin-top: 10px;
-    transition:transform 100ms ease-in;
+.studentGridItem,
+.instructorGridItem {
+	background-color: var(--main-color);
+	border: var(--main-color) solid;
+	border-radius: 30px;
+	width: 250px;
+	height: 200px;
+	margin-top: 10px;
+	transition: transform 100ms ease-in;
 }
-.studentGridItem:hover,.instructorGridItem:hover{
-    cursor: pointer;
-    transform: scale(1.08);
+.studentGridItem:hover,
+.instructorGridItem:hover {
+	cursor: pointer;
+	transform: scale(1.08);
 }
-.studentGridItem{
-    margin-right: 20px;
+.studentGridItem {
+	margin-right: 20px;
 }
-.child{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.child {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
-.child div{
-    padding: 5px;
+.child div {
+	padding: 5px;
 }
-.studImg{
-    width: 100px;
-    height: 100px;
-} 
-.instImg{
-    width: 100px;
-    height: 100px;
+.studImg {
+	width: 100px;
+	height: 100px;
+}
+.instImg {
+	width: 100px;
+	height: 100px;
 }
