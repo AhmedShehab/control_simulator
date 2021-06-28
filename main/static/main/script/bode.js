@@ -88,7 +88,6 @@ window.onload = function () {
 		},
 		data: phase,
 	};
-	console.log(magnitude);
 
 	if (omega_comp.value != "" || omega_comp.value == null) {
 		omega_comp = omega_comp.value;
@@ -134,7 +133,6 @@ window.onload = function () {
 		}
 		dataSeries.dataPoints = dataPoints;
 		phase.push(dataSeries);
-		console.log(phase);
 		Mag = {
 			zoomEnabled: true,
 			animationEnabled: true,
