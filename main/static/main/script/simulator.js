@@ -4,7 +4,10 @@ function run() {
 	if (btn.innerText == "Show System Description") {
 		btn.innerHTML = "Hide System Description<span class='arrowDown'></span>";
 		pdf.style.height = "100vh";
-		scrollTo(0, 740);
+		var body = document.body,
+			html = document.documentElement;
+		var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+		scrollTo(0, height * 0.4679);
 	} else {
 		btn.innerHTML = "Show System Description<span class='arrowUp'></span>";
 		scrollTo(0, 0);
