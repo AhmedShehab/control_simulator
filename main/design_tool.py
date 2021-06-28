@@ -6,7 +6,9 @@ import sys
 def Gs():
     # Define plant transfer function
     Gs = control.tf(36, [1, 3.6, 0])
-    # print(Gs)
+    [n, d] = control.tfdata(Gs)
+    b = str(control.tf(d,1 ))
+    print(b[5])
     num = "36"
     den = "s^2 + 3.6s"
     # Draw open-loop frequency response for the planet

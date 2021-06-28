@@ -11,6 +11,7 @@ from . import design_tool
 import numpy as np
 from .systems import *
 from datetime import date
+
 def home(request):
     return render(request, "main/home.html",{
         "home": True
@@ -18,14 +19,46 @@ def home(request):
 
 def design(request):
     num, den, omega, mag, phase,gm, pm, wg, wp= design_tool.Gs()
+    omega, mag, phase = bode_sys("servo")
+    num, den = tf("servo")
+    gm, pm, wg, wp = margin_sys("servo")
+    name = request.GET.get("name")
+    empty = False
+    if name == None:
+        name = "Design By Frequency"
+        num = "1"
+        den = "s + 1"
+        empty = True
     if request.method == "POST":
+        if request.POST.get("num"):
+            n = eval(request.POST.get("num"))
+            d = eval(request.POST.get("den"))
+            num = arrayToString(n)
+            den = arrayToString(d)
+            Gs = control.tf(n, d)
+            omega, mag, phase = bode_sys(Gs)
+            gm, pm, wg, wp = margin_sys(Gs)
+            return render(request, "main/design.html", {
+                "omega": omega,
+                "ph": phase,
+                "mag": mag,
+                "name": 'Design By Frequency',
+                "numerator": num,
+                "denominator": den,
+                "design": True,
+                "empty": empty
+            })
         if request.POST.get("zero"):
+            num = request.POST.get("numerator")
+            den = request.POST.get("denominator")
+            print(num)
             z = float(request.POST.get("zero"))
             p = float(request.POST.get("pole"))
             k = float(request.POST.get("gain"))
             z = np.array([z])
             p = np.array([p])
-            omega_comp, mag_comp, phase_comp, gm, pm, wp, wg  = design_tool.zpk(z,p, k)
+            omega, mag, phase = bode_zpk("servo", z, p, k)
+            gm, pm, wg, wp = margin_zpk("servo", z, p, k)
         if request.POST.get("p"):
             p = request.POST.get("p")
             i = request.POST.get("i")
@@ -37,6 +70,7 @@ def design(request):
             p = float(p)
             i = float(i)
             d = float(d)
+            
             omega_comp, mag_comp, phase_comp, gm_comp, pm_comp, wp, wg  = design_tool.pid(p, i, d)
         return render(request, "main/design.html", {
                 "omega": omega,
@@ -49,18 +83,22 @@ def design(request):
                 "ph_comp": phase_comp,
                 "omega_comp":omega_comp,
                 "pm_comp": pm_comp,
-                "gm_comp": gm_comp
+                "gm_comp": gm_comp,
+                "design": True,
+                "empty": empty
             })
+    
     return render(request, "main/design.html", {
-                
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
-                "name": 'Servo Motor',
+                "name": name,
                 "numerator": num,
                 "denominator": den,
                 "pm": pm,
-                "gm": gm
+                "gm": gm,
+                "design": True,
+                "empty": empty
             })
 
 

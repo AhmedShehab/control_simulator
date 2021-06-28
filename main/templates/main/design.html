@@ -1,122 +1,145 @@
 {% extends 'main/layout.html' %} {% load static %} {% block head %}
 <title>Design By Frequency</title>
-<link href="{% static 'main/css/test.css' %}" rel="stylesheet" />
-<link href="{% static 'main/css/Layout.css' %}" rel="stylesheet" />
-<link href="{% static 'main/css/cred.css' %}" rel="stylesheet" />
-{% endblock head %} {% block body %}
+<link href="{% static 'main/css/test.css' %}" rel="stylesheet">
+<link href="{% static 'main/css/Layout.css' %}" rel="stylesheet">
+<link href="{% static 'main/css/cred.css' %}" rel="stylesheet">
+<link href="{% static 'main/css/profile.css' %}" rel="stylesheet">
+{% endblock head %}
+{% block body %}
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 <script src="{% static 'main/script/bode.js' %}"></script>
-<h1 class="test" style="font-weight: bold; text-align: center">{{name}}</h1>
+<h1 class="test" style="font-weight: bold; text-align: center;">{{name}} </h1>
+<div class="sys_name " style="margin-top: 3%;" >
+    <div style="width: 30%; float: left;">
+        <div>
+            $$(Gs) = { {{numerator}} \over {{denominator}}} \\ $$ 
+        </div>
+    </div>
+    <div style="float: left; width: 70%;">
+        <div id="edit" style="display: none; text-align: center; margin-right: auto; margin-left: auto;" >
+            <form action="{% url 'design' %}" method="POST"> 
+                {% csrf_token %}
+                <input class="cred" type="text" placeholder="Numerator Ex:[1]" style="width:auto" name="num" required><br>
+                <input class="cred" type="text" placeholder="Denominator Ex:[1,0,1]" style="width:auto" name="den" required><br>
+                <button type="submit" class="btn draw">change</button>
+                <button type="button" class="btn draw" onclick="document.getElementById('edit').style.display='none'; document.getElementById('tf').style.display='block';">cancel</button>
+            </form>
+            
+        </div>  
+        {% if empty %}
+        <div style="padding: 13%;" id="tf">
+            <button class="btn draw" onclick="openForm()" style=" display: block;">Edit TF</button>
+        </div>
+        
+        {% endif %}
+    </div>
+    
+    <div style="white-space: nowrap; overflow-y: hidden; width: 100%;">
+    <p style=" display: inline-block; margin-left: 2%; font-weight: bolder;">Controller:  </p>
+    <select class="form-select form-select-lg mb-3 dropdown cred" style="display: inline-block; color: #28a745; width: auto;" aria-label=".form-select-lg example" onchange="display()" id="selector">
+        <option selected>No selected</option>
+        <option value="P">P</option>
+        <option value="PI">PI</option>
+        <option value="PD">PD</option>
+        <option value="PID">PID</option>
+        <option value="lag">Lag</option>
+        <option value="lead">Lead</option>
+    </select>
+    </div>
+    
+    <div id="P" class="no" style="display: none;">
+        <form class="cred_form" action="{% url 'design' %}" method="POST">
+            {% csrf_token %}
+            <br> <h5 style="display: inline-block;">P:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="p">
+            <br>
+            <button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+        </form>
+    </div>
+    <div id="PI" class="no" style="display: none;">
+        <form class="cred_form" action="{% url 'design' %}" method="POST">
+            {% csrf_token %}
+            <br> <h5 style="display: inline-block;">P:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="p">
+            <br> <h5 style="display: inline-block;">I:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="i">
+            <br>
+            <button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+        </form>
+    </div>
+    <div id="PD" class="no" style="display: none;">
+        <form class="cred_form" action="{% url 'design' %}" method="POST">
+            {% csrf_token %}
+            <br> <h5 style="display: inline-block;">P:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="p">
+            <br> <h5 style="display: inline-block;">D:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="d">
+            <br>
+            <button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+        </form>
+    </div>
+    <div id="PID" class="no" style="display: none;">
+        <form class="cred_form" action="{% url 'design' %}" method="POST">
+            {% csrf_token %}
+            <br> <h5 style="display: inline-block;">P:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="p">
+            <br> <h5 style="display: inline-block;">I:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="i">
+            <br> <h5 style="display: inline-block;">D:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="d">
+            <br>
+            <button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+        </form>
+    </div>
+    <div id="lag" class="no" style="display: none;">
+        <form class="cred_form" action="{% url 'design' %}" method="POST">
+            {% csrf_token %}
+            <br> <h5 style="display: inline-block;">Zero:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="zero">
+            <br> <h5 style="display: inline-block;">Pole:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="pole">
+            <br> <h5 style="display: inline-block;">Gain:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" required placeholder="Enter the value" name="gain">
+            <br>
+            <button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline:none;">Draw</button>
+        </form>
+    </div>
+    <div id="lead" class="no" style="display: none;">
+        <form class="cred_form" action="{% url 'design' %}" method="POST">
+            {% csrf_token %}
+            <br> <h5 style="display: inline-block;">Zero:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" placeholder="Enter the value" name="zero" required>
+            <br> <h5 style="display: inline-block;">Pole:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" placeholder="Enter the value" name="pole" required> 
+            <br> <h5 style="display: inline-block;">Gain:</h5>
+            <input class="cred" style="display: inline-block;" type="number" step="0.00001" placeholder="Enter the value" name="gain" required>
+            <br>
+            <button class="btn draw" type="submit" >Draw</button>
+        </form>
+    </div>
 
-<div class="sys_name">
-	<div style="">$$(Gs) = { {{numerator}} \over {{denominator}}} \\ $$</div>
-	<h2 style="display: inline; margin-left: 2%">Controller:</h2>
-	<select
-		class="form-select form-select-lg mb-3 dropdown cred"
-		style="display: inline; color: #28a745"
-		aria-label=".form-select-lg example"
-		onchange="display()"
-		id="selector"
-	>
-		<option selected>No selected</option>
-		<option value="P">P</option>
-		<option value="PI">PI</option>
-		<option value="PD">PD</option>
-		<option value="PID">PID</option>
-		<option value="lag">Lag</option>
-		<option value="lead">Lead</option>
-	</select>
-	<div id="P" class="no" style="display: none">
-		<form class="cred_form" action="{% url 'design' %}" method="POST">
-			{% csrf_token %}
-			<br />
-			<h5 style="display: inline-block">P:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="p" />
-			<br />
-			<button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline: none">Draw</button>
-		</form>
-	</div>
-	<div id="PI" class="no" style="display: none">
-		<form class="cred_form" action="{% url 'design' %}" method="POST">
-			{% csrf_token %}
-			<br />
-			<h5 style="display: inline-block">P:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="p" />
-			<br />
-			<h5 style="display: inline-block">I:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="i" />
-			<br />
-			<button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline: none">Draw</button>
-		</form>
-	</div>
-	<div id="PD" class="no" style="display: none">
-		<form class="cred_form" action="{% url 'design' %}" method="POST">
-			{% csrf_token %}
-			<br />
-			<h5 style="display: inline-block">P:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="p" />
-			<br />
-			<h5 style="display: inline-block">D:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="d" />
-			<br />
-			<button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline: none">Draw</button>
-		</form>
-	</div>
-	<div id="PID" class="no" style="display: none">
-		<form class="cred_form" action="{% url 'design' %}" method="POST">
-			{% csrf_token %}
-			<br />
-			<h5 style="display: inline-block">P:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="p" />
-			<br />
-			<h5 style="display: inline-block">I:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="i" />
-			<br />
-			<h5 style="display: inline-block">D:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="d" />
-			<br />
-			<button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline: none">Draw</button>
-		</form>
-	</div>
-	<div id="lag" class="no" style="display: none">
-		<form class="cred_form" action="{% url 'design' %}" method="POST">
-			{% csrf_token %}
-			<br />
-			<h5 style="display: inline-block">Zero:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="zero" />
-			<br />
-			<h5 style="display: inline-block">Pole:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="pole" />
-			<br />
-			<h5 style="display: inline-block">Gain:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" required placeholder="Enter the value" name="gain" />
-			<br />
-			<button class="btn draw" type="submit" style="margin-right: 20px; transition: 0.3s; outline: none">Draw</button>
-		</form>
-	</div>
-	<div id="lead" class="no" style="display: none">
-		<form class="cred_form" action="{% url 'design' %}" method="POST">
-			{% csrf_token %}
-			<br />
-			<h5 style="display: inline-block">Zero:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" placeholder="Enter the value" name="zero" required />
-			<br />
-			<h5 style="display: inline-block">Pole:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" placeholder="Enter the value" name="pole" required />
-			<br />
-			<h5 style="display: inline-block">Gain:</h5>
-			<input class="cred" style="display: inline-block" type="number" step="0.00001" placeholder="Enter the value" name="gain" required />
-			<br />
-			<button class="btn draw" type="submit">Draw</button>
-		</form>
-	</div>
 </div>
-<div style="width: 65%; float: left">
-	<div id="Magnitude" style="height: 250px; width: 100%"></div>
-	<br />
-	<div id="Phase" style="height: 250px; width: 100%"></div>
+<div style="width: 65%; float: left;" >
+    <div id="Magnitude" style="height: 250px; width: 100%;">
+    </div>
+    <br>
+    <div id="Phase" style="height: 250px; width: 100%;"></div> 
 </div>
+
+
+
+<input hidden name="omega" value="{{omega}}" id =omega>
+<input hidden name="ph" value="{{ph}}" id =ph>
+<input hidden name="mag" value="{{mag}}" id =mag>
+<input hidden name="pm" value="{{pm}}" id =pm>
+<input hidden name="gm" value="{{gm}}" id =gm>
+<input hidden name="pm" value="{{pm_comp}}" id =pm_comp>
+<input hidden name="gm_comp" value="{{gm_comp}}" id =gm_comp>
+<input hidden name="omega_comp" value="{{omega_comp}}" id =omega_comp>
+<input hidden name="ph_comp" value="{{ph_comp}}" id =ph_comp>
+<input hidden name="mag_comp" value="{{mag_comp}}" id =mag_comp>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>    
 
 <input hidden name="omega" value="{{omega}}" id="omega" />
 <input hidden name="ph" value="{{ph}}" id="ph" />
