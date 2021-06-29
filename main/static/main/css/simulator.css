@@ -3,12 +3,12 @@
 }
 body {
 	overflow-y: scroll;
-	-ms-overflow-style: none; /* IE and Edge */
+	-ms-overflow-style: none; /* IE and Edge  */
 	scrollbar-width: none; /* Firefox */
 }
 body::-webkit-scrollbar {
 	display: none;
-}
+} 
 .desc {
 	width: 100%;
 	background-color: var(--main-color);
@@ -57,3 +57,51 @@ body::-webkit-scrollbar {
 	left: 0;
 	width: 100%;
 }
+input::placeholder{
+	font-size: smaller;
+}
+input:focus::placeholder{
+	color: transparent;
+}
+.input-bar{
+	margin: 0;
+	padding: 0;
+	font-size:small;
+	font-weight: bold;
+}
+.input-data{
+	margin-top: 0;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: var(--main-color) solid 3px;
+	outline: none;
+}
+.text0, .text1, .text2, .text11, .text22, .text33{
+	margin: 1%;
+	overflow: hidden;
+}
+.text0{
+	width: 98%;
+}
+.text1, .text2{
+	width: 45%;	
+}
+.text1, .text11{
+	float: left;
+	margin-left: 10px;
+}
+.text2, .text33{
+	float: right;
+	margin-right: 10px;
+}
+.text11, .text33{
+	width: 29%;
+}
+.text22{
+	float: left;
+}
+.text22{
+	width: 31%;
+}
+
