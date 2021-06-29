@@ -387,6 +387,7 @@ def model(sys):
         den = [1, 3.6, 0]
     
     return num, den
+    
 def tf(sys):
     if sys == 'cruise':
         num = None
@@ -396,6 +397,7 @@ def tf(sys):
         den  = "s^2 + 3.6s"
     
     return num, den
+
 def arrayToString(array):
     s=""
     for index,val in enumerate(array):
