@@ -3,7 +3,8 @@
 }
 body {
 	overflow-y: scroll;
-	-ms-overflow-style: none; /* IE and Edge  */
+	overflow-x: scroll;
+	-ms-overflow-style: none; /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
 }
 body::-webkit-scrollbar {
@@ -24,6 +25,7 @@ body::-webkit-scrollbar {
 	border-radius: 5px;
 	border: 1px white solid;
 	font: 15px sans-serif, arial;
+	background-color:white;
 }
 .arrowUp {
 	border: solid var(--main-color);
