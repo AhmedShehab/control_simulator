@@ -409,16 +409,16 @@ def arrayToString(array):
                 if i==0:
                     s+=f"{val}"
                 elif i==1:
-                    s+=f"S"
+                    s+=f"s"
                 else:
-                    s+=f"S^{i}"
+                    s+=f"s^{i}"
             else:
                 if i==0:
                     s+=f"{val}"
                 elif i==1:
-                    s+=f"{val}S"
+                    s+=f"{val}s"
                 else:
-                    s+=f"{val}S^{i}"
+                    s+=f"{val}s^{i}"
         i-=1
     return s
     
