@@ -102,12 +102,12 @@
 {% else %}
 <div class="{{assignment.id}} assignPosition">
 	<div class="assign_child">
-		<h3>Requirements Describtion</h3>
+		<h3>Requirements Description</h3>
 		System: {{assignment.simulator}}
 		<br />
 		Controller: {{assignment.controller}}
 		<br />
-		<p>{{assignment.describtion}}</p>
+		<p>{{assignment.description}}</p>
 		{% if assignment.simulator == "Cruise Control" %}
 		<form action="{% url 'student' %}" method="POST">
 			{% csrf_token %}

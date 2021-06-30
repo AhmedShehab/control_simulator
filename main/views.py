@@ -320,7 +320,7 @@ def instructor(request):
                 assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=5,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller)
                 assign.save()
             elif req.get("grade")=="receive":
-                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=5, instructor=request.user.username,describtion=desc,controller=controller)
+                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=5, instructor=request.user.username,description=desc,controller=controller)
                 assign.save()
             course=Course.objects.get(name=course)
             course.assignments.add(assign)
@@ -344,7 +344,10 @@ def cruise(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
         student = Student.objects.get(credentials=request.user)
-        if not assignment.describtion:
+        if assignment.simulator != "Cruise Control":
+            assignment=""
+            pass
+        if not assignment.description:
             assignmentRequirements={
                 "RiseTime":assignment.riseTime,
                 "SettlingTime":assignment.setTime,
@@ -353,7 +356,7 @@ def cruise(request):
             }
         else:
             assignmentRequirements={
-                "Describtion":assignment.describtion
+                "Description":assignment.description
             }
         pass
     except:
@@ -406,7 +409,7 @@ def cruise(request):
             else:             # ZPK Controller
                 controller = ZPKController
                 parameters = ZPkParamaters
-            if assignmentRequirements.get("Describtion",0):
+            if assignmentRequirements.get("Description",0):
                 submission = Submission.objects.create(student=student,assignment=assignment,dateSubmitted=subDate,parameters=parameters)
                 submission.save()
             elif assignmentRequirements.get("RiseTime"):
@@ -426,7 +429,7 @@ def servomotor(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
         student = Student.objects.get(credentials=request.user)
-        if not assignment.describtion:
+        if not assignment.description:
             assignmentRequirements={
                 "RiseTime":assignment.riseTime,
                 "SettlingTime":assignment.setTime,
@@ -435,7 +438,7 @@ def servomotor(request):
             }
         else:
             assignmentRequirements={
-                "Describtion":assignment.describtion
+                "Description":assignment.description
             }
         pass
     except:
@@ -493,7 +496,7 @@ def servomotor(request):
             else:             # ZPK Controller
                 controller = ZPKController
                 parameters = ZPkParamaters
-            if assignmentRequirements.get("Describtion",0):
+            if assignmentRequirements.get("Description",0):
                 submission = Submission.objects.create(student=student,assignment=assignment,dateSubmitted=subDate,parameters=parameters)
                 submission.save()
             elif assignmentRequirements.get("RiseTime"):

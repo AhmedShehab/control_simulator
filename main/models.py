@@ -20,7 +20,7 @@ class Assignment(models.Model):
     setTime     = models.FloatField(null=True)
     Ess         = models.FloatField(null=True)
     pOvershoot  = models.FloatField(null=True)
-    describtion = models.TextField(null = True)
+    description = models.TextField(null = True)
     controller  = models.CharField(max_length=50, null=True)
     simulator_choices=[
         ("Cruise Control","Cruise Control"),
