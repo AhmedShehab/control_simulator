@@ -24,7 +24,7 @@
 {% endblock head %} {% block body %} {{duplicateAssignment}} {% if assignment.riseTime %}
 <div class="{{assignment.id}} assignPosition">
 	<div class="assign_child">
-		<h3>System Requirements </h3>
+		<h3>Assignment Requirements</h3>
                 <strong>Assignment: {{assignment.subject}} </strong> 
                 <br>
 		Rise Time = {{assignment.riseTime}}s
@@ -53,7 +53,7 @@
 		<form class="cred_form">
                         {% if assignment %}
                         <a class="btn draw" id="{{assignment.id}}" style="display: inline;" type="button" onclick="openReqForm({{assignment.id}});">
-                                Display Requirements
+                                Assignment Requirements
                         </a>
                         {% endif %}
                         <div class="text1">

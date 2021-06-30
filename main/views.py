@@ -344,21 +344,21 @@ def cruise(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
         student = Student.objects.get(credentials=request.user)
-        if assignment.simulator != "Cruise Control":
-            assignment=""
+        if assignment.simulator == "Cruise Control":
+            if not assignment.description:
+                assignmentRequirements={
+                    "RiseTime":assignment.riseTime,
+                    "SettlingTime":assignment.setTime,
+                    "SteadyStateError":assignment.Ess,
+                    "Overshoot":assignment.pOvershoot
+                }
+            else:
+                assignmentRequirements={
+                    "Description":assignment.description
+                }
             pass
-        if not assignment.description:
-            assignmentRequirements={
-                "RiseTime":assignment.riseTime,
-                "SettlingTime":assignment.setTime,
-                "SteadyStateError":assignment.Ess,
-                "Overshoot":assignment.pOvershoot
-            }
         else:
-            assignmentRequirements={
-                "Description":assignment.description
-            }
-        pass
+            assignment=""
     except:
         assignment=""
         pass
@@ -429,18 +429,21 @@ def servomotor(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
         student = Student.objects.get(credentials=request.user)
-        if not assignment.description:
-            assignmentRequirements={
-                "RiseTime":assignment.riseTime,
-                "SettlingTime":assignment.setTime,
-                "SteadyStateError":assignment.Ess,
-                "Overshoot":assignment.pOvershoot
-            }
+        if assignment.simulator == "Servo Motor":
+            if not assignment.description:
+                assignmentRequirements={
+                    "RiseTime":assignment.riseTime,
+                    "SettlingTime":assignment.setTime,
+                    "SteadyStateError":assignment.Ess,
+                    "Overshoot":assignment.pOvershoot
+                }
+            else:
+                assignmentRequirements={
+                    "Description":assignment.description
+                }
+            pass
         else:
-            assignmentRequirements={
-                "Description":assignment.description
-            }
-        pass
+            assignment=""
     except:
         assignment=""
         pass
