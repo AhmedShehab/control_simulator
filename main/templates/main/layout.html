@@ -62,16 +62,24 @@
 								Control System Simulator
 							</a>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="{% url 'cruise' %}">Basic Cruise Control Simulator</a>
-								<a class="dropdown-item" href="{% url 'servomotor' %}">Servomotor Control Simulator</a>
+								<a class="nav-link" href="{% url 'cruise' %}">Basic Cruise Control Simulator</a>
+								<a class="nav-link" href="{% url 'servomotor' %}">Servomotor Control Simulator</a>
 							</ul>
 						</div>
 					</li>
-					{% if not design %}
 					<li class="nav-item">
-						<a class="nav-link" href="{% url 'design' %}">Design Tool</a>
+						<div class="dropdown">
+							<a class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Design By Frequency
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="nav-link" href="{% url 'design' %}">Design Tool</a>
+								<a class="nav-link" href="{% url 'design' %}?name=Servomotor">Servo Design Tool</a>
+								<a class="nav-link" href="{% url 'design' %}?name=Servomotor">Cruise Design Tool</a>
+							</ul>
+						</div>
 					</li>
-					{% endif %}
+					
 				</ul>
 			</div>
 			<div class="collapse navbar-collapse" id="navbarRightAlignExample">
