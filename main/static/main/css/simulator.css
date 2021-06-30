@@ -106,4 +106,17 @@ input:focus::placeholder{
 .text22{
 	width: 31%;
 }
-
+.sub{
+	background-color:#28a745;
+	color: white;
+	border-radius: 1mm;
+	border: solid var(--main-color) 1px;
+	outline: none;
+	margin-top: 10px;
+	font: 16px arial, sans-serif;
+	padding: 10px;
+}
+.sub:hover, .sub:focus{
+	background-color:#30c553;
+	color: white;
+}

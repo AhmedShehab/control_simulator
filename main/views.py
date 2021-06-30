@@ -101,10 +101,6 @@ def design(request):
                 "empty": empty
             })
 
-
-
-
-
 def register(request):
     try: # Check if already logged in and have an account
         user = User.objects.get(username=request.user)
@@ -227,6 +223,7 @@ def register(request):
             return HttpResponseRedirect(reverse("home"))
         else:
             return render(request, "main/register.html")
+
 def login_view(request):
     if request.method == "POST":
         # Attempt to sign user in
@@ -343,7 +340,6 @@ def instructor(request):
             "assignmentSubmission": assignmentSubmission,
         })
 
-
 def cruise(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
@@ -426,8 +422,6 @@ def cruise(request):
             "assignment":assignment,
         })
 
-
-
 def servomotor(request):
     try:
         assignment = Assignment.objects.get(id=request.session["id"])
@@ -447,6 +441,10 @@ def servomotor(request):
     except:
         assignment=""
         pass
+    sys = "servo"
+    remember = 1
+    setTime = 1.0
+    setPoint = 1.0
     if request.POST:
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
@@ -455,8 +453,9 @@ def servomotor(request):
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
         step = float(request.POST.get("step",0))
-        setTime = float(request.POST.get("set",0))
-        initPoint = float(request.POST.get("init",0))
+        setTime = float(request.POST.get("time",0))
+        setPoint = float(request.POST.get("setPoint",0))
+        remember = request.POST.get("remember",0)
         PIDController={
             "Simulator":"servo",
             "Controller":"PID",
@@ -503,10 +502,35 @@ def servomotor(request):
                 submission.save()
             return HttpResponseRedirect(reverse("servomotor"))                     
         elif submit == "simulate":
-            if p or i or d:   # PID Controller
-                return
+            if p:   # PID Controller
+                if not i:
+                    i = 0
+                if not d:
+                    d = 0
+                t, output = step_pid(sys, setTime, setPoint, p, i, d)
+            elif zero and pole and gain:
+                t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+            else:
+                t, output = step_sys(sys, setTime, setPoint)
+            return render(request, "main/servomotor.html", {
+                "assignment":assignment,
+                "t": t,
+                "output":output,
+                "setPoint":setPoint,
+                "time":setTime,
+                "remember": remember,
+                "p":p,
+                "i":i,
+                "d":d,
+                "zero":zero,
+                "pole":pole,
+                "gain":gain
+        })
     else:
         return render(request, "main/servomotor.html", {
             "assignment":assignment,
+            "remember":remember,
+            "setPoint":setPoint,
+            "time":setTime,
         })
  

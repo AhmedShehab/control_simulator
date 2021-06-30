@@ -1,6 +1,5 @@
-function display() {
+window.onload = function(){
 	var name = document.getElementById("selector").value;
-	console.log(name);
 	var elements = document.getElementsByClassName("option");
 	for (let i = 0; i < elements.length; i++) {
 		var element = elements[i];
@@ -11,7 +10,18 @@ function display() {
 		}
 	}
 }
-
+function display(){
+	var name = document.getElementById("selector").value;
+	var elements = document.getElementsByClassName("option");
+	for (let i = 0; i < elements.length; i++) {
+		var element = elements[i];
+		if (element.id == name) {
+			document.getElementById(name).style.display = "block";
+		} else {
+			element.style.display = "none";
+		}
+	}
+}
 function sim(t, v) {
 	/* 
                     var ani = document.getElementById('animation')
@@ -66,7 +76,7 @@ function sim(t, v) {
 			clearInterval(interval);
 			return;
 		}
-		console.log(counter + " " + lt);
+		// console.log(counter + " " + lt);
 		chart.data.labels.push(t[counter]);
 		chart.data.datasets[0].data.push(v[counter]);
 		chart.update();
