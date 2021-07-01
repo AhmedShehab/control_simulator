@@ -142,3 +142,14 @@ input:focus::placeholder {
 .tResponse {
 	border-right: 2px solid #28a745;
 }
+select{
+	color: #28a745;
+	overflow: hidden;
+	outline: none;
+}
+option:hover, option:focus, option:active{
+	background-color: #28a745;
+	background: #28a745;
+	color: white;
+	outline: none;
+}

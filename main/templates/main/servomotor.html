@@ -51,6 +51,7 @@
 <div class="flex-container" style="display: flex">
 	<div class="flex-child" id="simulatorForm" style="flex: 1">
 		<form class="cred_form">
+<<<<<<< HEAD
 			{% if assignment %}
 			<a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
 				Assignment Requirements
@@ -60,6 +61,17 @@
 				<p class="input-bar">Controller:</p>
 			</div>
                         <select class="cred nav-link" onchange="display();" id="selector">
+=======
+                        {% if assignment %}
+                        <a class="btn draw" id="{{assignment.id}}" style="display: inline;" type="button" onclick="openReqForm({{assignment.id}});">
+                                Assignment Requirements
+                        </a>
+                        {% endif %}
+                        <div class="text1">
+                                <p class="input-bar">Controller:</p> 
+                        </div>
+			<select class="cred" onchange="display();" id="selector">
+>>>>>>> 1266e3df169b375652481aa3115a438f8d0cbda9
                                 <option disabled selected>Not Selected</option>
 				<option value="non" {% if remember == 'non' %}selected{% endif %}>Uncompensated</option>
 				<option value="P" {% if remember == 'p' %}selected{% endif %}>P</option>
