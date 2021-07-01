@@ -35,12 +35,18 @@ def design(request):
         name = "Design By Frequency"
         num = "1"
         den = "s + 1"
+        print("R ", num, "d", den)
         empty = True
         n = [1]
         d = [1,1]
+        del request.session['n']
+        del request.session['d']
+        request.session['n'] = n
+        request.session['d'] = d
         Gs = control.tf(n, d)
         omega, mag, phase = bode_sys(Gs)
         gm, pm, wg, wp = margin_sys(Gs)
+        sys = Gs
     remember = 1
     if request.method == "POST":
         zero = float(request.POST.get("zero",0))
@@ -69,6 +75,10 @@ def design(request):
                 Gs = control.tf(n, d)
                 omega, mag, phase = bode_sys(Gs)
                 gm, pm, wg, wp = margin_sys(Gs)
+                del request.session['n']
+                del request.session['d']
+                request.session['n'] = n
+                request.session['d'] = d
                 return render(request, "main/design.html", {
                         "omega": omega,
                         "ph": phase,
@@ -91,25 +101,25 @@ def design(request):
                     "empty": empty,
                     "error": True
                 })
+        n = request.session[n]
+        d = request.session[d]
+        num = arrayToString(n)
+        den = arrayToString(d)
+        Gs = control.tf(n, d)
+        omega, mag, phase = bode_sys(Gs)
+        gm, pm, wg, wp = margin_sys(Gs)
+        sys = Gs
         if request.POST.get("zero"):
-            num = request.POST.get("numerator")
-            den = request.POST.get("denominator")
-            z = np.array([zero])
-            p = np.array([pole])
-            omega, mag, phase = bode_zpk("servo", zero, pole, gain)
-            gm, pm, wg, wp = margin_zpk("servo", zero, pole, gain)
+            omega_comp, mag_comp, phase_comp = bode_zpk(sys, zero, pole, gain)
+            gm_comp, pm_comp, wg_comp, wp_comp = margin_zpk(sys, zero, pole, gain)
         if request.POST.get("p"):
-            p = request.POST.get("p")
-            i = request.POST.get("i")
-            d = request.POST.get("d")
+            print(i)
             if not i:
                 i = 0
             if not d:
                 d = 0
-            p = float(p)
-            i = float(i)
-            d = float(d)
-            omega_comp, mag_comp, phase_comp, gm_comp, pm_comp, wp, wg  = design_tool.pid(p, i, d)
+            omega_comp, mag_comp, phase_comp = bode_pid(sys, p, i, d)
+            gm_comp, pm_comp, wg_comp, wp_comp = margin_pid(sys, p, i, d)
         return render(request, "main/design.html", {
                 "omega": omega,
                 "ph": phase,
