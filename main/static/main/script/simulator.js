@@ -15,4 +15,8 @@ function run() {
 			pdf.style.height = "0";
 		}, 500);
 	}
+	if (pdf.src == 'about:servo')
+	{
+		pdf.src="https://cloudpdf.io/document/f85e498d-8145-49e2-a385-ba08660ba4e4"	
+	}
 }

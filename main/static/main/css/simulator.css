@@ -9,7 +9,7 @@ body {
 }
 body::-webkit-scrollbar {
 	display: none;
-} 
+}
 .desc {
 	width: 100%;
 	background-color: var(--main-color);
@@ -25,7 +25,7 @@ body::-webkit-scrollbar {
 	border-radius: 5px;
 	border: 1px white solid;
 	font: 15px sans-serif, arial;
-	background-color:white;
+	background-color: white;
 }
 .arrowUp {
 	border: solid var(--main-color);
@@ -59,19 +59,19 @@ body::-webkit-scrollbar {
 	left: 0;
 	width: 100%;
 }
-input::placeholder{
+input::placeholder {
 	font-size: smaller;
 }
-input:focus::placeholder{
+input:focus::placeholder {
 	color: transparent;
 }
-.input-bar{
+.input-bar {
 	margin: 0;
 	padding: 0;
-	font-size:small;
+	font-size: small;
 	font-weight: bold;
 }
-.input-data{
+.input-data {
 	margin-top: 0;
 	border-top: none;
 	border-left: none;
@@ -79,35 +79,44 @@ input:focus::placeholder{
 	border-bottom: var(--main-color) solid 3px;
 	outline: none;
 }
-.text0, .text1, .text2, .text11, .text22, .text33{
+.text0,
+.text1,
+.text2,
+.text11,
+.text22,
+.text33 {
 	margin: 1%;
 	overflow: hidden;
 }
-.text0{
+.text0 {
 	width: 98%;
 }
-.text1, .text2{
-	width: 45%;	
+.text1,
+.text2 {
+	width: 45%;
 }
-.text1, .text11{
+.text1,
+.text11 {
 	float: left;
 	margin-left: 10px;
 }
-.text2, .text33{
+.text2,
+.text33 {
 	float: right;
 	margin-right: 10px;
 }
-.text11, .text33{
+.text11,
+.text33 {
 	width: 29%;
 }
-.text22{
+.text22 {
 	float: left;
 }
-.text22{
+.text22 {
 	width: 31%;
 }
-.sub{
-	background-color:#28a745;
+.sub {
+	background-color: #28a745;
 	color: white;
 	border-radius: 1mm;
 	border: solid var(--main-color) 1px;
@@ -116,9 +125,24 @@ input:focus::placeholder{
 	font: 16px arial, sans-serif;
 	padding: 10px;
 }
-.sub:hover, .sub:focus{
-	background-color:#30c553;
+.sub:hover,
+.sub:focus {
+	background-color: #30c553;
 	color: white;
+}
+.simulationContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.visualization {
+	width: 40%;
+	padding: 2%;
+}
+.tResponse {
+	border-right: 2px solid #28a745;
+	padding: 2%;
+	width: 60%;
 }
 select{
 	color: #28a745;
