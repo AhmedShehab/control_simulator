@@ -11,13 +11,13 @@
 <link href="{% static 'main/css/simulator.css' %}" rel="stylesheet" />
 <style>
 	.flex-child {
-		margin-top: 2%;
+		margin-top: 3%;
 		flex: 0 70em;
 	}
 
 	.flex-child:first-child {
 		border-right: 2px solid #28a745;
-		padding: 0% 5% 2% 4%;
+		padding: 5% 5% 2% 4%;
 		margin-right: 20px;
 	}
 </style>
@@ -48,7 +48,7 @@
 	</div>
 </div>
 {% endif %}
-<div class="flex-container" style="display: flex; align-items:center;">
+<div class="flex-container" style="display: flex;">
 	<div class="flex-child" id="simulatorForm" style="flex: 1">
 		<form class="cred_form">
 			{% if assignment %}
