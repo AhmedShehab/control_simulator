@@ -120,3 +120,14 @@ input:focus::placeholder{
 	background-color:#30c553;
 	color: white;
 }
+select{
+	color: #28a745;
+	overflow: hidden;
+	outline: none;
+}
+option:hover, option:focus, option:active{
+	background-color: #28a745;
+	background: #28a745;
+	color: white;
+	outline: none;
+}

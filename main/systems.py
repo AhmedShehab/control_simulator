@@ -379,8 +379,8 @@ def model(sys):
         den = list(sys.den[0][0])   
 
     if sys == 'cruise':
-        num = None
-        den = None
+        num = 36
+        den = [1, 3.6, 0]
     
     elif sys == 'servo':
         num = 36

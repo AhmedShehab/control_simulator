@@ -1,3 +1,4 @@
+from os import remove
 from django import http
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -11,6 +12,7 @@ from . import design_tool
 import numpy as np
 from .systems import *
 from datetime import date
+import decimal
 
 def home(request):
     return render(request, "main/home.html",{
@@ -18,47 +20,84 @@ def home(request):
     })
 
 def design(request):
-    num, den, omega, mag, phase,gm, pm, wg, wp= design_tool.Gs()
-    omega, mag, phase = bode_sys("servo")
-    num, den = tf("servo")
-    gm, pm, wg, wp = margin_sys("servo")
     name = request.GET.get("name")
+    sys = name
+    if sys == "Servomotor":
+        sys = "servo"
+    elif sys == "Cruise":
+        sys = "servo"
     empty = False
-    if name == None:
+    if name != None:
+        omega, mag, phase = bode_sys(sys)
+        num, den = tf(sys)
+        gm, pm, wg, wp = margin_sys(sys)
+    else:
         name = "Design By Frequency"
         num = "1"
         den = "s + 1"
         empty = True
+        n = [1]
+        d = [1,1]
+        Gs = control.tf(n, d)
+        omega, mag, phase = bode_sys(Gs)
+        gm, pm, wg, wp = margin_sys(Gs)
+    remember = 1
     if request.method == "POST":
+        zero = float(request.POST.get("zero",0))
+        pole = float(request.POST.get("pole",0))
+        gain = float(request.POST.get("gain",0))
+        p = float(request.POST.get("p",0))
+        i = float(request.POST.get("i",0))
+        d = float(request.POST.get("d",0))
+        remember = request.POST.get("remember",0)
         if request.POST.get("num"):
-            n = eval(request.POST.get("num"))
-            d = eval(request.POST.get("den"))
-            num = arrayToString(n)
-            den = arrayToString(d)
-            Gs = control.tf(n, d)
-            omega, mag, phase = bode_sys(Gs)
-            gm, pm, wg, wp = margin_sys(Gs)
-            return render(request, "main/design.html", {
-                "omega": omega,
-                "ph": phase,
-                "mag": mag,
-                "name": 'Design By Frequency',
-                "numerator": num,
-                "denominator": den,
-                "design": True,
-                "empty": empty
-            })
+            n = request.POST.get("num")
+            d = request.POST.get("den")
+            n = n.strip('][').split(',')
+            d = d.strip('][').split(',')
+            try:
+                n = [float(i) for i in n]
+                d = [float(i) for i in d]
+                for i in range(len(n)):
+                    if n[i].is_integer():
+                        n[i] = int(n[i])
+                for i in range(len(d)):
+                    if d[i].is_integer():
+                        d[i] = int(d[i])
+                num = arrayToString(n)
+                den = arrayToString(d)
+                Gs = control.tf(n, d)
+                omega, mag, phase = bode_sys(Gs)
+                gm, pm, wg, wp = margin_sys(Gs)
+                return render(request, "main/design.html", {
+                        "omega": omega,
+                        "ph": phase,
+                        "mag": mag,
+                        "name": 'Design By Frequency',
+                        "numerator": num,
+                        "denominator": den,
+                        "design": True,
+                        "empty": empty
+                    })
+            except:
+                return render(request, "main/design.html", {
+                    "omega": omega,
+                    "ph": phase,
+                    "mag": mag,
+                    "name": 'Design By Frequency',
+                    "numerator": num,
+                    "denominator": den,
+                    "design": True,
+                    "empty": empty,
+                    "error": True
+                })
         if request.POST.get("zero"):
             num = request.POST.get("numerator")
             den = request.POST.get("denominator")
-            print(num)
-            z = float(request.POST.get("zero"))
-            p = float(request.POST.get("pole"))
-            k = float(request.POST.get("gain"))
-            z = np.array([z])
-            p = np.array([p])
-            omega, mag, phase = bode_zpk("servo", z, p, k)
-            gm, pm, wg, wp = margin_zpk("servo", z, p, k)
+            z = np.array([zero])
+            p = np.array([pole])
+            omega, mag, phase = bode_zpk("servo", zero, pole, gain)
+            gm, pm, wg, wp = margin_zpk("servo", zero, pole, gain)
         if request.POST.get("p"):
             p = request.POST.get("p")
             i = request.POST.get("i")
@@ -70,13 +109,12 @@ def design(request):
             p = float(p)
             i = float(i)
             d = float(d)
-            
             omega_comp, mag_comp, phase_comp, gm_comp, pm_comp, wp, wg  = design_tool.pid(p, i, d)
         return render(request, "main/design.html", {
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
-                "name": 'Servo Motor',
+                "name": name,
                 "numerator": num,
                 "denominator": den,
                 "mag_comp": mag_comp,
@@ -85,7 +123,8 @@ def design(request):
                 "pm_comp": pm_comp,
                 "gm_comp": gm_comp,
                 "design": True,
-                "empty": empty
+                "empty": empty, 
+                "remember": remember
             })
     
     return render(request, "main/design.html", {
@@ -98,7 +137,8 @@ def design(request):
                 "pm": pm,
                 "gm": gm,
                 "design": True,
-                "empty": empty
+                "empty": empty,
+                "remember": remember
             })
 
 def register(request):
@@ -362,6 +402,10 @@ def cruise(request):
     except:
         assignment=""
         pass
+    sys = "cruise"
+    remember = 1
+    setTime = 1.0
+    setPoint = 1.0
     if request.POST:
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
@@ -370,10 +414,11 @@ def cruise(request):
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
         step = float(request.POST.get("step",0))
-        setTime = float(request.POST.get("set",0))
-        initPoint = float(request.POST.get("init",0))
+        setTime = float(request.POST.get("time",0))
+        setPoint = float(request.POST.get("setPoint",0))
+        remember = request.POST.get("remember",0)
         PIDController={
-            "Simulator":"cruise",
+            "Simulator":"servo",
             "Controller":"PID",
             "StepInput":step,
             "setTime":setTime,
@@ -382,7 +427,7 @@ def cruise(request):
             "D":d,
         }
         ZPKController={
-            "Simulator":"cruise",
+            "Simulator":"servo",
             "Controller":"ZPK",
             "StepInput":step,
             "setTime":setTime,
@@ -418,11 +463,36 @@ def cruise(request):
                 submission.save()
             return HttpResponseRedirect(reverse("cruise"))                     
         elif submit == "simulate":
-            if p or i or d:   # PID Controller
-                return
+            if p:   # PID Controller
+                if not i:
+                    i = 0
+                if not d:
+                    d = 0
+                t, output = step_pid(sys, setTime, setPoint, p, i, d)
+            elif zero and pole and gain:
+                t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+            else:
+                t, output = step_sys(sys, setTime, setPoint)
+            return render(request, "main/cruise.html", {
+                "assignment":assignment,
+                "t": t,
+                "output":output,
+                "setPoint":setPoint,
+                "time":setTime,
+                "remember": remember,
+                "p":p,
+                "i":i,
+                "d":d,
+                "zero":zero,
+                "pole":pole,
+                "gain":gain
+        })
     else:
         return render(request, "main/cruise.html", {
             "assignment":assignment,
+            "remember":remember,
+            "setPoint":setPoint,
+            "time":setTime,
         })
 
 def servomotor(request):

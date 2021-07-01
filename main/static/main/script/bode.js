@@ -1,4 +1,14 @@
 window.onload = function () {
+	var name = document.getElementById("selector2").value;
+	var elements = document.getElementsByClassName("option");
+	for (let i = 0; i < elements.length; i++) {
+		var element = elements[i];
+		if (element.id == name) {
+			document.getElementById(name).style.display = "block";
+		} else {
+			element.style.display = "none";
+		}
+	}
 	var omega = document.getElementById("omega").value;
 	var mag = document.getElementById("mag").value;
 	var ph = document.getElementById("ph").value;
@@ -185,13 +195,17 @@ window.onload = function () {
 	chartMM.render();
 };
 
-function display() {
-	var elements = document.getElementsByClassName("no");
-	for (var i = 0; i < elements.length; i++) {
-		elements[i].style.display = "none";
+function display(){
+	var name = document.getElementById("selector2").value;
+	var elements = document.getElementsByClassName("option");
+	for (let i = 0; i < elements.length; i++) {
+		var element = elements[i];
+		if (element.id == name) {
+			document.getElementById(name).style.display = "block";
+		} else {
+			element.style.display = "none";
+		}
 	}
-	var name = document.getElementById("selector").value;
-	document.getElementById(name).style.display = "block";
 }
 function openForm() {
 	document.getElementById("edit").style.display = "block";
