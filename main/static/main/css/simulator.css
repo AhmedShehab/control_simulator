@@ -133,14 +133,16 @@ input:focus::placeholder {
 .simulationContainer {
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 }
-.tResponse,
 .visualization {
-	width: 50%;
+	width: 40%;
 	padding: 2%;
 }
 .tResponse {
 	border-right: 2px solid #28a745;
+	padding: 2%;
+	width: 60%;
 }
 select{
 	color: #28a745;
