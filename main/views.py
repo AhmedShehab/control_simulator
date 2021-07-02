@@ -549,6 +549,9 @@ def servomotor(request):
         setTime = float(request.POST.get("time",0))
         setPoint = float(request.POST.get("setPoint",0))
         remember = request.POST.get("remember",0)
+        animation= request.POST.get("animation","false")
+        if animation!="true":
+            animation="false"
         PIDController={
             "Simulator":"servo",
             "Controller":"PID",
@@ -617,7 +620,8 @@ def servomotor(request):
                 "d":d,
                 "zero":zero,
                 "pole":pole,
-                "gain":gain
+                "gain":gain,
+                "animation":animation
         })
     else:
         return render(request, "main/servomotor.html", {

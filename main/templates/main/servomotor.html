@@ -89,7 +89,7 @@
 					</div>
 					<input type="hidden" name="remember" value="non" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" /></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -113,7 +113,7 @@
 						<input class="cred" type="number" step="0.00001" required name="p" placeholder="Enter a value" value="{{p}}" />
 					</div>
 					<input type="hidden" name="remember" value="p" />
-					<div>Disable Animation <input type="checkbox" class="animation" /></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -144,7 +144,7 @@
 					<input type="hidden" name="remember" value="pi" />
 
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" /></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -174,7 +174,7 @@
 					</div>
 					<input type="hidden" name="remember" value="pd" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" /></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -208,7 +208,7 @@
 					</div>
 					<input type="hidden" name="remember" value="pid" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" /></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -242,7 +242,7 @@
 					</div>
 					<input type="hidden" name="remember" value="lag" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" /></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -276,7 +276,7 @@
 					</div>
 					<input type="hidden" name="remember" value="lead" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" /></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -284,7 +284,9 @@
 					{% endif %}
 				</form>
 			</div>
+			
 			<div style="text-align: center">
+			{{animation}}
 				<a class="btn draw" href="{% url 'design' 'Servomotor' %}">Design by Frequency</a>
 			</div>
 		</form>
@@ -292,6 +294,7 @@
 	<input type="text" style="display: none" id="degrees" value="{{output}}" />
 	<input type="text" style="display: none" id="time" value="{{time}}" />
 	<input type="text" style="display: none" id="tarray" value="{{t}}" />
+	<input type="text" style="display: none" id="animation" value="{{animation}}" />
 	<div class="flex-child" style="text-align: center">
 		<div>
 			<h1>System Response</h1>
@@ -403,19 +406,9 @@
 		t = t.slice(0, t.length - 1);
 		t = t.split(",");
 		var lt = t.length;
-		// var ani = document.getElementById('animation')  Cann't use an id because there is a checkbox in every form
-		var anis = document.getElementsByClassName("animation");
-		for (i = 0; i < anis.length; i++) {
-			console.log(anis[i]);
-			if (anis[i].checked == true) {
-				var ani = true;
-				break;
-			}
-			else{
-				var ani=false;
-			}
-		}
-		if (ani == true) {
+		var ani = document.getElementById('animation').value;
+		console.log(ani)
+		if (ani== "true") {
 			var ctx = document.getElementById("myChart").getContext("2d");
 
 			duration = 0;
