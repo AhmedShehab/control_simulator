@@ -23,3 +23,15 @@ function run() {
 		pdf.src="https://cloudpdf.io/document/aad2b22a-7d7f-47e7-ac84-db6abc6f0b2e"
 	}
 }
+function display(){
+	var name = document.getElementById("selector").value;
+	var elements = document.getElementsByClassName("option");
+	for (let i = 0; i < elements.length; i++) {
+		var element = elements[i];
+		if (element.id == name) {
+			document.getElementById(name).style.display = "block";
+		} else {
+			element.style.display = "none";
+		}
+	}
+}
