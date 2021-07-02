@@ -23,9 +23,7 @@ def home(request):
         "home": True
     })
 def design(request, name):
-    print(name)
     empty = False
-    print("tttttt")
     remember = 1
     if name != "tf":
         if name == "Servomotor":
@@ -36,7 +34,6 @@ def design(request, name):
         omega, mag, phase = bode_sys(sys)
         num, den = tf(sys)
         gm, pm, wg, wp = margin_sys(sys)
-        print("servooo", sys)
     else:
         system = "tf"
         name = "tf" #change
@@ -46,7 +43,6 @@ def design(request, name):
         n = request.session["n"]
         d = request.session["d"]
         Gs = control.tf(n, d)
-        print("5raaaa", n, d, num , den)
         omega, mag, phase = bode_sys(Gs)
         gm, pm, wg, wp = margin_sys(Gs)   
     if request.method == "POST":
@@ -57,7 +53,6 @@ def design(request, name):
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
         remember = request.POST.get("remember",0)
-        print("poooost")
         if request.POST.get("num"):
             nu = request.POST.get("num")
             de = request.POST.get("den")
@@ -73,14 +68,12 @@ def design(request, name):
                     if de[i].is_integer():
                         de[i] = int(de[i])
                 Gs = control.tf(nu, de)
-                print("gs:::: ", Gs)
                 omega, mag, phase = bode_sys(Gs)
                 gm, pm, wg, wp = margin_sys(Gs)
                 del request.session['n']
                 del request.session['d']
                 request.session['n'] = nu
                 request.session['d'] = de
-                print("nuuu:::", nu)
                 num = arrayToString(nu)
                 den = arrayToString(de)
                 request.session['num'] = num
@@ -114,14 +107,10 @@ def design(request, name):
             de = request.session["d"]
             num = request.session["num"]
             den = request.session["den"]
-            print("post pid: num", nu, de)
             Gs = control.tf(nu, de)
             sys = Gs
-            print("sys:N  ", sys)
-            print("nnnn:",nu ,de)
         elif name == "Servomotor":
             sys = "servo"
-            print("sys: ssss ", sys)
         else:
             sys = "servo"  #cruise
             num, den = tf(sys)
@@ -137,8 +126,6 @@ def design(request, name):
                 d = 0
             omega_comp, mag_comp, phase_comp = bode_pid(sys, p, i, d)
             gm_comp, pm_comp, wg_comp, wp_comp = margin_pid(sys, p, i, d)
-            print("piiiid")
-        print("system:", system)
         return render(request, "main/design.html", {
                 "omega": omega,
                 "ph": phase,
