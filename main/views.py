@@ -1,4 +1,4 @@
-from os import remove
+from os import remove, system
 from django import http
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -15,39 +15,40 @@ from datetime import date
 import decimal
 
 def home(request):
+    request.session["num"] = "1"
+    request.session["den"] = "s+1"
+    request.session["n"] = [1]
+    request.session["d"] = [1,1]
     return render(request, "main/home.html",{
         "home": True
     })
-
-def design(request):
-    name = request.GET.get("name")
-    sys = name
-    if sys == "Servomotor":
-        sys = "servo"
-    elif sys == "Cruise":
-        sys = "servo"
+def design(request, name):
+    print(name)
     empty = False
-    if name != None:
+    print("tttttt")
+    remember = 1
+    if name != "tf":
+        if name == "Servomotor":
+            sys = "servo"
+        else:
+            sys = "servo" #cruise
+        system = name
         omega, mag, phase = bode_sys(sys)
         num, den = tf(sys)
         gm, pm, wg, wp = margin_sys(sys)
+        print("servooo", sys)
     else:
-        name = "Design By Frequency"
-        num = "1"
-        den = "s + 1"
-        print("R ", num, "d", den)
+        system = "tf"
+        name = "tf" #change
         empty = True
-        n = [1]
-        d = [1,1]
-        del request.session['n']
-        del request.session['d']
-        request.session['n'] = n
-        request.session['d'] = d
+        num = request.session["num"]
+        den = request.session["den"]
+        n = request.session["n"]
+        d = request.session["d"]
         Gs = control.tf(n, d)
+        print("5raaaa", n, d, num , den)
         omega, mag, phase = bode_sys(Gs)
-        gm, pm, wg, wp = margin_sys(Gs)
-        sys = Gs
-    remember = 1
+        gm, pm, wg, wp = margin_sys(Gs)   
     if request.method == "POST":
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
@@ -56,29 +57,34 @@ def design(request):
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
         remember = request.POST.get("remember",0)
+        print("poooost")
         if request.POST.get("num"):
-            n = request.POST.get("num")
-            d = request.POST.get("den")
-            n = n.strip('][').split(',')
-            d = d.strip('][').split(',')
+            nu = request.POST.get("num")
+            de = request.POST.get("den")
+            nu = nu.strip('][').split(',')
+            de = de.strip('][').split(',')
             try:
-                n = [float(i) for i in n]
-                d = [float(i) for i in d]
-                for i in range(len(n)):
-                    if n[i].is_integer():
-                        n[i] = int(n[i])
-                for i in range(len(d)):
-                    if d[i].is_integer():
-                        d[i] = int(d[i])
-                num = arrayToString(n)
-                den = arrayToString(d)
-                Gs = control.tf(n, d)
+                nu = [float(i) for i in nu]
+                de = [float(i) for i in de]
+                for i in range(len(nu)):
+                    if nu[i].is_integer():
+                        nu[i] = int(nu[i])
+                for i in range(len(de)):
+                    if de[i].is_integer():
+                        de[i] = int(de[i])
+                Gs = control.tf(nu, de)
+                print("gs:::: ", Gs)
                 omega, mag, phase = bode_sys(Gs)
                 gm, pm, wg, wp = margin_sys(Gs)
                 del request.session['n']
                 del request.session['d']
-                request.session['n'] = n
-                request.session['d'] = d
+                request.session['n'] = nu
+                request.session['d'] = de
+                print("nuuu:::", nu)
+                num = arrayToString(nu)
+                den = arrayToString(de)
+                request.session['num'] = num
+                request.session['den'] = den
                 return render(request, "main/design.html", {
                         "omega": omega,
                         "ph": phase,
@@ -87,7 +93,8 @@ def design(request):
                         "numerator": num,
                         "denominator": den,
                         "design": True,
-                        "empty": empty
+                        "empty": empty,
+                        "sys": system
                     })
             except:
                 return render(request, "main/design.html", {
@@ -99,32 +106,44 @@ def design(request):
                     "denominator": den,
                     "design": True,
                     "empty": empty,
-                    "error": True
+                    "error": True,
+                    "sys": system
                 })
-        n = request.session[n]
-        d = request.session[d]
-        num = arrayToString(n)
-        den = arrayToString(d)
-        Gs = control.tf(n, d)
-        omega, mag, phase = bode_sys(Gs)
-        gm, pm, wg, wp = margin_sys(Gs)
-        sys = Gs
+        if name == "tf":
+            nu = request.session["n"]
+            de = request.session["d"]
+            num = request.session["num"]
+            den = request.session["den"]
+            print("post pid: num", nu, de)
+            Gs = control.tf(nu, de)
+            sys = Gs
+            print("sys:N  ", sys)
+            print("nnnn:",nu ,de)
+        elif name == "Servomotor":
+            sys = "servo"
+            print("sys: ssss ", sys)
+        else:
+            sys = "servo"  #cruise
+            num, den = tf(sys)
+        omega, mag, phase = bode_sys(sys)
+        gm, pm, wg, wp = margin_sys(sys)
         if request.POST.get("zero"):
             omega_comp, mag_comp, phase_comp = bode_zpk(sys, zero, pole, gain)
             gm_comp, pm_comp, wg_comp, wp_comp = margin_zpk(sys, zero, pole, gain)
         if request.POST.get("p"):
-            print(i)
             if not i:
                 i = 0
             if not d:
                 d = 0
             omega_comp, mag_comp, phase_comp = bode_pid(sys, p, i, d)
             gm_comp, pm_comp, wg_comp, wp_comp = margin_pid(sys, p, i, d)
+            print("piiiid")
+        print("system:", system)
         return render(request, "main/design.html", {
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
-                "name": name,
+                "name": "servo",#change
                 "numerator": num,
                 "denominator": den,
                 "mag_comp": mag_comp,
@@ -134,22 +153,23 @@ def design(request):
                 "gm_comp": gm_comp,
                 "design": True,
                 "empty": empty, 
-                "remember": remember
-            })
-    
-    return render(request, "main/design.html", {
-                "omega": omega,
-                "ph": phase,
-                "mag": mag,
-                "name": name,
-                "numerator": num,
-                "denominator": den,
-                "pm": pm,
-                "gm": gm,
-                "design": True,
-                "empty": empty,
-                "remember": remember
-            })
+                "remember": remember,
+                "sys": system
+            })  
+    return render(request, "main/design.html" , {
+            "omega": omega,
+            "ph": phase,
+            "mag": mag,
+            "name": name,
+            "numerator": num,
+            "denominator": den,
+            "pm": pm,
+            "gm": gm,
+            "design": True,
+            "empty": empty,
+            "remember": remember,
+            "sys": system
+        })
 
 def register(request):
     try: # Check if already logged in and have an account

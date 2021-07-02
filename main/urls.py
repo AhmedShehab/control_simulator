@@ -9,6 +9,6 @@ urlpatterns = [
     path("instructor/",views.instructor,name="instructor"),
     path("logout/",views.logout_view,name="logout"),
     path("cruise/",views.cruise,name="cruise"),
-    path("design/",views.design,name="design"),
+    path("design/<str:name>",views.design,name="design"),
     path("servomotor/", views.servomotor, name="servomotor")
 ]

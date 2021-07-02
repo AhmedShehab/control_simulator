@@ -26,7 +26,7 @@
 		</div>
 		<div style="float: left; width: 70%">
 			<div id="edit" style="display: none; text-align: center; margin-right: auto; margin-left: auto">
-				<form action="{% url 'design' %}" method="POST">
+				<form action="{% url 'design' sys %}" method="POST">
 					{% csrf_token %}
 					<input class="cred" type="text" placeholder="Numerator Ex:[1]" style="width: auto" name="num" required /><br />
 					<input class="cred" type="text" placeholder="Denominator Ex:[1,0,1]" style="width: auto" name="den" required /><br />
@@ -38,7 +38,7 @@
 				</form>
 			</div>
 			{% if empty %}
-			<div style="padding: 13%" id="tf">
+			<div style="padding: 13%; float: right; margin-top: 7%;" id="tf">
 				<button class="btn draw" onclick="openForm()" style="display: block">Edit TF</button>
 				{% if error %}
 				<p style="color: red; font-size: smaller;">Please write on the right way*</p>
@@ -62,7 +62,7 @@
 		</select>
 	
 		<div id="P" style="display: none" class="option">
-			<form class="cred_form" action="{% url 'design' %}" method="POST">
+			<form class="cred_form" action="{% url 'design' sys %}" method="POST">
 				{% csrf_token %}			
 				<div class="text0">
 						<p class="input-bar" style="margin-left: 10px;">P:</p>
@@ -73,7 +73,7 @@
 			</form>
 		</div>
 		<div id="PI" style="display: none" class="option">
-			<form class="cred_form" action="{% url 'design' %}" method="POST">
+			<form class="cred_form" action="{% url 'design' sys %}" method="POST">
 				{% csrf_token %}
 				<div class="text1">
 						<p class="input-bar">P:</p>
@@ -88,7 +88,7 @@
 			</form>
 		</div>
 		<div id="PD" style="display: none" class="option">
-			<form class="cred_form" action="{% url 'design' %}" method="POST">
+			<form class="cred_form" action="{% url 'design' sys %}" method="POST">
 				{% csrf_token %}
 				<div class="text1">
 						<p class="input-bar">P:</p>
@@ -103,7 +103,7 @@
 			</form>
 		</div>
 		<div id="PID" style="display: none" class="option">
-			<form class="cred_form" action="{% url 'design' %}" method="POST">
+			<form class="cred_form" action="{% url 'design' sys  %}" method="POST">
 				{% csrf_token %}
 				
 				<div class="text11">
@@ -123,7 +123,7 @@
 			</form>
 		</div>
 		<div id="lag" style="display: none" class="option">
-			<form class="cred_form" action="{% url 'design' %}" method="POST">
+			<form class="cred_form" action="{% url 'design' sys %}" method="POST">
 				{% csrf_token %}
 				<div class="text11">
 						<p class="input-bar">Zero:</p>
@@ -142,7 +142,7 @@
 			</form>
 		</div>
 		<div id="lead" style="display: none" class="option">
-			<form class="cred_form" action="{% url 'design' %}" method="POST">
+			<form class="cred_form" action="{% url 'design' sys %}" method="POST">
 				{% csrf_token %}
 				<div class="text11">
 						<p class="input-bar">Zero:</p>
