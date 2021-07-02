@@ -313,11 +313,20 @@
 		<iframe id="pdf" src="about:servo"></iframe>
 	</div>
 </div>
-<script src=" {% static 'main/script/chart.js' %}"></script>
 <script src=" {% static 'main/script/student.js' %}"></script>
 <script src=" {% static 'main/script/simulator.js' %}"></script>
 <script>
 	window.addEventListener("load", (event) => {
+		var name = document.getElementById("selector").value;
+		var elements = document.getElementsByClassName("option");
+		for (let i = 0; i < elements.length; i++) {
+			var element = elements[i];
+			if (element.id == name) {
+				document.getElementById(name).style.display = "block";
+			} else {
+				element.style.display = "none";
+			}
+		}
 		if ("{{assignment.controller}}" != "") {
 			document.getElementById("selector").value = "{{assignment.controller}}";
 			display();
