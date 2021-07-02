@@ -305,6 +305,54 @@ def step_pid(sys, final_time, setpoint, Kp, Ki, Kd):
 
     return t, output
 
+def action_sys(sys, final_time, setpoint):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+ 
+    # closed-loop unity-feedback transfer function
+    Ts = control.feedback(Gs, 1)
+
+    # simulation time parameters
+    initial_time = 0
+    nsteps = 2000   # number of time steps
+    t = np.linspace(initial_time, final_time, nsteps)
+    output, t = matlab.step(Ts, t)
+    output = setpoint*output
+
+    # calculate list of error
+    setpoint_arr = setpoint * np.ones(nsteps)
+    err = setpoint_arr - output
+    
+    # calculate control action
+    action = err
+
+    # covert numpy arrays to lists
+    t = list(t)
+    action = list(action)
+
+    # round lists to 5 decimal digits
+    ndigits = 6
+    t = [round(num, ndigits) for num in t]
+    action = [round(num, ndigits) for num in action]
+
+    # calculate maximum control action
+    max_action = max(action)
+
+    return t, action, max_action
+
+def action_zpk(sys, final_time, setpoint, z, p, k):
+    return t, action, max_action
+
+def action_pid(sys, final_time, setpoint, Kp, Ki, Kd):
+    return t, action, max_action
+
+
 def stepinfo_sys(sys):
     ## open-loop system transfer function
     try:
