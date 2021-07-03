@@ -247,8 +247,13 @@ function display(){
 function openForm() {
 	document.getElementById("edit").style.display = "block";
 	document.getElementById("tf").style.display = "none";
+	document.getElementById("systf").style.display = "none";
+	document.getElementById("centersys").style.display = "block";
+
 }
 function close() {
 	document.getElementById("edit").style.display = "none";
 	document.getElementById("tf").style.display = "block";
+	document.getElementById("systf").style.display = "block";
+	document.getElementById("centersys").style.display = "none";
 }

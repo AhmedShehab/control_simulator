@@ -29,14 +29,17 @@ def design(request, name):
     if name != "tf":
         if name == "Servomotor":
             sys = "servo"
+            simulator = "servomotor"
         else:
             sys = "servo" #cruise
+            simulator = "cruise"
         system = name
         omega, mag, phase = bode_sys(sys)
         num, den = tf(sys)
         gm, pm, wg, wp = margin_sys(sys)
     else:
         system = "tf"
+        simulator = "tf"
         design = "Design By Frequency" #change
         empty = True
         num = request.session["num"]
@@ -118,8 +121,10 @@ def design(request, name):
             sys = Gs
         elif name == "Servomotor":
             sys = "servo"
+            simulator = "servomotor"
         else:
             sys = "servo"  #cruise
+            simulator = "cruise"
             num, den = tf(sys)
         omega, mag, phase = bode_sys(sys)
         gm, pm, wg, wp = margin_sys(sys)
@@ -154,7 +159,15 @@ def design(request, name):
                 "design": True,
                 "empty": empty, 
                 "remember": remember,
-                "sys": system
+                "sys": system,
+                "p":p,
+                "i":i,
+                "d":d,
+                "zero": zero,
+                "pole": pole,
+                "gain": gain,
+                "simulator": simulator
+
             })  
     return render(request, "main/design.html" , {
             "omega": omega,
@@ -169,7 +182,8 @@ def design(request, name):
             "design": True,
             "empty": empty,
             "remember": remember,
-            "sys": system
+            "sys": system,
+            "simulator": simulator
         })
 
 def register(request):

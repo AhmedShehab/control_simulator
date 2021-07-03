@@ -19,33 +19,45 @@
 	}
 </style>
 <div class="flex-container" style="display: flex">
-	<div class="flex-child" id="simulatorForm" style="flex: 1">
-		
-		<div style="width: 30%; float: left">
-			<div>$$G(s) = { {{numerator}} \over {{denominator}}} \\ $$</div>
+	<div class="flex-child" id="simulatorForm" style="flex: 1; padding-top: 1%;">	
+		{% if empty %}
+		<div style="margin: 0 4%; height: 100px;" id="systf">
+			<div style="width: 30%; float: left">
+				<div>$$G(s) = { {{numerator}} \over {{denominator}}} \\ $$</div>
+			</div>
+			<div style="float: left; width: 70%">
+				
+				<div style="padding: 13% 0%; float: right; margin-top: 5%; margin-right: 0;" id="tf">
+					<button class="btn draw" onclick="openForm()" style="display: block">Edit TF</button>
+					{% if error %}
+					<p style="color: red; font-size: smaller;">Please write on the right way*</p>
+					{% endif %}
+				</div>
+			</div>
 		</div>
-		<div style="float: left; width: 70%">
-			<div id="edit" style="display: none; text-align: center; margin-right: auto; margin-left: auto">
-				<form action="{% url 'design' sys %}" method="POST">
-					{% csrf_token %}
-					<input class="cred" type="text" placeholder="Numerator Ex:[1]" style="width: auto" name="num" required /><br />
-					<input class="cred" type="text" placeholder="Denominator Ex:[1,0,1]" style="width: auto" name="den" required /><br />
-					<button type="submit" class="btn draw">change</button>
-					<button
-						type="button" class="btn draw" onclick="document.getElementById('edit').style.display='none'; document.getElementById('tf').style.display='block';">
-						cancel
-					</button>
-				</form>
+		{% else %}
+		<div id="centersys" style="height: 100px;" >
+			<div style=" text-align: center;">
+				<div>$$G(s) = { {{numerator}} \over {{denominator}}} \\ $$</div>
 			</div>
-			{% if empty %}
-			<div style="padding: 13%; float: right; margin-top: 7%;" id="tf">
-				<button class="btn draw" onclick="openForm()" style="display: block">Edit TF</button>
-				{% if error %}
-				<p style="color: red; font-size: smaller;">Please write on the right way*</p>
-				{% endif %}
+		</div>
+		{% endif %}
+		<div id="centersys" style="display: none; height: 100px;" >
+			<div style=" text-align: center;">
+				<div>$$G(s) = { {{numerator}} \over {{denominator}}} \\ $$</div>
 			</div>
-			{% endif %}
-			
+		</div>
+		<div id="edit" style="display: none; text-align: center; width: 100%; overflow: hidden; padding: 0;">
+			<form action="{% url 'design' sys %}" method="POST" style="padding: 0% 0%;">
+				{% csrf_token %}
+				<input class="cred" type="text" placeholder="Numerator Ex:[1]" name="num" required /><br />
+				<input class="cred" type="text" placeholder="Denominator Ex:[1,0,1]"  name="den" required /><br />
+				<button type="submit" class="btn draw">change</button>
+				<button
+					type="button" class="btn draw" onclick=" document.getElementById('edit').style.display = 'none'; document.getElementById('tf').style.display = 'block'; document.getElementById('systf').style.display = 'block'; document.getElementById('centersys').style.display = 'none';">
+					cancel
+				</button>
+			</form>
 		</div>
 		<div class="text0" style="margin-left: 3%;">
 				<p class="input-bar">Controller:</p> 
@@ -69,7 +81,7 @@
 						<input class="cred" type="number" step="0.00001" required name="p" placeholder="Enter a value" value="{{p}}" />
 				</div>
 				<input type="hidden" name="remember" value="p">
-				<button class="button" type="submit" name="submit" >Draw</button>
+				<button class="btn draw" type="submit" name="submit" >Draw</button>
 			</form>
 		</div>
 		<div id="PI" style="display: none" class="option">
@@ -84,7 +96,7 @@
 						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="i" value="{{i}}"/>
 				</div>
 				<input type="hidden" name="remember" value="pi">
-				<button class="button" type="submit" name="submit">Draw</button>
+				<button class="btn draw" type="submit" name="submit">Draw</button>
 			</form>
 		</div>
 		<div id="PD" style="display: none" class="option">
@@ -99,7 +111,7 @@
 						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="d" value="{{i}}"/>
 				</div>
 				<input type="hidden" name="remember" value="pd">
-				<button class="button" type="submit" name="submit">Draw</button>
+				<button class="btn draw" type="submit" name="submit">Draw</button>
 			</form>
 		</div>
 		<div id="PID" style="display: none" class="option">
@@ -119,7 +131,7 @@
 						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="d" value="{{d}}"/>
 				</div>
 				<input type="hidden" name="remember" value="pid">
-				<button class="button" type="submit" name="submit">Draw</button>
+				<button class="btn draw" type="submit" name="submit">Draw</button>
 			</form>
 		</div>
 		<div id="lag" style="display: none" class="option">
@@ -138,7 +150,7 @@
 						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="gain" value="{{gain}}"/>
 				</div>
 				<input type="hidden" name="remember" value="lag">
-				<button class="button" type="submit" name="submit">Draw</button>
+				<button class="btn draw" type="submit" name="submit">Draw</button>
 			</form>
 		</div>
 		<div id="lead" style="display: none" class="option">
@@ -157,9 +169,14 @@
 						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="gain" value="{{gain}}"/>
 				</div>
 				<input type="hidden" name="remember" value="lead">
-				<button class="button" type="submit" name="submit" >Draw</button>
+				<button class="btn draw" type="submit" name="submit" >Draw</button>
 			</form>
 		</div>
+		{% if not empty %}
+		<div style="text-align: center; margin-top: 0%;">
+			<a class="btn draw" href="{% url simulator %}" >Return to {{name}} Simulator</a>
+		</div>
+		{% endif %}
 	</div>
 	<div class="flex-child" style="text-align: center">
 		<h4>{{name}}</h4>
