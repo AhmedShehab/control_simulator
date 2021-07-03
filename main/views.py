@@ -26,13 +26,16 @@ def design(request, name):
     empty = False
     remember = 1
     design = name
-    if name != "tf":
-        if name == "Servomotor":
-            sys = "servo"
-            simulator = "servomotor"
-        else:
-            sys = "servo" #cruise
-            simulator = "cruise"
+    if name == "Servomotor":
+        sys = "servo"
+        simulator = "servomotor"
+        system = name
+        omega, mag, phase = bode_sys(sys)
+        num, den = tf(sys)
+        gm, pm, wg, wp = margin_sys(sys)
+    elif name == "Cruise Control":
+        sys = "servo" #cruise
+        simulator = "cruise"
         system = name
         omega, mag, phase = bode_sys(sys)
         num, den = tf(sys)
@@ -112,20 +115,20 @@ def design(request, name):
                     "sys": system, 
                     "wp": wp
                 })
-        if name == "tf":
+        if name == "Crusie Control":
+            sys = "servo"  #cruise
+            simulator = "cruise"
+            num, den = tf(sys)
+        elif name == "Servomotor":
+            sys = "servo"
+            simulator = "servomotor"
+        else:
             nu = request.session["n"]
             de = request.session["d"]
             num = request.session["num"]
             den = request.session["den"]
             Gs = control.tf(nu, de)
             sys = Gs
-        elif name == "Servomotor":
-            sys = "servo"
-            simulator = "servomotor"
-        else:
-            sys = "servo"  #cruise
-            simulator = "cruise"
-            num, den = tf(sys)
         omega, mag, phase = bode_sys(sys)
         gm, pm, wg, wp = margin_sys(sys)
         if request.POST.get("zero"):
