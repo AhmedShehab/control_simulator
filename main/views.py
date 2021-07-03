@@ -25,6 +25,7 @@ def home(request):
 def design(request, name):
     empty = False
     remember = 1
+    design = name
     if name != "tf":
         if name == "Servomotor":
             sys = "servo"
@@ -36,7 +37,7 @@ def design(request, name):
         gm, pm, wg, wp = margin_sys(sys)
     else:
         system = "tf"
-        name = "tf" #change
+        design = "Design By Frequency" #change
         empty = True
         num = request.session["num"]
         den = request.session["den"]
@@ -82,25 +83,31 @@ def design(request, name):
                         "omega": omega,
                         "ph": phase,
                         "mag": mag,
-                        "name": 'Design By Frequency',
+                        "pm": pm,
+                        "gm": gm,
+                        "name": design,
                         "numerator": num,
                         "denominator": den,
                         "design": True,
                         "empty": empty,
-                        "sys": system
+                        "sys": system,
+                        "wp": wp
                     })
             except:
                 return render(request, "main/design.html", {
                     "omega": omega,
                     "ph": phase,
                     "mag": mag,
-                    "name": 'Design By Frequency',
+                    "pm": pm,
+                    "gm": gm,
+                    "name": design,
                     "numerator": num,
                     "denominator": den,
                     "design": True,
                     "empty": empty,
                     "error": True,
-                    "sys": system
+                    "sys": system, 
+                    "wp": wp
                 })
         if name == "tf":
             nu = request.session["n"]
@@ -126,11 +133,16 @@ def design(request, name):
                 d = 0
             omega_comp, mag_comp, phase_comp = bode_pid(sys, p, i, d)
             gm_comp, pm_comp, wg_comp, wp_comp = margin_pid(sys, p, i, d)
+            print("wg:", wg_comp)
+            print("wp:", wp_comp)
         return render(request, "main/design.html", {
                 "omega": omega,
                 "ph": phase,
                 "mag": mag,
-                "name": "servo",#change
+                "pm": pm,
+                "gm": gm,
+                "wp": wp,
+                "name": design,#change
                 "numerator": num,
                 "denominator": den,
                 "mag_comp": mag_comp,
@@ -138,6 +150,7 @@ def design(request, name):
                 "omega_comp":omega_comp,
                 "pm_comp": pm_comp,
                 "gm_comp": gm_comp,
+                "wp_comp": wp_comp,
                 "design": True,
                 "empty": empty, 
                 "remember": remember,
@@ -147,7 +160,8 @@ def design(request, name):
             "omega": omega,
             "ph": phase,
             "mag": mag,
-            "name": name,
+            "wp": wp,
+            "name": design,
             "numerator": num,
             "denominator": den,
             "pm": pm,
