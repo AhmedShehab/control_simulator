@@ -346,13 +346,6 @@ def action_sys(sys, final_time, setpoint):
 
     return t, action, max_action
 
-def action_zpk(sys, final_time, setpoint, z, p, k):
-    return t, action, max_action
-
-def action_pid(sys, final_time, setpoint, Kp, Ki, Kd):
-    return t, action, max_action
-
-
 def stepinfo_sys(sys):
     ## open-loop system transfer function
     try:
