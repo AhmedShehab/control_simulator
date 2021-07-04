@@ -586,6 +586,7 @@ def servomotor(request):
         step = float(request.POST.get("step",0))
         setTime = float(request.POST.get("time",0))
         setPoint = float(request.POST.get("setPoint",0))
+        setPoint = setPoint % 360
         remember = request.POST.get("remember",0)
         animation= request.POST.get("animation","false")
         removeAssignment= request.POST.get("removeAssignment",0)
