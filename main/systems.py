@@ -320,8 +320,8 @@ def action_sys(sys, final_time, setpoint):
 
     # simulation time parameters
     initial_time = 0
-    nsteps = 2000   # number of time steps
-    t = np.linspace(initial_time, final_time, nsteps)
+    nsteps = 40 * final_time   # number of time steps
+    t = np.linspace(initial_time, final_time, round(nsteps))
     output, t = matlab.step(Ts, t)
     output = setpoint*output
 
