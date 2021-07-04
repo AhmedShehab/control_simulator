@@ -14,17 +14,37 @@ window.onload = function () {
 	var ph = document.getElementById("ph").value;
 	var pm = document.getElementById("pm").value;
 	var gm = document.getElementById("gm").value;
-
-	if (parseFloat(pm) != NaN) {
-		pm = parseFloat(pm).toFixed(3);
-	}
+	var wp = document.getElementById("wp").value;
+	console.log("pmmmm"+ pm)
+	console.log(typeof(pm))
+	// if (parseFloat(pm) != NaN) {
+	// 	pm = parseFloat(pm).toFixed(3);
+	// }
+	console.log(pm)
 	var p = parseFloat(pm);
+	var w = parseFloat(wp);
+	console.log(p)
+	if (!isNaN(w)) {
+		wp = parseFloat(parseFloat(wp).toFixed(3));
+		wp = "(at "+wp+"rad/s)"
+	}
+	else{
+		wp = "";
+	}
+	console.log("sooof"+ wp)
 	if (!isNaN(p)) {
-		pm = parseFloat(pm).toFixed(3);
+		pm = parseFloat(parseFloat(pm).toFixed(3));
+	}
+	else{
+		pm = "inf";
 	}
 	var g = parseFloat(gm);
 	if (!isNaN(g)) {
-		gm = parseFloat(gm).toFixed(3);
+		gm =parseFloat(parseFloat(gm).toFixed(3));
+		gm = gm.toString()
+	}
+	else{
+		gm = "inf";
 	}
 
 	omega = omega.match(/-?\d+(?:\.\d+)?/g).map(Number);
@@ -66,7 +86,7 @@ window.onload = function () {
 		theme: "light",
 		title: {
 			display: true,
-			text: "Gain margin =" + gm + " dB/ Phase margin =" + pm + " degrees",
+			text: "Gm =" + gm + " dB/ Pm =" + pm + " deg "+wp,
 			fontSize: 20,
 		},
 
@@ -109,17 +129,34 @@ window.onload = function () {
 
 		var pm = document.getElementById("pm_comp").value;
 		var gm = document.getElementById("gm_comp").value;
-
-		if (parseFloat(pm) != NaN) {
-			pm = parseFloat(pm).toFixed(3);
+		var wp = document.getElementById("wp_comp").value;
+		var w = parseFloat(wp);
+		console.log(p)
+		if (!isNaN(w)) {
+			wp = parseFloat(parseFloat(wp).toFixed(3));
+			wp = "(at "+wp+"rad/s)"
 		}
+		else{
+			wp = "";
+		}
+		console.log(wp+"shoof")
+		console.log(pm+"rrrr")
 		var p = parseFloat(pm);
+		console.log(p)
+
 		if (!isNaN(p)) {
-			pm = parseFloat(pm).toFixed(3);
+			pm = parseFloat(parseFloat(pm).toFixed(3));
+		}
+		else{
+			pm = "inf";
 		}
 		var g = parseFloat(gm);
 		if (!isNaN(g)) {
-			gm = parseFloat(gm).toFixed(3);
+			gm =parseFloat(parseFloat(gm).toFixed(3));
+			gm = gm.toString()
+		}
+		else{
+			gm = "inf";
 		}
 
 		var limit_comp = omega_comp.length;
@@ -149,7 +186,7 @@ window.onload = function () {
 			theme: "light",
 			title: {
 				display: true,
-				text: "Gain margin =" + gm + " dB/ Phase margin =" + pm + " degrees",
+				text: "Gm =" + gm + " dB/ Pm =" + pm + " deg "+wp,
 				fontSize: 20,
 			},
 			axisX: {
@@ -210,8 +247,13 @@ function display(){
 function openForm() {
 	document.getElementById("edit").style.display = "block";
 	document.getElementById("tf").style.display = "none";
+	document.getElementById("systf").style.display = "none";
+	document.getElementById("centersys").style.display = "block";
+
 }
 function close() {
 	document.getElementById("edit").style.display = "none";
 	document.getElementById("tf").style.display = "block";
+	document.getElementById("systf").style.display = "block";
+	document.getElementById("centersys").style.display = "none";
 }
