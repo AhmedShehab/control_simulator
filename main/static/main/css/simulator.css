@@ -1,5 +1,5 @@
 :root {
-	--main-color: #28a745;
+	--main-color: var(#28a745);
 }
 body {
 	overflow-y: scroll;
@@ -116,7 +116,7 @@ input:focus::placeholder {
 	width: 31%;
 }
 .sub {
-	background-color: #28a745;
+	background-color: var(--main-color);
 	color: white;
 	border-radius: 1mm;
 	border: solid var(--main-color) 1px;
@@ -135,23 +135,32 @@ input:focus::placeholder {
 	flex-direction: row;
 	align-items: center;
 }
+.simulationContainerCruise{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
 .visualization {
 	width: 40%;
 	padding: 2%;
 }
-.tResponse {
-	border-right: 2px solid #28a745;
+.simulationContainer .tResponse{
+	border-right: 2px solid var(--main-color);
 	padding: 2%;
 	width: 60%;
 }
+.simulationContainerCruise .tResponse{
+	border-bottom: 2px solid var(--main-color);
+	width: 50%;
+}
 select{
-	color: #28a745;
+	color: var(--main-color);
 	overflow: hidden;
 	outline: none;
 }
 option:hover, option:focus, option:active{
-	background-color: #28a745;
-	background: #28a745;
+	background-color: var(--main-color);
+	background: var(--main-color);
 	color: white;
 	outline: none;
 }

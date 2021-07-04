@@ -50,11 +50,11 @@
 {% endif %}
 <div class="flex-container" style="display: flex">
 	<div class="flex-child" id="simulatorForm" style="flex: 1">
-		<form class="cred_form">
+		<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
 			{% if assignment %}
-			<a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
-				Assignment Requirements
-			</a>
+				<a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
+					Assignment Requirements
+				</a><span><button class="btn draw removeAssignment" name="removeAssignment" value="1" type="submit">X</button></span>
 			{% endif %}
 			<div class="text1">
 				<p class="input-bar">Controller:</p>
@@ -286,7 +286,6 @@
 			</div>
 			
 			<div style="text-align: center">
-			{{animation}}
 				<a class="btn draw" href="{% url 'design' 'Servomotor' %}">Design by Frequency</a>
 			</div>
 		</form>
@@ -347,6 +346,13 @@
 				return parseFloat(element);
 			});
 		}
+		var tarray = document.getElementById('tarray').value;
+		tarray = tarray.slice(1);
+		tarray = tarray.slice(0, tarray.length - 1);
+		tarray = tarray.split(',')
+		tarray = tarray.map(function(element){
+		return parseFloat(element)
+		});
 		var t = document.getElementById("time").value;
 		t = t / 2000;
 		//Aliases
@@ -369,9 +375,13 @@
 		document.getElementById("canvas").appendChild(app.view);
 		loader.add("{% static 'main/images/circle.png' %}").add("{% static 'main/images/pointer.png' %}").load(setup);
 		//Define any variables that are used in more than one function
-		let circle;
-		let pointer;
-
+		var circle;
+		var pointer;
+		var v;	
+		var timer;
+		var count = 0;
+		var l = d.length;
+		var pointer;
 		function setup() {
 			pointer = new Sprite(resources["{% static 'main/images/pointer.png' %}"].texture);
 			circle = new Sprite(resources["{% static 'main/images/circle.png' %}"].texture);
@@ -384,10 +394,6 @@
 			app.stage.addChild(circle);
 			app.stage.addChild(pointer);
 			if(runSetupFuction){
-				var count = 0;
-				l = d.length;
-				var v;	
-				var timer;
 				timer = setInterval(function () {
 					d[count] = parseFloat(d[count]);
 					v = (d[count] * Math.PI) / 180;
@@ -398,19 +404,12 @@
 					}
 
 					count++;
-				}, t);
+				}, tarray[1]*1000);
 			}
 		}
-		var t = document.getElementById("tarray").value;
-		t = t.slice(1);
-		t = t.slice(0, t.length - 1);
-		t = t.split(",");
-		var lt = t.length;
 		var ani = document.getElementById('animation').value;
-		console.log(ani)
 		if (ani== "true") {
 			var ctx = document.getElementById("myChart").getContext("2d");
-
 			duration = 0;
 			var chart = new Chart(ctx, {
 				// The type of chart we want to create
@@ -418,11 +417,11 @@
 
 				// The data for our dataset
 				data: {
-					labels: t,
+					labels: tarray,
 					datasets: [
 						{
 							label: "Degree",
-							borderColor: "rgb(255, 99, 132)",
+							borderColor: 'rgb(40,167,69)',
 							data: d,
 						},
 					],
@@ -434,7 +433,7 @@
 								ticks: {
 									beginAtZero: true,
 									//sampleSize : 2000
-									maxTicksLimit: 50,
+									maxTicksLimit: 10,
 								},
 							},
 						],
@@ -462,7 +461,7 @@
 					datasets: [
 						{
 							label: "Degree",
-							borderColor: "rgb(255, 99, 132)",
+							borderColor: 'rgb(40,167,69)',
 							data: [],
 						},
 					],
@@ -473,7 +472,7 @@
 							{
 								ticks: {
 									beginAtZero: true,
-									maxTicksLimit: 50,
+									maxTicksLimit: 10,
 								},
 							},
 						],
@@ -491,15 +490,17 @@
 			});
 			var counter = 0;
 			var interval = setInterval(function () {
-				if (lt < counter) {
+				if (l < counter) {
 					clearInterval(interval);
 					return;
 				}
-				chart.data.labels.push(t[counter]);
+				console.time()
+				chart.data.labels.push(tarray[counter]);
 				chart.data.datasets[0].data.push(d[counter]);
 				chart.update();
 				counter++;
-			}, 100);
+				console.timeEnd()
+			}, tarray[1]*1000);
 		}
 	});
 </script>

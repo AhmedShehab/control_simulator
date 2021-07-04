@@ -434,6 +434,13 @@ def cruise(request):
         setTime = float(request.POST.get("time",0))
         setPoint = float(request.POST.get("setPoint",0))
         remember = request.POST.get("remember",0)
+        animation= request.POST.get("animation","false")
+        removeAssignment= request.POST.get("removeAssignment",0)
+        if removeAssignment == "1":
+            del request.session["id"]
+            return HttpResponseRedirect(reverse("servomotor"))
+        if animation!="true":
+            animation="false"
         PIDController={
             "Simulator":"servo",
             "Controller":"PID",
@@ -550,6 +557,10 @@ def servomotor(request):
         setPoint = float(request.POST.get("setPoint",0))
         remember = request.POST.get("remember",0)
         animation= request.POST.get("animation","false")
+        removeAssignment= request.POST.get("removeAssignment",0)
+        if removeAssignment == "1":
+            del request.session["id"]
+            return HttpResponseRedirect(reverse("servomotor"))
         if animation!="true":
             animation="false"
         PIDController={
@@ -604,6 +615,8 @@ def servomotor(request):
                 if not d:
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
+                test = stepinfo_pid("servo",p,i,d)
+                settling = test.get("SettlingTime")
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
             else:
@@ -614,6 +627,7 @@ def servomotor(request):
                 "output":output,
                 "setPoint":setPoint,
                 "time":setTime,
+                "settlingTime":settling,
                 "remember": remember,
                 "p":p,
                 "i":i,

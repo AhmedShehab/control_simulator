@@ -1,5 +1,5 @@
 {% extends 'main/layout.html' %} {% load static %} {% block head %}
-<title>Cruise Control Simulator</title>
+<title>cruise Simulator</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
@@ -7,16 +7,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"></script>
 <link href="{% static 'main/css/cred.css' %}" rel="stylesheet" />
 <link href="{% static 'main/css/profile.css' %}" rel="stylesheet" />
+<link href="{% static 'main/css/Layout.css' %}" rel="stylesheet" />
 <link href="{% static 'main/css/simulator.css' %}" rel="stylesheet" />
 <style>
 	.flex-child {
-		margin-top: 5%;
+		margin-top: 3%;
 		flex: 0 70em;
 	}
 
 	.flex-child:first-child {
-		border-right: 2px solid green;
-		padding: 3% 5% 2% 4%;
+		border-right: 2px solid #28a745;
+		padding: 5% 5% 2% 4%;
 		margin-right: 20px;
 	}
 </style>
@@ -49,11 +50,11 @@
 {% endif %}
 <div class="flex-container" style="display: flex">
 	<div class="flex-child" id="simulatorForm" style="flex: 1">
-		<form class="cred_form">
+		<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 			{% if assignment %}
 			<a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
-				Assignment Requirements
-			</a>
+				Assignment Requirements </a
+			><span><button class="btn draw removeAssignment" name="removeAssignment" value="1" type="submit">X</button></span>
 			{% endif %}
 			<div class="text1">
 				<p class="input-bar">Controller:</p>
@@ -70,13 +71,13 @@
 			</select>
 			{% comment %} Dummy Form Temporary fix for some unknown bug {% endcomment %}
 			<div id="dummy" style="display: none" class="option">
-				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+				<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 					{% csrf_token %}
 					<button class="button" type="submit" name="submit" value="submit">Submit</button>
 				</form>
 			</div>
 			<div id="non" style="display: none" class="option">
-				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+				<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
@@ -88,7 +89,7 @@
 					</div>
 					<input type="hidden" name="remember" value="non" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true" /></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -97,7 +98,7 @@
 				</form>
 			</div>
 			<div id="P" style="display: none" class="option">
-				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+				<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
@@ -112,7 +113,7 @@
 						<input class="cred" type="number" step="0.00001" required name="p" placeholder="Enter a value" value="{{p}}" />
 					</div>
 					<input type="hidden" name="remember" value="p" />
-					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true" /></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -121,7 +122,7 @@
 				</form>
 			</div>
 			<div id="PI" style="display: none" class="option">
-				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+				<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
@@ -143,7 +144,7 @@
 					<input type="hidden" name="remember" value="pi" />
 
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true" /></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -152,7 +153,7 @@
 				</form>
 			</div>
 			<div id="PD" style="display: none" class="option">
-				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+				<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
@@ -173,7 +174,7 @@
 					</div>
 					<input type="hidden" name="remember" value="pd" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true" /></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -182,7 +183,7 @@
 				</form>
 			</div>
 			<div id="PID" style="display: none" class="option">
-				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+				<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
@@ -207,7 +208,7 @@
 					</div>
 					<input type="hidden" name="remember" value="pid" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true" /></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -216,7 +217,7 @@
 				</form>
 			</div>
 			<div id="lag" style="display: none" class="option">
-				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+				<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
@@ -241,7 +242,7 @@
 					</div>
 					<input type="hidden" name="remember" value="lag" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true" /></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -250,7 +251,7 @@
 				</form>
 			</div>
 			<div id="lead" style="display: none" class="option">
-				<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
+				<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
@@ -275,7 +276,7 @@
 					</div>
 					<input type="hidden" name="remember" value="lead" />
 					<br />
-					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
+					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true" /></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
 					<button class="button" type="button">Reset</button>
 					{% if assignment %}
@@ -283,10 +284,9 @@
 					{% endif %}
 				</form>
 			</div>
-			
+
 			<div style="text-align: center">
-			{{animation}}
-				<a class="btn draw" href="{% url 'design' 'Servomotor' %}">Design by Frequency</a>
+				<a class="btn draw" href="{% url 'design' 'cruise' %}">Design by Frequency</a>
 			</div>
 		</form>
 	</div>
@@ -297,7 +297,7 @@
 	<div class="flex-child" style="text-align: center">
 		<div>
 			<h1>System Response</h1>
-			<div class="simulationContainer">
+			<div class="simulationContainerCruise">
 				<div class="tResponse">
 					<div>
 						<canvas id="myChart"></canvas>
@@ -317,15 +317,9 @@
 </div>
 <script src=" {% static 'main/script/student.js' %}"></script>
 <script src=" {% static 'main/script/simulator.js' %}"></script>
-<div class="desc" id="desc">
-	<button id="descButton" class="descButton" onclick="run();">Show System Description<span class="arrowUp"></span></button>
-	<div class="content">
-		<iframe id="pdf" src="about:cruise"></iframe>
-	</div>
-</div>
 <script>
 	window.addEventListener("load", (event) => {
-                var name = document.getElementById("selector").value;
+		var name = document.getElementById("selector").value;
 		var elements = document.getElementsByClassName("option");
 		for (let i = 0; i < elements.length; i++) {
 			var element = elements[i];
@@ -339,6 +333,124 @@
 			document.getElementById("selector").value = "{{assignment.controller}}";
 			display();
 		}
+		var d = document.getElementById("degrees").value;
+		d = d.slice(1);
+		d = d.slice(0, d.length - 1);
+		d = d.split(",");``
+		var t = document.getElementById("tarray").value;
+		t = t.slice(1);
+		t = t.slice(0, t.length - 1);
+		t = t.split(",");
+		var lt = t.length;
+		var ani = document.getElementById('animation').value;
+		if (ani== "true") {
+			var ctx = document.getElementById("myChart").getContext("2d");
+			duration = 0;
+			var chart = new Chart(ctx, {
+				// The type of chart we want to create
+				type: "line",
+
+				// The data for our dataset
+				data: {
+					labels: t,
+					datasets: [
+						{
+							label: "Degree",
+							borderColor: "rgb(255, 99, 132)",
+							data: d,
+						},
+					],
+				},
+				options: {
+					scales: {
+						xAxes: [
+							{
+								ticks: {
+									beginAtZero: true,
+									//sampleSize : 2000
+									maxTicksLimit: 50,
+								},
+							},
+						],
+						yAxes: [{ ticks: { beginAtZero: true } }],
+					},
+					animation: {
+						duration: duration,
+						easing: "easeInCirc",
+					},
+					hover: {
+						duration: 0,
+					},
+					responsiveAnimationDuration: 0,
+				},
+			});
+		} else {
+			var ctx = document.getElementById("myChart").getContext("2d");
+			var chart = new Chart(ctx, {
+				// The type of chart we want to create
+				type: "line",
+
+				// The data for our dataset
+				data: {
+					labels: [],
+					datasets: [
+						{
+							label: "Degree",
+							borderColor: "rgb(255, 99, 132)",
+							data: [],
+						},
+					],
+				},
+				options: {
+					scales: {
+						xAxes: [
+							{
+								ticks: {
+									beginAtZero: true,
+									maxTicksLimit: 50,
+								},
+							},
+						],
+						yAxes: [{ ticks: { beginAtZero: true } }],
+					},
+					animation: {
+						duration: 0,
+						easing: "easeInCirc",
+					},
+					hover: {
+						duration: 0,
+					},
+					responsiveAnimationDuration: 0,
+				},
+			});
+			/*var previous = 0;
+			var steadyStateCounter=0;*/
+			var counter = 0;
+			var interval = setInterval(function () {
+				if (lt < counter) {
+					clearInterval(interval);
+					return;
+				}
+				chart.data.labels.push(t[counter]);
+				chart.data.datasets[0].data.push(d[counter]);
+				/*if (d[counter] == previous){
+					steadyStateCounter++;
+				}else{
+					steadyStateCounter=0;
+				}
+				if (steadyStateCounter == 2){
+					clearInterval(interval);
+					return;
+				}
+				previous = d[counter];*/
+				chart.update();
+				counter++;
+			}, tarray);
+		}
+	
+		
 	});
 </script>
+<script src="{% static 'main/script/pixi.min.js' %}"></script>
+<script src="{% static 'main/script/pixi.min.js.map' %}"></script>
 {% endblock body %}

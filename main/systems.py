@@ -210,8 +210,8 @@ def step_sys(sys, final_time, setpoint):
 
     # simulation time parameters
     initial_time = 0
-    nsteps = 2000   # number of time steps
-    t = np.linspace(initial_time, final_time, nsteps)
+    nsteps = 40 * final_time   # number of time steps
+    t = np.linspace(initial_time, final_time, round(nsteps))
     output, t = matlab.step(Ts, t)
     output = setpoint*output
 
@@ -251,8 +251,8 @@ def step_zpk(sys, final_time, setpoint, z, p, k):
 
     # simulation time parameters
     initial_time = 0
-    nsteps = 2000   # number of time steps
-    t = np.linspace(initial_time, final_time, nsteps)
+    nsteps = 40 * final_time   # number of time steps
+    t = np.linspace(initial_time, final_time, round(nsteps))
     output, t = matlab.step(Ts, t)
     output = setpoint*output
 
@@ -289,8 +289,8 @@ def step_pid(sys, final_time, setpoint, Kp, Ki, Kd):
 
     # simulation time parameters
     initial_time = 0
-    nsteps = 2000   # number of time steps
-    t = np.linspace(initial_time, final_time, nsteps)
+    nsteps = 40 * final_time     # number of time steps
+    t = np.linspace(initial_time, final_time, round(nsteps))
     output, t = matlab.step(Ts, t)
     output = setpoint*output
 

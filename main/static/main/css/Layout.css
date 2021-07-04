@@ -102,6 +102,17 @@ a:active {
 	background-color: var(--main-color);
 	color: white;
 }
+.removeAssignment{
+	margin-left:3px;
+	color:red;
+	font-weight: 500;
+	border: solid 1px red;
+}
+.removeAssignment:hover{
+	transition: 0.3s;
+	outline: none;
+	background-color:red;
+}
 .hidden {
 	display: none;
 }
