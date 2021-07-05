@@ -649,8 +649,6 @@ def servomotor(request):
                 if not d:
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
-                test = stepinfo_pid("servo",p,i,d)
-                settling = test.get("SettlingTime")
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
             else:
@@ -661,7 +659,6 @@ def servomotor(request):
                 "output":output,
                 "setPoint":setPoint,
                 "time":setTime,
-                "settlingTime":settling,
                 "remember": remember,
                 "p":p,
                 "i":i,
