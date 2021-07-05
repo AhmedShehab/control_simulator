@@ -3,10 +3,10 @@
 {% endblock head %} {% block body %}
 <div class="page-wrapper">
 	<div class="flex">
-		<div class="img imgRES">
+		<div class="carShifter">
 			<img src="{% static 'main/images/car-shift.jpg' %}" alt="car shifter" />
 		</div>
-		<div class="content contentRES">
+		<div class="description descriptionResponsive">
 			<h3>Description</h3>
 			<p>
 				Test, learn and program PID control loops in real time with the automated PID Simulator! With the simulated feedback and optional controls, the
@@ -17,22 +17,22 @@
 	</div>
 	<div class="flex">
 		<div class="hidden">
-			<h3>Basic Cruise Control Simulator</h3>
+			<h3>Cruise Control Simulator</h3>
 			<p>
-				Basic cruise control is a system that automatically controls the speed of a motor vehicle. The system is a servomechanism that takes over the
+				cruise control is a system that automatically controls the speed of a motor vehicle. The system is a servomechanism that takes over the
 				throttle of the car to maintain a steady speed as set by the driver.
 			</p>
 			<form action="{% url 'cruise' %}">
 				<button type="submit" class="btn btn-outline-success">Run Simulation</button>
 			</form>
 		</div>
-		<div class="img img2">
-			<img src="{% static 'main/images/Cruise-Control-Diagram.png' %}" alt="cruise control block diagram" />
+		<div class="cruiseControl">
+			<img src="{% static 'main/images/CruiseControl.jpeg' %}" alt="cruise control block diagram" />
 		</div>
 		<div class="content hide">
-			<h3>Basic Cruise Control Simulator</h3>
+			<h3>Cruise Control Simulator</h3>
 			<p>
-				Basic cruise control is a system that automatically controls the speed of a motor vehicle. The system is a servomechanism that takes over the
+				cruise control is a system that automatically controls the speed of a motor vehicle. The system is a servomechanism that takes over the
 				throttle of the car to maintain a steady speed as set by the driver.
 			</p>
 			<form action="{% url 'cruise' %}">
@@ -41,11 +41,11 @@
 		</div>
 	</div>
 	<div class="flex">
-		<div class="img imgRES">
-			<img src="{% static 'main/images/Adaptive-Cruise-Controller-Block-Diagram.png' %}" alt="adaptive cruise control block diagram" />
+		<div class="servomotor">
+			<img src="{% static 'main/images/Servomotor.jpg' %}" alt="adaptive cruise control block diagram" />
 		</div>
-		<div class="content contentRES">
-			<h3>Adaptive Cruise Control Simulator</h3>
+		<div class="servomotorIntroduction">
+			<h3>Servomotor Simulator</h3>
 			<p>
 				Adaptive cruise control (ACC) is an available. cruise control advanced driver assistance system for road vehicles that automatically adjusts the
 				vehicle speed to maintain a safe distance from vehicles ahead.As of 2019. it is also called by 20 unique names that describe that basic
