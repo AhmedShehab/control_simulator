@@ -35,3 +35,15 @@ function display(){
 		}
 	}
 }
+function Reset(){
+	var reset = document.getElementsByClassName("reset");
+	var clear = document.getElementsByClassName("clear");
+	var s = 1.0;
+	s = s.toFixed(1)
+	for(var i =0; i < reset.length; i++){
+		reset[i].value = s;
+	}
+	for(var i =0; i < clear.length; i++){
+		clear[i].value = "";
+	}
+}

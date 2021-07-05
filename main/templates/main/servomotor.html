@@ -81,17 +81,17 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data" type="number" step="0.00001" required name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" step="0.00001" required name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
-						<input class="input-data" type="number" step="0.00001" required name="time" value="{{time}}" />
+						<input class="input-data reset" type="number" step="0.00001" required name="time" value="{{time}}" />
 					</div>
 					<input type="hidden" name="remember" value="non" />
 					<br />
 					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
-					<button class="button" type="button">Reset</button>
+					 <button class="button" onclick="Reset();" type="button">Reset</button>
 					{% if assignment %}
 					<button class="sub" type="submit" name="submit" value="submit">Submit</button>
 					{% endif %}
@@ -102,20 +102,20 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
-						<input class="input-data" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
+						<input class="input-data reset" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
 					</div>
 					<div class="text0">
 						<p class="input-bar" style="margin-left: 10px">P:</p>
-						<input class="cred" type="number" step="0.00001" required name="p" placeholder="Enter a value" value="{{p}}" />
+						<input class="cred clear" type="number" step="0.00001" required name="p" placeholder="Enter a value" value="{{p}}" />
 					</div>
 					<input type="hidden" name="remember" value="p" />
 					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
-					<button class="button" type="button">Reset</button>
+					 <button class="button" onclick="Reset();" type="button">Reset</button>
 					{% if assignment %}
 					<button class="sub" type="submit" name="submit" value="submit">Submit</button>
 					{% endif %}
@@ -126,27 +126,27 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
-						<input class="input-data" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
+						<input class="input-data reset" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
 					</div>
 					<br /><br /><br />
 					<div class="text1">
 						<p class="input-bar">P:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="p" value="{{p}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="p" value="{{p}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">I:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="i" value="{{i}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="i" value="{{i}}" />
 					</div>
 					<input type="hidden" name="remember" value="pi" />
 
 					<br />
 					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
-					<button class="button" type="button">Reset</button>
+					 <button class="button" onclick="Reset();" type="button">Reset</button>
 					{% if assignment %}
 					<button class="sub" type="submit" name="submit" value="submit">Submit</button>
 					{% endif %}
@@ -157,26 +157,26 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data" type="number" step="0.00001" min="0" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" step="0.00001" min="0" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
-						<input class="input-data" type="number" step="0.00001" min="1" name="time" value="{{time}}" />
+						<input class="input-data reset" type="number" step="0.00001" min="1" name="time" value="{{time}}" />
 					</div>
 					<br /><br /><br />
 					<div class="text1">
 						<p class="input-bar">P:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="p" value="{{p}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="p" value="{{p}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">D:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="d" value="{{d}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="d" value="{{d}}" />
 					</div>
 					<input type="hidden" name="remember" value="pd" />
 					<br />
 					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
-					<button class="button" type="button">Reset</button>
+					 <button class="button" onclick="Reset();" type="button">Reset</button>
 					{% if assignment %}
 					<button class="sub" type="submit" name="submit" value="submit">Submit</button>
 					{% endif %}
@@ -187,30 +187,30 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
-						<input class="input-data" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
+						<input class="input-data reset" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
 					</div>
 					<br /><br /><br />
 					<div class="text11">
 						<p class="input-bar">P:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="p" value="{{p}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="p" value="{{p}}" />
 					</div>
 					<div class="text22">
 						<p class="input-bar">I:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="i" value="{{i}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="i" value="{{i}}" />
 					</div>
 					<div class="text33">
 						<p class="input-bar">D:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="d" value="{{d}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="d" value="{{d}}" />
 					</div>
 					<input type="hidden" name="remember" value="pid" />
 					<br />
 					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
-					<button class="button" type="button">Reset</button>
+					 <button class="button" onclick="Reset();" type="button">Reset</button>
 					{% if assignment %}
 					<button class="sub" type="submit" name="submit" value="submit">Submit</button>
 					{% endif %}
@@ -221,30 +221,30 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
-						<input class="input-data" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
+						<input class="input-data reset" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
 					</div>
 					<br /><br /><br />
 					<div class="text11">
 						<p class="input-bar">Zero:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="zero" value="{{zero}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="zero" value="{{zero}}" />
 					</div>
 					<div class="text22">
 						<p class="input-bar">Pole:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="pole" value="{{pole}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="pole" value="{{pole}}" />
 					</div>
 					<div class="text33">
 						<p class="input-bar">Gain:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="gain" value="{{gain}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="gain" value="{{gain}}" />
 					</div>
 					<input type="hidden" name="remember" value="lag" />
 					<br />
 					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
-					<button class="button" type="button">Reset</button>
+					 <button class="button" onclick="Reset();" type="button">Reset</button>
 					{% if assignment %}
 					<button class="sub" type="submit" name="submit" value="submit">Submit</button>
 					{% endif %}
@@ -255,30 +255,30 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
-						<input class="input-data" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
+						<input class="input-data reset" type="number" min="1" step="0.00001" name="time" value="{{time}}" />
 					</div>
 					<br /><br /><br />
 					<div class="text11">
 						<p class="input-bar">Zero:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="zero" value="{{zero}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="zero" value="{{zero}}" />
 					</div>
 					<div class="text22">
 						<p class="input-bar">Pole:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="pole" value="{{pole}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="pole" value="{{pole}}" />
 					</div>
 					<div class="text33">
 						<p class="input-bar">Gain:</p>
-						<input class="input-data" type="number" step="0.00001" required placeholder="Enter a value" name="gain" value="{{gain}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="gain" value="{{gain}}" />
 					</div>
 					<input type="hidden" name="remember" value="lead" />
 					<br />
 					<div>Disable Animation <input type="checkbox" class="animation" name="animation" value="true"/></div>
 					<button class="button" type="submit" name="submit" value="simulate">Start</button>
-					<button class="button" type="button">Reset</button>
+					 <button class="button" onclick="Reset();" type="button">Reset</button>
 					{% if assignment %}
 					<button class="sub" type="submit" name="submit" value="submit">Submit</button>
 					{% endif %}
