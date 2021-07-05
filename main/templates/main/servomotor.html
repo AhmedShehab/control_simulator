@@ -59,7 +59,7 @@
 			<div class="text1">
 				<p class="input-bar">Controller:</p>
 			</div>
-			<select class="cred nav-link" onchange="display();" id="selector">
+			<select class="cred nav-link" onchange="display();" id="selector" >
 				<option disabled selected>Not Selected</option>
 				<option value="non" {% if remember == 'non' %}selected{% endif %}>Uncompensated</option>
 				<option value="P" {% if remember == 'p' %}selected{% endif %}>P</option>
@@ -330,7 +330,9 @@
 			}
 		}
 		if ("{{assignment.controller}}" != "") {
-			document.getElementById("selector").value = "{{assignment.controller}}";
+			var selector = document.getElementById("selector")
+			selector.value = "{{assignment.controller}}";
+			selector.disabled=true
 			display();
 		}
 		var d = document.getElementById("degrees").value;
@@ -489,17 +491,16 @@
 				},
 			});
 			var counter = 0;
+			console.log(l)
 			var interval = setInterval(function () {
-				if (l < counter) {
+				if (l <= counter + 1) {
 					clearInterval(interval);
 					return;
 				}
-				console.time()
 				chart.data.labels.push(tarray[counter]);
 				chart.data.datasets[0].data.push(d[counter]);
 				chart.update();
 				counter++;
-				console.timeEnd()
 			}, tarray[1]*1000);
 		}
 	});

@@ -124,12 +124,32 @@
 		</form>
 	</div>
 </div>
+<div class="assignPosition" style="display: none;" id="courseCodeForm">
+	<div class="assign_child" style="text-align:center;width:fit-content">
+		<div>
+			<h3>Course Code</h3>
+		</div>
+		<div style="text-align:left;font-size: 20px;">
+			{% for course in allCourseData %}
+				<div style="border-bottom:green 2px solid; padding:10px;">
+					<strong >{{course.name}}:</strong> {{course.code}}
+				</div>
+			{% endfor %}
+		</div>
+		<div>
+			<button type="button" class="button" onclick="closeCourseCodeForm()">Cancel</button>
+		</div>
+	</div>
+</div>
 <div class="wrapper">
 	<div class="profile" style="display: flex; height: 80px">
 		<div><img src="{% static 'main/images/profile.png' %}" alt="instructor's Photo" style="height: 100px; width: auto" /></div>
 		<div style="margin-left: 20px">
 			<h3><strong>{{instructor.credentials.first_name}} {{instructor.credentials.last_name}}</strong></h3>
 			<h4>Major: <small style="color: black">{{instructor.major}}</small></h4>
+		</div>
+		<div style="margin:-.5rem 15rem 0 auto">
+			<button class="button"  onclick="openCourseCodeForm()">Course Code</button>
 		</div>
 	</div>
 	<div class="profile" style="display: flex; height: 50px" id="assignment">

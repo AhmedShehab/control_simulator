@@ -24,7 +24,6 @@ class Assignment(models.Model):
     controller  = models.CharField(max_length=50, null=True)
     simulator_choices=[
         ("Cruise Control","Cruise Control"),
-        ("Water","Water"),
         ("Servo Motor","Servo Motor")
     ]
     simulator   = models.CharField(max_length=64,choices=simulator_choices,null=True) # Remove Null= True later

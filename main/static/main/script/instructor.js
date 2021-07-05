@@ -10,6 +10,12 @@ function openCourseForm() {
 function closeCourseForm() {
 	document.getElementById("courseForm").style.display = "none";
 }
+function openCourseCodeForm() {
+	document.getElementById("courseCodeForm").style.display = "flex";
+}
+function closeCourseCodeForm() {
+	document.getElementById("courseCodeForm").style.display = "none";
+}
 function courseSelector(courses) {
 	var table = document.getElementsByClassName("tr");
 	for (let i = 0; i < table.length; i++) {

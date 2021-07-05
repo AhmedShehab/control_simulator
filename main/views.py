@@ -377,6 +377,7 @@ def instructor(request):
     assignmentSubmissions=[] #Submissions in each assignment
     assignmentSubmission={} #Assignment:submissions pairs
     course=Course.objects.filter(instructor=request.user)
+    allCourseData= course
     assignment=Assignment.objects.filter(instructor=request.user)
     for something in course:
         courses.append(something.name)
@@ -425,6 +426,7 @@ def instructor(request):
             "simulators": simulators,
             "courseAssignment": courseAssignment,
             "courses": courses,
+            "allCourseData":allCourseData,
             "assignmentSubmission": assignmentSubmission,
         })
 
@@ -501,8 +503,8 @@ def cruise(request):
                             "duplicateAssignment":"Sorry you can't submit the same assignment twice",
                         })
             subDate = date.today().strftime("%Y-%m-%d")
-            PIDParamaters= f"Propotional Constant(P): {p}, \n Differential Constant(D): {i}, \n Integral Constant(I): {d},"
-            ZPkParamaters= f"Gain: {gain}, \n Pole: {pole}, \n Zero: {zero}"
+            PIDParamaters= f"Propotional Constant (P): {p},\n Differential Constant (D): {i},\n Integral Constant (I): {d},"
+            ZPkParamaters= f"Gain: {gain},\n Pole: {pole},\n Zero: {zero}"
             if p or i or d:   # PID Controller
                 controller = PIDController
                 parameters = PIDParamaters
