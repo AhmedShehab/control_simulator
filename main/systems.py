@@ -1,4 +1,3 @@
-
 from control.lti import zero
 from django.http import response
 import numpy as np
@@ -26,7 +25,7 @@ def bode_sys(sys):
     phase = list(phase)
     mag = list(mag)
     
-    # round lists to 5 decimal floating digits
+    # round lists to 6 decimal floating digits
     ndigits = 6
     omega = [round(num, ndigits) for num in omega]
     phase = [round(num, ndigits) for num in phase]
@@ -88,7 +87,7 @@ def bode_zpk(sys, z, p, k):
     phase = list(phase)
     mag = list(mag)
     
-    # round lists to 5 decimal floating digits
+    # round lists to 6 decimal floating digits
     ndigits = 6
     omega = [round(num, ndigits) for num in omega]
     phase = [round(num, ndigits) for num in phase]
@@ -157,7 +156,7 @@ def bode_pid(sys, Kp, Ki, Kd):
     phase = list(phase)
     mag = list(mag)
     
-    # round lists to 5 decimal floating digits
+    # round lists to 6 decimal floating digits
     ndigits = 6
     omega = [round(num, ndigits) for num in omega]
     phase = [round(num, ndigits) for num in phase]
@@ -219,7 +218,7 @@ def step_sys(sys, final_time, setpoint):
     t = list(t)
     output = list(output)
 
-    # round lists to 5 decimal digits
+    # round lists to 6 decimal digits
     ndigits = 6
     t = [round(num, ndigits) for num in t]
     output = [round(num, ndigits) for num in output]
@@ -260,7 +259,7 @@ def step_zpk(sys, final_time, setpoint, z, p, k):
     t = list(t)
     output = list(output)
 
-    # round lists to 5 decimal digits
+    # round lists to 6 decimal digits
     ndigits = 6
     t = [round(num, ndigits) for num in t]
     output = [round(num, ndigits) for num in output]
@@ -298,7 +297,7 @@ def step_pid(sys, final_time, setpoint, Kp, Ki, Kd):
     t = list(t)
     output = list(output)
 
-    # round lists to 5 decimal digits
+    # round lists to 6 decimal digits
     ndigits = 6
     t = [round(num, ndigits) for num in t]
     output = [round(num, ndigits) for num in output]
@@ -336,7 +335,7 @@ def action_sys(sys, final_time, setpoint):
     t = list(t)
     action = list(action)
 
-    # round lists to 5 decimal digits
+    # round lists to 6 decimal digits
     ndigits = 6
     t = [round(num, ndigits) for num in t]
     action = [round(num, ndigits) for num in action]
