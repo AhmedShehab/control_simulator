@@ -11,7 +11,7 @@
 <link href="{% static 'main/css/simulator.css' %}" rel="stylesheet" />
 <style>
 	.flex-child {
-		margin-top: 3%;
+		margin-top: 1%;
 		flex: 0 70em;
 	}
 
@@ -290,20 +290,21 @@
 			</div>
 		</form>
 	</div>
-	<input type="text" style="display: none" id="degrees" value="{{output}}" />
+	<input type="text" style="display: none" id="speed" value="{{output}}" />
 	<input type="text" style="display: none" id="time" value="{{time}}" />
 	<input type="text" style="display: none" id="tarray" value="{{t}}" />
 	<input type="text" style="display: none" id="animation" value="{{animation}}" />
 	<div class="flex-child" style="text-align: center">
 		<div>
-			<h1>System Response</h1>
 			<div class="simulationContainerCruise">
 				<div class="tResponse">
 					<div>
 						<canvas id="myChart"></canvas>
 					</div>
 				</div>
-				<div class="visualization" id="canvas"></div>
+				<div >
+					<div class="visualization" id="canvas"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -331,20 +332,94 @@
 		}
 		if ("{{assignment.controller}}" != "") {
 			document.getElementById("selector").value = "{{assignment.controller}}";
+			selector.disabled=true
 			display();
 		}
-		var d = document.getElementById("degrees").value;
-		d = d.slice(1);
-		d = d.slice(0, d.length - 1);
-		d = d.split(",");``
-		var t = document.getElementById("tarray").value;
-		t = t.slice(1);
-		t = t.slice(0, t.length - 1);
-		t = t.split(",");
-		var lt = t.length;
-		var ani = document.getElementById('animation').value;
-		if (ani== "true") {
-			var ctx = document.getElementById("myChart").getContext("2d");
+		var v = document.getElementById("speed").value;
+		if (v ===""){
+			var runSetupFuction = false;
+		}
+		else
+		{
+			runSetupFuction= true;		
+			v = v.slice(1);
+			v = v.slice(0, v.length - 1);
+			v = v.split(",");
+			v = v.map(function (element) {
+					return parseFloat(element);
+				});	
+		}	
+
+		var tarray = document.getElementById('tarray').value;
+		tarray = tarray.slice(1);
+		tarray = tarray.slice(0, tarray.length - 1);
+		tarray = tarray.split(',')
+		tarray = tarray.map(function(element){
+		return parseFloat(element)
+		});
+
+
+//Aliases
+let Application = PIXI.Application,
+    Container = PIXI.Container,
+    loader = PIXI.loader,
+    resources = PIXI.loader.resources,
+    TextureCache = PIXI.utils.TextureCache,
+    Text = PIXI.Text,
+    TextStyle = PIXI.TextStyle,
+    Sprite = PIXI.Sprite;
+
+//Create a Pixi Application
+let app = new Application({ 
+    width: 600, 
+    height: 300,                       
+    antialiasing: true, 
+    transparent: true, 
+    resolution: 1
+  }
+);
+    
+
+//Add the canvas that Pixi automatically created for you to the HTML document
+document.getElementById("canvas").appendChild(app.view);
+
+loader
+  .add("{% static 'main/images/dashboard.png' %}")
+  .load(setup);
+
+//Define any variables that are used in more than one function
+let dashboard;
+let style;
+let message1; 
+let message2;  
+var count = 0;
+var l =v.length     
+var timer;
+
+function setup() {
+    
+  style = new TextStyle({
+  fontFamily: "Arial",
+  fontSize: 24,
+  fill: "white",
+});
+
+  message1 = new Text ('00', style)
+  message2 = new Text ('00', style)
+  //Create the 'dashboard' sprite 
+  dashboard = new Sprite(resources["{% static 'main/images/dashboard.png' %}"].texture);
+  app.stage.addChild(dashboard);
+  app.stage.addChild(message1);
+  app.stage.addChild(message2);
+  message1.position.set(124, 139);
+  message2.position.set(450, 139);
+
+}
+
+    
+var ctx = document.getElementById("myChart").getContext("2d");
+var ani = document.getElementById('animation').value;
+if (ani== "true") {
 			duration = 0;
 			var chart = new Chart(ctx, {
 				// The type of chart we want to create
@@ -352,12 +427,12 @@
 
 				// The data for our dataset
 				data: {
-					labels: t,
+					labels: tarray,
 					datasets: [
 						{
-							label: "Degree",
-							borderColor: "rgb(255, 99, 132)",
-							data: d,
+							label: "Speed",
+							borderColor: 'rgb(40,167,69)',
+							data: v,
 						},
 					],
 				},
@@ -368,7 +443,7 @@
 								ticks: {
 									beginAtZero: true,
 									//sampleSize : 2000
-									maxTicksLimit: 50,
+									maxTicksLimit: 10,
 								},
 							},
 						],
@@ -384,8 +459,36 @@
 					responsiveAnimationDuration: 0,
 				},
 			});
-		} else {
-			var ctx = document.getElementById("myChart").getContext("2d");
+if (runSetupFuction)
+{
+	timer = setInterval(function()
+                    {
+						message1.position.set(124, 139);
+   						message2.position.set(450, 139);	
+                    v[count] = ((Math.floor(v[count]*100)/100))
+                    //hp[count] = ((Math.floor(hp[count]*100)/100))
+                    if (v[count] < 10)
+                    {
+                          message1.text = '0' + v[count]
+                          //message2.text = ('0'+hp[vount])
+                    }
+                    else
+                    {
+                          message1.text = v[count]
+                          //message2.text = (hp[vount])
+                    }
+                        if (l == count + 1 )
+                        {
+                                clearInterval(timer);
+								return;
+                        }
+                        
+                    count++; 
+                    },tarray[1]*1000)
+}			
+		} 
+		else 
+		{
 			var chart = new Chart(ctx, {
 				// The type of chart we want to create
 				type: "line",
@@ -395,8 +498,8 @@
 					labels: [],
 					datasets: [
 						{
-							label: "Degree",
-							borderColor: "rgb(255, 99, 132)",
+							label: "Speed",
+							borderColor: 'rgb(40,167,69)',
 							data: [],
 						},
 					],
@@ -407,7 +510,7 @@
 							{
 								ticks: {
 									beginAtZero: true,
-									maxTicksLimit: 50,
+									maxTicksLimit: 10,
 								},
 							},
 						],
@@ -423,32 +526,47 @@
 					responsiveAnimationDuration: 0,
 				},
 			});
-			/*var previous = 0;
-			var steadyStateCounter=0;*/
-			var counter = 0;
-			var interval = setInterval(function () {
-				if (lt < counter) {
-					clearInterval(interval);
-					return;
-				}
-				chart.data.labels.push(t[counter]);
-				chart.data.datasets[0].data.push(d[counter]);
-				/*if (d[counter] == previous){
-					steadyStateCounter++;
-				}else{
-					steadyStateCounter=0;
-				}
-				if (steadyStateCounter == 2){
-					clearInterval(interval);
-					return;
-				}
-				previous = d[counter];*/
+			if (runSetupFuction)
+{
+	timer = setInterval(function()
+                    {
+						message1.position.set(112, 139);
+   						message2.position.set(450, 139);
+                    v[count] = ((Math.floor(v[count]*100)/100))
+                    //hp[count] = ((Math.floor(hp[count]*100)/100))
+                    if (v[count] < 10)
+                    {
+                          message1.text = '0' + v[count]
+                          //message2.text = ('0'+hp[vount])
+                    }
+                    else
+                    {
+                          message1.text = v[count]
+                          //message2.text = (hp[vount])
+                    }
+				chart.data.labels.push(tarray[count]);
+				chart.data.datasets[0].data.push(v[count]);
 				chart.update();
+                        if (l == count + 1 )
+                        {
+                                clearInterval(timer);
+								return;
+                        }
+                        
+                    count++; 
+                    },tarray[1]*1000)
+}			
+			
+			/*var interval = setInterval(function () {
+
+				if (l == counter + 1) {
+					clearInterval(interval);
+					return;
+				}				
 				counter++;
-			}, tarray);
+			}, tarray[1]*1000);*/
 		}
 	
-		
 	});
 </script>
 <script src="{% static 'main/script/pixi.min.js' %}"></script>
