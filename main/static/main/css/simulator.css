@@ -151,7 +151,7 @@ input:focus::placeholder {
 }
 .simulationContainerCruise .tResponse{
 	border-bottom: 2px solid var(--main-color);
-	width: 50%;
+	width:50%;
 }
 select{
 	color: var(--main-color);
