@@ -48,7 +48,7 @@
 </div>
 {% endif %}
 <div class="flex-container" style="display: flex">
-	<div class="flex-child" id="simulatorForm" style="flex: 1">
+	<div class="flex-child" id="simulatorForm" style="flex: 1; margin-top: 0; padding: 3% 2% 2% 2%;">
 		<form class="cred_form" action="{% url 'servomotor' %}" method="POST">
 			{% if assignment %}
 				<a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
@@ -287,6 +287,11 @@
 			<div style="text-align: center">
 				<a class="btn draw" href="{% url 'design' 'Servomotor' %}">Design by Frequency</a>
 			</div>
+			{% if stepinfo %}
+			<div style="text-align: center; margin-top: 2%;">
+				<button class="btn draw" onclick="openStepInfo();">Show Step info.</button>
+			</div>
+			{% endif %}
 		</form>
 	</div>
 	<input type="text" style="display: none" id="degrees" value="{{output}}" />
@@ -311,6 +316,19 @@
 	<button id="descButton" class="descButton" onclick="run();">Show System Description<span class="arrowUp"></span></button>
 	<div class="content">
 		<iframe id="pdf" src="about:servo"></iframe>
+	</div>
+</div>
+<div class=" assignPosition" id="stepInfo">
+	<div class="assign_child">
+		<h3>Step Info.</h3>
+		<p class="removePadding">RiseTime: {{ spec.RiseTime}} sec</p>
+		<p class="removePadding">SettlingTime: {{ spec.SettlingTime}} sec</p>
+		<p class="removePadding">Overshoot: {{ spec.Overshoot}}</p>
+		<p class="removePadding">Undershoot: {{ spec.Undershoot}}</p>
+		<p class="removePadding">Peak: {{ spec.Peak}}</p>
+		<p class="removePadding">PeakTime: {{ spec.PeakTime}} sec</p>
+		<p class="removePadding">SteadyStateValue: {{ spec.SteadyStateValue}}</p>
+		<button class="button" onclick="closeStepInfo();">Exit</button>
 	</div>
 </div>
 <script src=" {% static 'main/script/student.js' %}"></script>

@@ -49,7 +49,7 @@
 </div>
 {% endif %}
 <div class="flex-container" style="display: flex">
-	<div class="flex-child" id="simulatorForm" style="flex: 1">
+	<div class="flex-child" id="simulatorForm" style="flex: 1; margin-top: 0; padding: 3% 2% 2% 2%;">
 		<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 			{% if assignment %}
 			<a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
@@ -288,6 +288,11 @@
 			<div style="text-align: center">
 				<a class="btn draw" href="{% url 'design' 'Cruise Control' %}">Design by Frequency</a>
 			</div>
+			{% if stepinfo %}
+			<div style="text-align: center; margin-top: 2%;">
+				<button class="btn draw" onclick="openStepInfo();">Show Step info.</button>
+			</div>
+			{% endif %}
 		</form>
 	</div>
 	<input type="text" style="display: none" id="speed" value="{{output}}" />
@@ -297,13 +302,13 @@
 	<div class="flex-child" style="text-align: center">
 		<div>
 			<div class="simulationContainerCruise">
-				<div class="tResponse">
+				<div class="tResponse2">
 					<div>
 						<canvas id="myChart"></canvas>
 					</div>
 				</div>
-				<div >
-					<div class="visualization" id="canvas"></div>
+				<div class="tDashboard">
+					<div class="visualization2" id="canvas2"></div>
 				</div>
 			</div>
 		</div>
@@ -315,6 +320,21 @@
 	<div class="content">
 		<iframe id="pdf" src="about:cruise"></iframe>
 	</div>
+</div>
+<div class=" assignPosition" id="stepInfo">
+	<div class="assign_child">
+		<h3>Step Info.</h3>
+		<p class="removePadding">RiseTime: {{ spec.RiseTime}} sec</p>
+		<p class="removePadding">SettlingTime: {{ spec.SettlingTime}} sec</p>
+		<p class="removePadding">Overshoot: {{ spec.Overshoot}}</p>
+		<p class="removePadding">Undershoot: {{ spec.Undershoot}}</p>
+		<p class="removePadding">Peak: {{ spec.Peak}}</p>
+		<p class="removePadding">PeakTime: {{ spec.PeakTime}} sec</p>
+		<p class="removePadding">SteadyStateValue: {{ spec.SteadyStateValue}}</p>
+		<button class="button" onclick="closeStepInfo();">Exit</button>
+	</div>
+</div>
+	
 </div>
 <script src=" {% static 'main/script/student.js' %}"></script>
 <script src=" {% static 'main/script/simulator.js' %}"></script>
@@ -381,7 +401,7 @@ let app = new Application({
     
 
 //Add the canvas that Pixi automatically created for you to the HTML document
-document.getElementById("canvas").appendChild(app.view);
+document.getElementById("canvas2").appendChild(app.view);
 
 loader
   .add("{% static 'main/images/dashboard.png' %}")

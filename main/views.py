@@ -22,6 +22,7 @@ def home(request):
     return render(request, "main/home.html",{
         "home": True
     })
+
 def design(request, name):
     empty = False
     remember = 1
@@ -457,6 +458,7 @@ def cruise(request):
     setTime = 1.0
     setPoint = 1.0
     if request.POST:
+        info = True
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
         gain = float(request.POST.get("gain",0))
@@ -526,10 +528,13 @@ def cruise(request):
                 if not d:
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
+                spec = stepinfo_pid(sys, p, i, d)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+                spec = stepinfo_zpk(sys, zero, pole, gain)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
+                spec = stepinfo_sys(sys)
             return render(request, "main/cruise.html", {
                 "assignment":assignment,
                 "t": t,
@@ -542,7 +547,9 @@ def cruise(request):
                 "d":d,
                 "zero":zero,
                 "pole":pole,
-                "gain":gain
+                "gain":gain,
+                "stepinfo": info,
+                "spec": spec
         })
     else:
         return render(request, "main/cruise.html", {
@@ -579,6 +586,7 @@ def servomotor(request):
     setTime = 1.0
     setPoint = 1.0
     if request.POST:
+        info = True
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
         gain = float(request.POST.get("gain",0))
@@ -649,10 +657,13 @@ def servomotor(request):
                 if not d:
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
+                spec = stepinfo_pid(sys, p, i, d)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+                spec = stepinfo_zpk(sys, zero, pole, gain)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
+                spec = stepinfo_sys(sys)
             return render(request, "main/servomotor.html", {
                 "assignment":assignment,
                 "t": t,
@@ -666,7 +677,9 @@ def servomotor(request):
                 "zero":zero,
                 "pole":pole,
                 "gain":gain,
-                "animation":animation
+                "animation":animation,
+                "stepinfo": info,
+                "spec": spec
         })
     else:
         return render(request, "main/servomotor.html", {

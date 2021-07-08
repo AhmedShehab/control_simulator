@@ -47,3 +47,9 @@ function Reset(){
 		clear[i].value = "";
 	}
 }
+function openStepInfo() {
+	document.getElementById("stepInfo").style.display = "flex";
+}
+function closeStepInfo() {
+	document.getElementById("stepInfo").style.display = "none";
+}

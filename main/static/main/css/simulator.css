@@ -149,9 +149,19 @@ input:focus::placeholder {
 	padding: 2%;
 	width: 60%;
 }
-.simulationContainerCruise .tResponse{
+
+.visualization2 {
+	padding: 2%;
+}
+
+.simulationContainerCruise .tResponse2{
 	border-bottom: 2px solid var(--main-color);
-	width:50%;
+}
+.tResponse2{
+	width: 47%;
+}
+#canvas2 > canvas:last-child{
+	width: 80%;
 }
 select{
 	color: var(--main-color);
@@ -163,4 +173,8 @@ option:hover, option:focus, option:active{
 	background: var(--main-color);
 	color: white;
 	outline: none;
+}
+.removePadding{
+	padding: 0;
+	margin: 0;
 }
