@@ -15,15 +15,11 @@ window.onload = function () {
 	var pm = document.getElementById("pm").value;
 	var gm = document.getElementById("gm").value;
 	var wp = document.getElementById("wp").value;
-	console.log("pmmmm"+ pm)
-	console.log(typeof(pm))
 	// if (parseFloat(pm) != NaN) {
 	// 	pm = parseFloat(pm).toFixed(3);
 	// }
-	console.log(pm)
 	var p = parseFloat(pm);
 	var w = parseFloat(wp);
-	console.log(p)
 	if (!isNaN(w)) {
 		wp = parseFloat(parseFloat(wp).toFixed(3));
 		wp = "(at "+wp+"rad/s)"
@@ -31,7 +27,6 @@ window.onload = function () {
 	else{
 		wp = "";
 	}
-	console.log("sooof"+ wp)
 	if (!isNaN(p)) {
 		pm = parseFloat(parseFloat(pm).toFixed(3));
 	}
@@ -131,7 +126,6 @@ window.onload = function () {
 		var gm = document.getElementById("gm_comp").value;
 		var wp = document.getElementById("wp_comp").value;
 		var w = parseFloat(wp);
-		console.log(p)
 		if (!isNaN(w)) {
 			wp = parseFloat(parseFloat(wp).toFixed(3));
 			wp = "(at "+wp+"rad/s)"
@@ -139,11 +133,7 @@ window.onload = function () {
 		else{
 			wp = "";
 		}
-		console.log(wp+"shoof")
-		console.log(pm+"rrrr")
 		var p = parseFloat(pm);
-		console.log(p)
-
 		if (!isNaN(p)) {
 			pm = parseFloat(parseFloat(pm).toFixed(3));
 		}

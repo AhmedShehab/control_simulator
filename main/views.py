@@ -34,7 +34,7 @@ def design(request, name):
         num, den = tf(sys)
         gm, pm, wg, wp = margin_sys(sys)
     elif name == "Cruise Control":
-        sys = "servo" #cruise
+        sys = "cruise" #cruise
         simulator = "cruise"
         system = name
         omega, mag, phase = bode_sys(sys)
@@ -116,7 +116,7 @@ def design(request, name):
                     "wp": wp
                 })
         if name == "Crusie Control":
-            sys = "servo"  #cruise
+            sys = "cruise"  #cruise
             simulator = "cruise"
             num, den = tf(sys)
         elif name == "Servomotor":
@@ -675,4 +675,3 @@ def servomotor(request):
             "setPoint":setPoint,
             "time":setTime,
         })
- 
