@@ -135,11 +135,6 @@ input:focus::placeholder {
 	flex-direction: row;
 	align-items: center;
 }
-.simulationContainerCruise{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
 .visualization {
 	width: 40%;
 	padding: 2%;
@@ -148,20 +143,6 @@ input:focus::placeholder {
 	border-right: 2px solid var(--main-color);
 	padding: 2%;
 	width: 60%;
-}
-
-.visualization2 {
-	padding: 2%;
-}
-
-.simulationContainerCruise .tResponse2{
-	border-bottom: 2px solid var(--main-color);
-}
-.tResponse2{
-	width: 47%;
-}
-#canvas2 > canvas:last-child{
-	width: 80%;
 }
 select{
 	color: var(--main-color);

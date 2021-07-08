@@ -529,12 +529,15 @@ def cruise(request):
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d)
+                
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
                 spec = stepinfo_sys(sys)
+            for key,value in spec.items():
+                spec[key] = round(value,5)
             return render(request, "main/cruise.html", {
                 "assignment":assignment,
                 "t": t,
@@ -664,6 +667,8 @@ def servomotor(request):
             else:
                 t, output = step_sys(sys, setTime, setPoint)
                 spec = stepinfo_sys(sys)
+            for key,value in spec.items():
+                spec[key] = round(value,5)
             return render(request, "main/servomotor.html", {
                 "assignment":assignment,
                 "t": t,

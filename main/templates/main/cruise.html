@@ -1,5 +1,5 @@
 {% extends 'main/layout.html' %} {% load static %} {% block head %}
-<title>cruise Simulator</title>
+<title>Cruise Control Simulator</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
@@ -11,14 +11,14 @@
 <link href="{% static 'main/css/simulator.css' %}" rel="stylesheet" />
 <style>
 	.flex-child {
-		margin-top: 1%;
+		margin-top: 0;
+		padding: 3% 2% 2% 2%;
 		flex: 0 70em;
 	}
 
 	.flex-child:first-child {
 		border-right: 2px solid #28a745;
 		padding: 5% 5% 2% 4%;
-		margin-right: 20px;
 	}
 </style>
 {% endblock head %} {% block body %} {{duplicateAssignment}} {% if assignment.riseTime %}
@@ -49,7 +49,7 @@
 </div>
 {% endif %}
 <div class="flex-container" style="display: flex">
-	<div class="flex-child" id="simulatorForm" style="flex: 1; margin-top: 0; padding: 3% 2% 2% 2%;">
+	<div class="flex-child" id="simulatorForm" style="flex: 1;">
 		<form class="cred_form" action="{% url 'cruise' %}" method="POST">
 			{% if assignment %}
 			<a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
@@ -301,15 +301,14 @@
 	<input type="text" style="display: none" id="animation" value="{{animation}}" />
 	<div class="flex-child" style="text-align: center">
 		<div>
-			<div class="simulationContainerCruise">
-				<div class="tResponse2">
+			<h1>System Response</h1>
+			<div class="simulationContainer">
+				<div class="tResponse">
 					<div>
 						<canvas id="myChart"></canvas>
 					</div>
 				</div>
-				<div class="tDashboard">
-					<div class="visualization2" id="canvas2"></div>
-				</div>
+				<div class="visualization" id="canvas"></div>
 			</div>
 		</div>
 	</div>
@@ -334,8 +333,6 @@
 		<button class="button" onclick="closeStepInfo();">Exit</button>
 	</div>
 </div>
-	
-</div>
 <script src=" {% static 'main/script/student.js' %}"></script>
 <script src=" {% static 'main/script/simulator.js' %}"></script>
 <script>
@@ -357,6 +354,7 @@
 		}
 		var v = document.getElementById("speed").value;
 		if (v ===""){
+			console.log("Nothing submitted yet")
 			var runSetupFuction = false;
 		}
 		else
@@ -391,8 +389,8 @@ let Application = PIXI.Application,
 
 //Create a Pixi Application
 let app = new Application({ 
-    width: 600, 
-    height: 300,                       
+    width: 400, 
+    height: 400,                       
     antialiasing: true, 
     transparent: true, 
     resolution: 1
@@ -401,7 +399,7 @@ let app = new Application({
     
 
 //Add the canvas that Pixi automatically created for you to the HTML document
-document.getElementById("canvas2").appendChild(app.view);
+document.getElementById("canvas").appendChild(app.view);
 
 loader
   .add("{% static 'main/images/dashboard.png' %}")
@@ -419,20 +417,25 @@ var timer;
 function setup() {
     
   style = new TextStyle({
-  fontFamily: "Arial",
-  fontSize: 24,
+  fontFamily: "Trebuchet MS",
+  fontSize: 40,
   fill: "white",
 });
+style2 = new TextStyle({
+fontFamily: "Arial",
+fontSize: 10,
+fill: "white",
+    });
 
-  message1 = new Text ('00', style)
-  message2 = new Text ('00', style)
+  message1 = new Text ('00.00', style)
+  message2 = new Text ('km/hr', style2)
   //Create the 'dashboard' sprite 
   dashboard = new Sprite(resources["{% static 'main/images/dashboard.png' %}"].texture);
   app.stage.addChild(dashboard);
   app.stage.addChild(message1);
   app.stage.addChild(message2);
-  message1.position.set(124, 139);
-  message2.position.set(450, 139);
+  message1.position.set(150, 175);
+  message2.position.set(189, 230);
 
 }
 
@@ -483,17 +486,19 @@ if (runSetupFuction)
 {
 	timer = setInterval(function()
                     {
-						message1.position.set(124, 139);
-   						message2.position.set(450, 139);	
+						// message1.position.set(124, 139);
+   						// message2.position.set(450, 139);	
                     v[count] = ((Math.floor(v[count]*100)/100))
                     //hp[count] = ((Math.floor(hp[count]*100)/100))
                     if (v[count] < 10)
                     {
+						console.log('vsim = '+v[count])
                           message1.text = '0' + v[count]
                           //message2.text = ('0'+hp[vount])
                     }
                     else
                     {
+						console.log('vsim = '+v[count])
                           message1.text = v[count]
                           //message2.text = (hp[vount])
                     }
@@ -550,21 +555,25 @@ if (runSetupFuction)
 {
 	timer = setInterval(function()
                     {
-						message1.position.set(112, 139);
-   						message2.position.set(450, 139);
+						// message1.position.set(112, 139);
+   						// message2.position.set(450, 139);
                     v[count] = ((Math.floor(v[count]*100)/100))
                     //hp[count] = ((Math.floor(hp[count]*100)/100))
                     if (v[count] < 10)
                     {
+						console.log('vsim = '+v[count])
                           message1.text = '0' + v[count]
                           //message2.text = ('0'+hp[vount])
                     }
                     else
                     {
+						console.log('vsim = '+v[count])
                           message1.text = v[count]
                           //message2.text = (hp[vount])
                     }
 				chart.data.labels.push(tarray[count]);
+				console.log('vchart = '+v[count])
+				console.log('t = '+ tarray[count])
 				chart.data.datasets[0].data.push(v[count]);
 				chart.update();
                         if (l == count + 1 )
