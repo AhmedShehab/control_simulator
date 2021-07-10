@@ -345,7 +345,7 @@ def action_sys(sys, final_time, setpoint):
 
     return t, action, max_action
 
-def stepinfo_sys(sys):
+def stepinfo_sys(sys,setPoint):
     ## open-loop system transfer function
     try:
         num, den = model(sys)
@@ -356,12 +356,12 @@ def stepinfo_sys(sys):
     Gs = control.tf(num, den)
     
     # closed-loop unity-feedback transfer function
-    Ts = control.feedback(Gs, 1)
+    Ts = control.feedback(Gs, 1) * setPoint
     spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
     
     return spec
 
-def stepinfo_zpk(sys, z, p, k):
+def stepinfo_zpk(sys, z, p, k,setPoint):
     ## open-loop system transfer function
     try:
         num, den = model(sys)
@@ -382,12 +382,12 @@ def stepinfo_zpk(sys, z, p, k):
     DsGs = Ds*Gs
 
     # closed-loop unity-feedback transfer function
-    Ts = control.feedback(DsGs, 1)
+    Ts = control.feedback(DsGs, 1) * setPoint
     spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
 
     return spec
 
-def stepinfo_pid(sys, Kp, Ki, Kd):
+def stepinfo_pid(sys, Kp, Ki, Kd,setPoint):
     ## open-loop system transfer function
     try:
         num, den = model(sys)
@@ -405,7 +405,7 @@ def stepinfo_pid(sys, Kp, Ki, Kd):
     DsGs = Ds*Gs
 
     # closed-loop unity-feedback transfer function
-    Ts = control.feedback(DsGs, 1)
+    Ts = control.feedback(DsGs, 1) * setPoint
     spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
 
     return spec

@@ -15,6 +15,14 @@
 			height: 50vh;
 		}
 	}
+	a{
+		color:green;
+		padding:5px
+	}
+	a:hover{
+		color:white;
+		padding:5px;
+	}
 </style>
 {% endblock head %} {% block body %}
 <div class="test">
@@ -30,11 +38,11 @@
 		Disabled Temporarely {% endcomment %} {% if message %}
 		<h5 style="color: red">{{message}}</h5>
 		{% endif %}
-		<a href="#" class="signup">Forgot password?</a>
-		<br />
+		{% comment %} <a href="#" >Forgot password?</a>
+		<br /> {% endcomment %}
 		<button class="button" type="submit" style="margin-right: 20px; transition: 0.3s; outline: none; padding: 7px">Login</button>
 		<br />
-		<a class="signup" href="{% url 'register' %}">Don't have an account ? Sign Up</a>
+		<a  href="{% url 'register' %}">Don't have an account ? Sign Up</a>
 	</form>
 </div>
 {% endblock body %}

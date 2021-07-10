@@ -1,7 +1,6 @@
 from os import remove, system
 from django import http
 from django.contrib.auth import authenticate, login, logout
-from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -202,7 +201,6 @@ def register(request):
             major= request.POST.get("major")
             email = request.POST.get("email")
             code=request.POST.get("code")
-            agree=request.POST.get("agree")
             password = request.POST.get("password")
             confirmation = request.POST.get("confirmation")
             # Attempt to create new user
@@ -233,6 +231,8 @@ def register(request):
                     user.save()
                     instructor=Instructor.objects.create(credentials=user,major=major)
                     instructor.save()
+                    login(request, user)
+                    return HttpResponseRedirect(reverse("instructor"))
                 except:
                     return render(request, "main/register.html", {
                         "instMSG": "Username already taken.",
@@ -263,16 +263,6 @@ def register(request):
                         "code": code,
                         "email": email,
                     })
-                # Ensure that the user agrees to all terms and privacy policy
-                if not request.POST.get("agree")=="on":
-                    return render(request, "main/register.html", {
-                        "studMSG": "You need to agree on the terms in order to sign up.",
-                        "username": username,
-                        "first": first,
-                        "last": last,
-                        "code": code,
-                        "email": email,
-                   })  
                 try: # Creating New User
                     try : # Check if the Course Code is valid.
                         temp = UUID(code,version=4)
@@ -290,6 +280,8 @@ def register(request):
                     user.save()
                     student=Student.objects.create(credentials=user,courses=course)
                     student.save()
+                    login(request, user)
+                    return HttpResponseRedirect(reverse("student"))
                 except:
                     return render(request, "main/register.html", {
                         "studMSG": "Username already taken.",
@@ -299,17 +291,6 @@ def register(request):
                         "code": code,
                         "email": email,
                     })
-                if not code:
-                    return render(request, "main/register.html", {
-                        "studMSG": "Make sure to enter your course code correctly.",
-                        "username": username,
-                        "first": first,
-                        "last": last,
-                        "code": code,
-                        "email": email,
-                    })
-            login(request, user)
-            return HttpResponseRedirect(reverse("home"))
         else:
             return render(request, "main/register.html")
 
@@ -322,7 +303,10 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("home"))
+            if user.status == "s":
+                return HttpResponseRedirect(reverse("student"))
+            else:
+                return HttpResponseRedirect(reverse("instructor"))
         else:
             return render(request, "main/login.html", {
                 "message": "Invalid username and/or password."
@@ -528,14 +512,13 @@ def cruise(request):
                 if not d:
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
-                spec = stepinfo_pid(sys, p, i, d)
-                
+                spec = stepinfo_pid(sys, p, i, d,setPoint)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
-                spec = stepinfo_zpk(sys, zero, pole, gain)
+                spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
-                spec = stepinfo_sys(sys)
+                spec = stepinfo_sys(sys,setPoint)
             for key,value in spec.items():
                 spec[key] = round(value,5)
             return render(request, "main/cruise.html", {
@@ -660,13 +643,13 @@ def servomotor(request):
                 if not d:
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
-                spec = stepinfo_pid(sys, p, i, d)
+                spec = stepinfo_pid(sys, p, i, d,setPoint)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
-                spec = stepinfo_zpk(sys, zero, pole, gain)
+                spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
-                spec = stepinfo_sys(sys)
+                spec = stepinfo_sys(sys,setPoint)
             for key,value in spec.items():
                 spec[key] = round(value,5)
             return render(request, "main/servomotor.html", {
