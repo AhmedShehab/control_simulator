@@ -457,7 +457,7 @@ def cruise(request):
         removeAssignment= request.POST.get("removeAssignment",0)
         if removeAssignment == "1":
             del request.session["id"]
-            return HttpResponseRedirect(reverse("servomotor"))
+            return HttpResponseRedirect(reverse("cruise"))
         if animation!="true":
             animation="false"
         PIDController={
@@ -535,6 +535,7 @@ def cruise(request):
                 "pole":pole,
                 "gain":gain,
                 "stepinfo": info,
+                "animation":animation,
                 "spec": spec
         })
     else:
