@@ -319,9 +319,13 @@ def action_sys(sys, final_time, setpoint):
 
     # simulation time parameters
     initial_time = 0
-    nsteps = 40 * final_time   # number of time steps
+    nsteps = 40 * int(final_time)   # number of time steps
     t = np.linspace(initial_time, final_time, round(nsteps))
+    print(t)
+    print("====")
     output, t = matlab.step(Ts, t)
+    print(t)
+    print("****")
     output = setpoint*output
 
     # calculate list of error
@@ -333,7 +337,64 @@ def action_sys(sys, final_time, setpoint):
 
     # covert numpy arrays to lists
     t = list(t)
+    print(t)
+    print("&&&")
     action = list(action)
+
+    # round lists to 6 decimal digits
+    ndigits = 6
+    t = [round(num, ndigits) for num in t]
+    action = [round(num, ndigits) for num in action]
+    print(t)
+    print("$$$$")
+    # calculate maximum control action
+    max_action = max(action)
+    min_action = min(action)
+    return t, action, min_action, max_action
+
+def action_pid(sys, final_time, setpoint, Kp, Ki, Kd):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+    s = matlab.tf('s')
+    Ds = Kp + Ki/s + Kd*s
+ 
+    # closed-loop unity-feedback transfer function
+    Ts = control.feedback(Ds*Gs, 1)
+
+    # simulation time parameters
+    initial_time = 0
+    nsteps = 40 * int(final_time)   # number of time steps
+    t = np.linspace(initial_time, final_time, round(nsteps))
+    print(t)
+    print("====")
+    print(len(t))
+    output, t = matlab.step(Ts, t)
+    output = setpoint*output
+    print(t)
+    print("$$$$")
+    print(len(t))
+    # calculate list of error
+    setpoint_arr = setpoint * np.ones(nsteps)
+    err = setpoint_arr - output
+    
+    # calculate control action
+    action = matlab.lsim(Ds, err, t)
+
+    # covert numpy arrays to lists
+    t = list(t)
+    print(t)
+    print("####")
+    print(len(t))
+    action = list(action[0])
+    print(action)
+    print("action1")
+    #print(action)
 
     # round lists to 6 decimal digits
     ndigits = 6
@@ -342,8 +403,63 @@ def action_sys(sys, final_time, setpoint):
 
     # calculate maximum control action
     max_action = max(action)
+    min_action = min(action)
+    return t, action, min_action, max_action
 
-    return t, action, max_action
+def action_zpk(sys, final_time, setpoint, z, p, k):
+    ## open-loop system transfer function
+    try:
+        num, den = model(sys)
+    except:
+        # for error detection
+        print("Err: system in not defined")
+        return
+    Gs = control.tf(num, den)
+    z = np.array([z])
+    p = np.array([p])
+    num, den = matlab.zpk2tf(z, p, k)
+    Ds = matlab.tf(num, den)
+    # closed-loop unity-feedback transfer function
+    Ts = control.feedback(Ds*Gs, 1)
+
+    # simulation time parameters
+    initial_time = 0
+    nsteps = 40 * int(final_time)   # number of time steps
+    t = np.linspace(initial_time, final_time, round(nsteps))
+    print(t)
+    print("====")
+    print(len(t))
+    output, t = matlab.step(Ts, t)
+    output = setpoint*output
+    print(t)
+    print("$$$$")
+    print(len(t))
+    # calculate list of error
+    setpoint_arr = setpoint * np.ones(nsteps)
+    err = setpoint_arr - output
+    
+    # calculate control action
+    action = matlab.lsim(Ds, err, t)
+
+    # covert numpy arrays to lists
+    t = list(t)
+    print(t)
+    print("####")
+    print(len(t))
+    action = list(action[0])
+    print(action)
+    print("action1")
+    #print(action)
+
+    # round lists to 6 decimal digits
+    ndigits = 6
+    t = [round(num, ndigits) for num in t]
+    action = [round(num, ndigits) for num in action]
+
+    # calculate maximum control action
+    max_action = max(action)
+    min_action = min(action)
+    return t, action, min_action, max_action
 
 def stepinfo_sys(sys,setPoint):
     ## open-loop system transfer function

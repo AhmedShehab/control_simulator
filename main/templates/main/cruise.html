@@ -10,49 +10,45 @@
 <link href="{% static 'main/css/Layout.css' %}" rel="stylesheet" />
 <link href="{% static 'main/css/simulator.css' %}" rel="stylesheet" />
 <style>
-	.flex-child {
-		margin-top: 0;
-		padding: 3% 2% 2% 2%;
-		flex: 0 70em;
-	}
-
-	.flex-child:first-child {
-		border-right: 2px solid #28a745;
-		padding: 5% 5% 2% 4%;
-	}
+    .flex-child {
+        margin-top: 0;
+        padding: 3% 2% 2% 2%;
+        flex: 0 70em;
+    }
+    
+    .flex-child:first-child {
+        border-right: 2px solid #28a745;
+        padding: 5% 5% 2% 4%;
+    }
 </style>
 {% endblock head %} {% block body %} {{duplicateAssignment}} {% if assignment.riseTime %}
 <div class="{{assignment.id}} assignPosition">
-	<div class="assign_child">
-		<h3>Assignment Requirements</h3>
-		<strong>Assignment: {{assignment.subject}} </strong>
-		<br />
-		Rise Time = {{assignment.riseTime}}s
-		<br />
-		Settling Time = {{assignment.setTime}}s
-		<br />
-		Percent overshoot = {{assignment.pOvershoot}}%
-		<br />
-		steady state error = {{assignment.Ess}}
-		<br />
-		<button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
-	</div>
+    <div class="assign_child">
+        <h3>Assignment Requirements</h3>
+        <strong>Assignment: {{assignment.subject}} </strong>
+        <br /> Rise Time = {{assignment.riseTime}}s
+        <br /> Settling Time = {{assignment.setTime}}s
+        <br /> Percent overshoot = {{assignment.pOvershoot}}%
+        <br /> steady state error = {{assignment.Ess}}
+        <br />
+        <button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
+    </div>
 </div>
 {% else %}
 <div class="{{assignment.id}} assignPosition">
-	<div class="assign_child">
-		<h3>Requirements Description</h3>
-		<p>{{assignment.description}}</p>
-		<br />
-		<button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
-	</div>
+    <div class="assign_child">
+        <h3>Requirements Description</h3>
+        <p>{{assignment.description}}</p>
+        <br />
+        <button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
+    </div>
 </div>
 {% endif %}
 <div class="flex-container" style="display: flex">
-	<div class="flex-child" id="simulatorForm" style="flex: 1;">
-		<form class="cred_form" action="{% url 'cruise' %}" method="POST">
-			{% if assignment %}
-			<a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
+    <div class="flex-child" id="simulatorForm" style="flex: 1;">
+        <form class="cred_form" action="{% url 'cruise' %}" method="POST">
+            {% if assignment %}
+            <a class="btn draw" id="{{assignment.id}}" style="display: inline" type="button" onclick="openReqForm({{assignment.id}});">
 				Assignment Requirements </a
 			><span><button class="btn draw removeAssignment" name="removeAssignment" value="1" type="submit">X</button></span>
 			{% endif %}
@@ -287,316 +283,300 @@
 
 			<div style="text-align: center">
 				<a class="btn draw" href="{% url 'design' 'Cruise Control' %}">Design by Frequency</a>
-			</div>
-			{% if stepinfo %}
-			<div style="text-align: center; margin-top: 2%;">
-				<button class="btn draw" onclick="openStepInfo();">Show Step info.</button>
-			</div>
-			{% endif %}
-		</form>
-	</div>
-	<input type="text" style="display: none" id="speed" value="{{output}}" />
-	<input type="text" style="display: none" id="time" value="{{time}}" />
-	<input type="text" style="display: none" id="tarray" value="{{t}}" />
-	<input type="text" style="display: none" id="animation" value="{{animation}}" />
-	<div class="flex-child" style="text-align: center">
-		<div>
-			<h1>System Response</h1>
-			<div class="simulationContainer">
-				<div class="tResponse">
-					<div>
-						<canvas id="myChart"></canvas>
-					</div>
-				</div>
-				<div class="visualization" id="canvas"></div>
-			</div>
-		</div>
-	</div>
+    </div>
+    {% if stepinfo %}
+    <div style="text-align: center; margin-top: 2%;">
+        <button class="btn draw" onclick="openStepInfo();">Show Step info.</button>
+        <p style="color:red; font-size: small;">actuation range is {{min_ac}}:{{max_ac}}</p>
+    </div>
+    {% endif %}
+    </form>
+</div>
+<input type="text" style="display: none" id="speed" value="{{output}}" />
+<input type="text" style="display: none" id="time" value="{{time}}" />
+<input type="text" style="display: none" id="tarray" value="{{t}}" />
+<input type="text" style="display: none" id="animation" value="{{animation}}" />
+<div class="flex-child" style="text-align: center">
+    <div>
+        <h1>System Response</h1>
+        <div class="simulationContainer">
+            <div class="tResponse">
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <div class="visualization" id="canvas"></div>
+        </div>
+    </div>
+</div>
 </div>
 
 <div class="desc" id="desc">
-	<button id="descButton" class="descButton" onclick="run();">Show System Description<span class="arrowUp"></span></button>
-	<div class="content">
-		<iframe id="pdf" src="about:cruise"></iframe>
-	</div>
+    <button id="descButton" class="descButton" onclick="run();">Show System Description<span class="arrowUp"></span></button>
+    <div class="content">
+        <iframe id="pdf" src="about:cruise"></iframe>
+    </div>
 </div>
 <div class=" assignPosition" id="stepInfo">
-	<div class="assign_child">
-		<h3>Step Info.</h3>
-		<p class="removePadding">RiseTime: {{ spec.RiseTime}} sec</p>
-		<p class="removePadding">SettlingTime: {{ spec.SettlingTime}} sec</p>
-		<p class="removePadding">Overshoot: {{ spec.Overshoot}} %</p>
-		<p class="removePadding">Undershoot: {{ spec.Undershoot}} %</p>
-		<p class="removePadding">Peak: {{ spec.Peak}}</p>
-		<p class="removePadding">PeakTime: {{ spec.PeakTime}} sec</p>
-		<p class="removePadding">SteadyStateValue: {{ spec.SteadyStateValue}}</p>
-		<button class="button" onclick="closeStepInfo();">Exit</button>
-	</div>
+    <div class="assign_child">
+        <h3>Step Info.</h3>
+        <p class="removePadding">RiseTime: {{ spec.RiseTime}} sec</p>
+        <p class="removePadding">SettlingTime: {{ spec.SettlingTime}} sec</p>
+        <p class="removePadding">Overshoot: {{ spec.Overshoot}} %</p>
+        <p class="removePadding">Undershoot: {{ spec.Undershoot}} %</p>
+        <p class="removePadding">Peak: {{ spec.Peak}}</p>
+        <p class="removePadding">PeakTime: {{ spec.PeakTime}} sec</p>
+        <p class="removePadding">SteadyStateValue: {{ spec.SteadyStateValue}}</p>
+        <button class="button" onclick="closeStepInfo();">Exit</button>
+    </div>
 </div>
 <script src=" {% static 'main/script/student.js' %}"></script>
 <script src=" {% static 'main/script/simulator.js' %}"></script>
 <script>
-	window.addEventListener("load", (event) => {
-		var name = document.getElementById("selector").value;
-		var elements = document.getElementsByClassName("option");
-		for (let i = 0; i < elements.length; i++) {
-			var element = elements[i];
-			if (element.id == name) {
-				document.getElementById(name).style.display = "block";
-			} else {
-				element.style.display = "none";
-			}
-		}
-		if ("{{assignment.controller}}" != "") {
-			document.getElementById("selector").value = "{{assignment.controller}}";
-			selector.disabled=true
-			display();
-		}
-		var v = document.getElementById("speed").value;
-		if (v ===""){
-			console.log("Nothing submitted yet")
-			var runSetupFuction = false;
-		}
-		else
-		{
-			runSetupFuction= true;		
-			v = v.slice(1);
-			v = v.slice(0, v.length - 1);
-			v = v.split(",");
-			v = v.map(function (element) {
-					return parseFloat(element);
-				});	
-		}	
+    window.addEventListener("load", (event) => {
+        var name = document.getElementById("selector").value;
+        var elements = document.getElementsByClassName("option");
+        for (let i = 0; i < elements.length; i++) {
+            var element = elements[i];
+            if (element.id == name) {
+                document.getElementById(name).style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+        }
+        if ("{{assignment.controller}}" != "") {
+            document.getElementById("selector").value = "{{assignment.controller}}";
+            selector.disabled = true
+            display();
+        }
+        var v = document.getElementById("speed").value;
+        if (v === "") {
+            console.log("Nothing submitted yet")
+            var runSetupFuction = false;
+        } else {
+            runSetupFuction = true;
+            v = v.slice(1);
+            v = v.slice(0, v.length - 1);
+            v = v.split(",");
+            v = v.map(function(element) {
+                return parseFloat(element);
+            });
+        }
 
-		var tarray = document.getElementById('tarray').value;
-		tarray = tarray.slice(1);
-		tarray = tarray.slice(0, tarray.length - 1);
-		tarray = tarray.split(',')
-		tarray = tarray.map(function(element){
-		return parseFloat(element)
-		});
+        var tarray = document.getElementById('tarray').value;
+        tarray = tarray.slice(1);
+        tarray = tarray.slice(0, tarray.length - 1);
+        tarray = tarray.split(',')
+        tarray = tarray.map(function(element) {
+            return parseFloat(element)
+        });
 
 
-//Aliases
-let Application = PIXI.Application,
-    Container = PIXI.Container,
-    loader = PIXI.loader,
-    resources = PIXI.loader.resources,
-    TextureCache = PIXI.utils.TextureCache,
-    Text = PIXI.Text,
-    TextStyle = PIXI.TextStyle,
-    Sprite = PIXI.Sprite;
+        //Aliases
+        let Application = PIXI.Application,
+            Container = PIXI.Container,
+            loader = PIXI.loader,
+            resources = PIXI.loader.resources,
+            TextureCache = PIXI.utils.TextureCache,
+            Text = PIXI.Text,
+            TextStyle = PIXI.TextStyle,
+            Sprite = PIXI.Sprite;
 
-//Create a Pixi Application
-let app = new Application({ 
-    width: 400, 
-    height: 400,                       
-    antialiasing: true, 
-    transparent: true, 
-    resolution: 1
-  }
-);
-    
+        //Create a Pixi Application
+        let app = new Application({
+            width: 400,
+            height: 400,
+            antialiasing: true,
+            transparent: true,
+            resolution: 1
+        });
 
-//Add the canvas that Pixi automatically created for you to the HTML document
-document.getElementById("canvas").appendChild(app.view);
 
-loader
-  .add("{% static 'main/images/dashboard.png' %}")
-  .load(setup);
+        //Add the canvas that Pixi automatically created for you to the HTML document
+        document.getElementById("canvas").appendChild(app.view);
 
-//Define any variables that are used in more than one function
-let dashboard;
-let style;
-let message1; 
-let message2;  
-var count = 0;
-var l =v.length     
-var timer;
+        loader
+            .add("{% static 'main/images/dashboard.png' %}")
+            .load(setup);
 
-function setup() {
-    
-  style = new TextStyle({
-  fontFamily: "Trebuchet MS",
-  fontSize: 40,
-  fill: "white",
-});
-style2 = new TextStyle({
-fontFamily: "Arial",
-fontSize: 10,
-fill: "white",
+        //Define any variables that are used in more than one function
+        let dashboard;
+        let style;
+        let message1;
+        let message2;
+        var count = 0;
+        var l = v.length
+        var timer;
+
+        function setup() {
+
+            style = new TextStyle({
+                fontFamily: "Trebuchet MS",
+                fontSize: 40,
+                fill: "white",
+            });
+            style2 = new TextStyle({
+                fontFamily: "Arial",
+                fontSize: 10,
+                fill: "white",
+            });
+
+            message1 = new Text('00.00', style)
+            message2 = new Text('km/hr', style2)
+                //Create the 'dashboard' sprite 
+            dashboard = new Sprite(resources["{% static 'main/images/dashboard.png' %}"].texture);
+            app.stage.addChild(dashboard);
+            app.stage.addChild(message1);
+            app.stage.addChild(message2);
+            message1.position.set(150, 175);
+            message2.position.set(189, 230);
+
+        }
+
+
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var ani = document.getElementById('animation').value;
+        if (ani == "true") {
+            duration = 0;
+            var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: "line",
+
+                // The data for our dataset
+                data: {
+                    labels: tarray,
+                    datasets: [{
+                        label: "Speed",
+                        borderColor: 'rgb(40,167,69)',
+                        data: v,
+                    }, ],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                //sampleSize : 2000
+                                maxTicksLimit: 10,
+                            },
+                        }, ],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                    },
+                    animation: {
+                        duration: duration,
+                        easing: "easeInCirc",
+                    },
+                    hover: {
+                        duration: 0,
+                    },
+                    responsiveAnimationDuration: 0,
+                },
+            });
+            if (runSetupFuction) {
+                timer = setInterval(function() {
+                    // message1.position.set(124, 139);
+                    // message2.position.set(450, 139);	
+                    v[count] = ((Math.floor(v[count] * 100) / 100))
+                        //hp[count] = ((Math.floor(hp[count]*100)/100))
+                    if (v[count] < 10) {
+                        console.log('vsim = ' + v[count])
+                        message1.text = '0' + v[count]
+                            //message2.text = ('0'+hp[vount])
+                    } else {
+                        console.log('vsim = ' + v[count])
+                        message1.text = v[count]
+                            //message2.text = (hp[vount])
+                    }
+                    if (l == count + 1) {
+                        clearInterval(timer);
+                        return;
+                    }
+
+                    count++;
+                }, tarray[1] * 1000)
+            }
+        } else {
+            var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: "line",
+
+                // The data for our dataset
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "Speed",
+                        borderColor: 'rgb(40,167,69)',
+                        data: [],
+                    }, ],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                maxTicksLimit: 10,
+                            },
+                        }, ],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                    },
+                    animation: {
+                        duration: 0,
+                        easing: "easeInCirc",
+                    },
+                    hover: {
+                        duration: 0,
+                    },
+                    responsiveAnimationDuration: 0,
+                },
+            });
+            if (runSetupFuction) {
+                timer = setInterval(function() {
+                    // message1.position.set(112, 139);
+                    // message2.position.set(450, 139);
+                    v[count] = ((Math.floor(v[count] * 100) / 100))
+                        //hp[count] = ((Math.floor(hp[count]*100)/100))
+                    if (v[count] < 10) {
+                        console.log('vsim = ' + v[count])
+                        message1.text = '0' + v[count]
+                            //message2.text = ('0'+hp[vount])
+                    } else {
+                        console.log('vsim = ' + v[count])
+                        message1.text = v[count]
+                            //message2.text = (hp[vount])
+                    }
+                    chart.data.labels.push(tarray[count]);
+                    console.log('vchart = ' + v[count])
+                    console.log('t = ' + tarray[count])
+                    chart.data.datasets[0].data.push(v[count]);
+                    chart.update();
+                    if (l == count + 1) {
+                        clearInterval(timer);
+                        return;
+                    }
+
+                    count++;
+                }, tarray[1] * 1000)
+            }
+
+            /*var interval = setInterval(function () {
+
+            	if (l == counter + 1) {
+            		clearInterval(interval);
+            		return;
+            	}				
+            	counter++;
+            }, tarray[1]*1000);*/
+        }
+
     });
-
-  message1 = new Text ('00.00', style)
-  message2 = new Text ('km/hr', style2)
-  //Create the 'dashboard' sprite 
-  dashboard = new Sprite(resources["{% static 'main/images/dashboard.png' %}"].texture);
-  app.stage.addChild(dashboard);
-  app.stage.addChild(message1);
-  app.stage.addChild(message2);
-  message1.position.set(150, 175);
-  message2.position.set(189, 230);
-
-}
-
-    
-var ctx = document.getElementById("myChart").getContext("2d");
-var ani = document.getElementById('animation').value;
-if (ani== "true") {
-			duration = 0;
-			var chart = new Chart(ctx, {
-				// The type of chart we want to create
-				type: "line",
-
-				// The data for our dataset
-				data: {
-					labels: tarray,
-					datasets: [
-						{
-							label: "Speed",
-							borderColor: 'rgb(40,167,69)',
-							data: v,
-						},
-					],
-				},
-				options: {
-					scales: {
-						xAxes: [
-							{
-								ticks: {
-									beginAtZero: true,
-									//sampleSize : 2000
-									maxTicksLimit: 10,
-								},
-							},
-						],
-						yAxes: [{ ticks: { beginAtZero: true } }],
-					},
-					animation: {
-						duration: duration,
-						easing: "easeInCirc",
-					},
-					hover: {
-						duration: 0,
-					},
-					responsiveAnimationDuration: 0,
-				},
-			});
-if (runSetupFuction)
-{
-	timer = setInterval(function()
-                    {
-						// message1.position.set(124, 139);
-   						// message2.position.set(450, 139);	
-                    v[count] = ((Math.floor(v[count]*100)/100))
-                    //hp[count] = ((Math.floor(hp[count]*100)/100))
-                    if (v[count] < 10)
-                    {
-						console.log('vsim = '+v[count])
-                          message1.text = '0' + v[count]
-                          //message2.text = ('0'+hp[vount])
-                    }
-                    else
-                    {
-						console.log('vsim = '+v[count])
-                          message1.text = v[count]
-                          //message2.text = (hp[vount])
-                    }
-                        if (l == count + 1 )
-                        {
-                                clearInterval(timer);
-								return;
-                        }
-                        
-                    count++; 
-                    },tarray[1]*1000)
-}			
-		} 
-		else 
-		{
-			var chart = new Chart(ctx, {
-				// The type of chart we want to create
-				type: "line",
-
-				// The data for our dataset
-				data: {
-					labels: [],
-					datasets: [
-						{
-							label: "Speed",
-							borderColor: 'rgb(40,167,69)',
-							data: [],
-						},
-					],
-				},
-				options: {
-					scales: {
-						xAxes: [
-							{
-								ticks: {
-									beginAtZero: true,
-									maxTicksLimit: 10,
-								},
-							},
-						],
-						yAxes: [{ ticks: { beginAtZero: true } }],
-					},
-					animation: {
-						duration: 0,
-						easing: "easeInCirc",
-					},
-					hover: {
-						duration: 0,
-					},
-					responsiveAnimationDuration: 0,
-				},
-			});
-			if (runSetupFuction)
-{
-	timer = setInterval(function()
-                    {
-						// message1.position.set(112, 139);
-   						// message2.position.set(450, 139);
-                    v[count] = ((Math.floor(v[count]*100)/100))
-                    //hp[count] = ((Math.floor(hp[count]*100)/100))
-                    if (v[count] < 10)
-                    {
-						console.log('vsim = '+v[count])
-                          message1.text = '0' + v[count]
-                          //message2.text = ('0'+hp[vount])
-                    }
-                    else
-                    {
-						console.log('vsim = '+v[count])
-                          message1.text = v[count]
-                          //message2.text = (hp[vount])
-                    }
-				chart.data.labels.push(tarray[count]);
-				console.log('vchart = '+v[count])
-				console.log('t = '+ tarray[count])
-				chart.data.datasets[0].data.push(v[count]);
-				chart.update();
-                        if (l == count + 1 )
-                        {
-                                clearInterval(timer);
-								return;
-                        }
-                        
-                    count++; 
-                    },tarray[1]*1000)
-}			
-			
-			/*var interval = setInterval(function () {
-
-				if (l == counter + 1) {
-					clearInterval(interval);
-					return;
-				}				
-				counter++;
-			}, tarray[1]*1000);*/
-		}
-	
-	});
 </script>
 <script src="{% static 'main/script/pixi.min.js' %}"></script>
 <script src="{% static 'main/script/pixi.min.js.map' %}"></script>

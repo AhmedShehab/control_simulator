@@ -513,12 +513,21 @@ def cruise(request):
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
+                tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
+                print(action)
+                print(max_ac)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
+                tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
+                print(action)
+                print(max_ac)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
                 spec = stepinfo_sys(sys,setPoint)
+                tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
+                print(len(action))
+                print(max_ac)
             for key,value in spec.items():
                 spec[key] = round(value,5)
             return render(request, "main/cruise.html", {
@@ -536,7 +545,9 @@ def cruise(request):
                 "gain":gain,
                 "stepinfo": info,
                 "animation":animation,
-                "spec": spec
+                "spec": spec,
+                "max_ac": max_ac,
+                "min_ac": min_ac
         })
     else:
         return render(request, "main/cruise.html", {
@@ -645,12 +656,21 @@ def servomotor(request):
                     d = 0
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
+                tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
+                print(action)
+                print(max_ac)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
+                tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
+                print(action)
+                print(max_ac)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
                 spec = stepinfo_sys(sys,setPoint)
+                tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
+                print(len(action))
+                print(max_ac)
             for key,value in spec.items():
                 spec[key] = round(value,5)
             return render(request, "main/servomotor.html", {
@@ -668,7 +688,9 @@ def servomotor(request):
                 "gain":gain,
                 "animation":animation,
                 "stepinfo": info,
-                "spec": spec
+                "spec": spec,
+                "max_ac": max_ac,
+                "min_ac": min_ac
         })
     else:
         return render(request, "main/servomotor.html", {
