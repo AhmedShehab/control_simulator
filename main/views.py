@@ -425,11 +425,11 @@ def cruise(request):
                     "RiseTime":assignment.riseTime,
                     "SettlingTime":assignment.setTime,
                     "SteadyStateError":assignment.Ess,
-                    "Overshoot":assignment.pOvershoot
+                    "Overshoot":assignment.pOvershoot,
                 }
             else:
                 assignmentRequirements={
-                    "Description":assignment.description
+                    "Description":assignment.description,
                 }
             pass
         else:
@@ -567,11 +567,11 @@ def servomotor(request):
                     "RiseTime":assignment.riseTime,
                     "SettlingTime":assignment.setTime,
                     "SteadyStateError":assignment.Ess,
-                    "Overshoot":assignment.pOvershoot
+                    "Overshoot":assignment.pOvershoot,
                 }
             else:
                 assignmentRequirements={
-                    "Description":assignment.description
+                    "Description":assignment.description,
                 }
             pass
         else:
@@ -623,7 +623,6 @@ def servomotor(request):
         }
         submit= request.POST.get("submit")
         if submit== "submit":
-            del request.session["id"]
             if Submission.objects.filter(assignment=assignment):
                 test = Submission.objects.filter(assignment=assignment)
                 for something in test:
@@ -631,6 +630,7 @@ def servomotor(request):
                         return render(request,"main/servomotor.html",{
                             "duplicateAssignment":"Sorry you can't submit the same assignment twice",
                         })
+            del request.session["id"]
             subDate = date.today().strftime("%Y-%m-%d")
             PIDParamaters= f"Propotional Constant(P): {p}, \n Differential Constant(D): {i}, \n Integral Constant(I): {d},"
             ZPkParamaters= f"Gain: {gain}, \n Pole: {pole}, \n Zero: {zero}"
@@ -654,6 +654,7 @@ def servomotor(request):
                     i = 0
                 if not d:
                     d = 0
+                print(setPoint)
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
                 tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
