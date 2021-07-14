@@ -70,6 +70,8 @@
 		<h3>System Requirements</h3>
 		System: {{assignment.simulator}}
 		<br />
+		Set Point: {{assignment.setPoint}}
+		<br>
 		Controller: {{assignment.controller}}
 		<br />
 		Rise Time = {{assignment.riseTime}}s
@@ -84,17 +86,13 @@
 		<form action="{% url 'student' %}" method="POST">
 			{% csrf_token %}
 			<button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
-		</form>
-		{% elif assignment.simulator == "Adaptive Cruise control" %}
-		<form action="{% url 'student' %}" method="POST">
-			{% csrf_token %}
-			<button class="button2" type="submit" name="assignment" value="{{assignment.id}}">Submit Assignment</button>
+			<button	button class="button" type="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
 		</form>
 		{% elif assignment.simulator == "Servo Motor" %}
 		<form action="{% url 'student' %}" method="POST">
 			{% csrf_token %}
 			<button class="button2" name="assignment" value="{{assignment.id}}" type="submit">Submit Assignment</button>
-			<button class="button" type="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
+			<button	button class="button" type="button" onclick="closeReqForm({{assignment.id}});">Cancel</button>
 		</form>
 		{% endif %}
 	</div>

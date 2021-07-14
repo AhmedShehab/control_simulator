@@ -26,6 +26,7 @@
     <div class="assign_child">
         <h3>Assignment Requirements</h3>
         <strong>Assignment: {{assignment.subject}} </strong>
+        <br /> setPoint = {{assignment.setPoint}}
         <br /> Rise Time = {{assignment.riseTime}}s
         <br /> Settling Time = {{assignment.setTime}}s
         <br /> Percent overshoot = {{assignment.pOvershoot}}%
@@ -334,10 +335,23 @@
                 element.style.display = "none";
             }
         }
+
+        // If there is assignment preset the form Requirements
         if ("{{assignment.controller}}" != "") {
+            // Select assignment controller and disables the selector
             var selector = document.getElementById("selector")
             selector.value = "{{assignment.controller}}";
             selector.disabled = true
+            
+            // Disable set point fields and display the required set Point
+            document.getElementsByName("setPoint").forEach(element => {
+                element.style.display= "none";
+                var span = document.createElement('span')
+                span.innerHTML="<h6>{{assignment.setPoint}}</h6>"
+                span.style.textAlign='left'
+                element.parentNode.append(span)
+            })
+            
             display();
         }
         var d = document.getElementById("degrees").value;

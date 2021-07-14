@@ -9,7 +9,7 @@ class User(AbstractUser,models.Model):
         ("s","s"),
         ("i","i")
     ]
-    status     = models.CharField(max_length=5,choices=status_choices,default="s")
+    status      = models.CharField(max_length=5,choices=status_choices,default="s")
 
 class Assignment(models.Model):
     subject     = models.CharField(max_length=64,null=True)
@@ -20,6 +20,7 @@ class Assignment(models.Model):
     setTime     = models.FloatField(null=True)
     Ess         = models.FloatField(null=True)
     pOvershoot  = models.FloatField(null=True)
+    setPoint    = models.FloatField(null= True)
     description = models.TextField(null = True)
     controller  = models.CharField(max_length=50, null=True)
     simulator_choices=[

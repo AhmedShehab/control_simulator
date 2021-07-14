@@ -389,12 +389,13 @@ def instructor(request):
             overshoot = req.get("overshoot")
             error = req.get("error")
             desc = req.get("desc")
+            setPoint = req.get("setPoint")
             controller= req.get("controller")
             if req.get("grade")=="auto":
-                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=5,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller)
+                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=5,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller,setPoint=setPoint)
                 assign.save()
             elif req.get("grade")=="receive":
-                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=5, instructor=request.user.username,description=desc,controller=controller)
+                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=5, instructor=request.user.username,description=desc,controller=controller,setPoint=setPoint)
                 assign.save()
             course=Course.objects.get(name=course)
             course.assignments.add(assign)
@@ -558,6 +559,8 @@ def cruise(request):
                 "unstable": unstable
         })
     else:
+        if assignment:
+            setPoint = float(assignment.setPoint)
         return render(request, "main/cruise.html", {
             "assignment":assignment,
             "remember":remember,
@@ -708,6 +711,8 @@ def servomotor(request):
                 "unstable": unstable
         })
     else:
+        if assignment:
+            setPoint = float(assignment.setPoint)
         return render(request, "main/servomotor.html", {
             "assignment":assignment,
             "remember":remember,

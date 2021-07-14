@@ -21,6 +21,7 @@
 }
 .grade {
 	display: grid;
+	place-content: center;
 	border-bottom: var(--main-color) solid 3px;
 }
 .button,
@@ -40,7 +41,8 @@
 	color: white;
 	background-color: var(--main-color);
 }
-.button:hover.button2:hover {
+.button:hover,
+.button2:hover {
 	cursor: pointer;
 	border-color: var(--main-color);
 }
@@ -50,7 +52,7 @@
 }
 .button2:hover {
 	color: white;
-	background-color: var(--main-color);
+	background-color:#30c553;
 }
 .link {
 	color: var(--main-color);
