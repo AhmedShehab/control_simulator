@@ -1,8 +1,9 @@
-from control.lti import zero
-from django.http import response
-import numpy as np
 import control
 import control.matlab as matlab
+import numpy as np
+from control.lti import zero
+from django.http import response
+
 
 def bode_sys(sys):
     ## open-loop system transfer function
@@ -371,36 +372,28 @@ def action_pid(sys, final_time, setpoint, Kp, Ki, Kd):
     initial_time = 0
     nsteps = 40 * int(final_time)   # number of time steps
     t = np.linspace(initial_time, final_time, round(nsteps))
-    print(t)
-    print("====")
-    print(len(t))
+
     output, t = matlab.step(Ts, t)
     output = setpoint*output
-    print(t)
-    print("$$$$")
-    print(len(t))
+
     # calculate list of error
     setpoint_arr = setpoint * np.ones(nsteps)
     err = setpoint_arr - output
-    
-    # calculate control action
-    action = matlab.lsim(Ds, err, t)
-
-    # covert numpy arrays to lists
-    t = list(t)
-    print(t)
-    print("####")
-    print(len(t))
-    action = list(action[0])
-    print(action)
-    print("action1")
-    #print(action)
+    action= []
+    sum = 0
+    for i in range(len(err)):
+        if i == 0:
+        
+            action.append(Kp*err[i] +Kd*(err[i]-0)/t[1] )   
+        else:
+            sum += t[1]*(err[i]+err[i-1])/2 
+            action.append(Kp*err[i] +Kd*(err[i]-err[i- 1])/t[1] +Ki* sum)
 
     # round lists to 6 decimal digits
     ndigits = 6
     t = [round(num, ndigits) for num in t]
     action = [round(num, ndigits) for num in action]
-
+  
     # calculate maximum control action
     max_action = max(action)
     min_action = min(action)
@@ -426,14 +419,10 @@ def action_zpk(sys, final_time, setpoint, z, p, k):
     initial_time = 0
     nsteps = 40 * int(final_time)   # number of time steps
     t = np.linspace(initial_time, final_time, round(nsteps))
-    print(t)
-    print("====")
-    print(len(t))
+
     output, t = matlab.step(Ts, t)
     output = setpoint*output
-    print(t)
-    print("$$$$")
-    print(len(t))
+ 
     # calculate list of error
     setpoint_arr = setpoint * np.ones(nsteps)
     err = setpoint_arr - output
@@ -443,13 +432,7 @@ def action_zpk(sys, final_time, setpoint, z, p, k):
 
     # covert numpy arrays to lists
     t = list(t)
-    print(t)
-    print("####")
-    print(len(t))
     action = list(action[0])
-    print(action)
-    print("action1")
-    #print(action)
 
     # round lists to 6 decimal digits
     ndigits = 6
@@ -473,7 +456,10 @@ def stepinfo_sys(sys,setPoint):
     
     # closed-loop unity-feedback transfer function
     Ts = control.feedback(Gs, 1) * setPoint
-    spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+    try:
+        spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+    except:
+        spec = "Unstable response"
     
     return spec
 
@@ -499,7 +485,10 @@ def stepinfo_zpk(sys, z, p, k,setPoint):
 
     # closed-loop unity-feedback transfer function
     Ts = control.feedback(DsGs, 1) * setPoint
-    spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+    try:
+        spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+    except:
+        spec = "Unstable response"
 
     return spec
 
@@ -522,7 +511,10 @@ def stepinfo_pid(sys, Kp, Ki, Kd,setPoint):
 
     # closed-loop unity-feedback transfer function
     Ts = control.feedback(DsGs, 1) * setPoint
-    spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+    try:
+        spec = matlab.stepinfo(Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
+    except:
+        spec = "Unstable response"
 
     return spec
 
@@ -577,6 +569,17 @@ def arrayToString(array):
                     s+=f"{val}s^{i}"
         i-=1
     return s
+
+def format(num):
+    mag = 0
+    while abs(num)>=1000:
+        mag += 1
+        num /= 1000.0
+        if mag > 6 and num > 0:
+            return "inf"
+        elif mag > 6 and num < 0:
+            return "-inf"
+    return '%.2f%s' % (num, ['', 'K', "M", "G", "T","P","E"][mag])
     
 # Auto grading function for student submissions
 def isPass(parameters, requirements):
