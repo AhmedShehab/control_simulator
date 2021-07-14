@@ -2,83 +2,77 @@
 <title>Home</title>
 {% endblock head %} {% block body %}
 <div class="page-wrapper">
-	<div class="flex">
-		<div class="img imgRES">
-			<img class="pic" src="{% static 'main/images/car-shift.jpg' %}" alt="car shifter" />
-		</div>
-		<div class="content contentRES">
-			<h3>Description</h3>
-			<p>
-				Test, learn and program PID control loops in real time with the automated PID Simulator! With the simulated feedback and optional controls, the
-				PID Simulator is the perfect tool to learn, practice, and teach how a PID controller works in a safe environment while maintaining a real world
-				feel.
-			</p>
-		</div>
-	</div>
-	<div class="flex">
-		<div class="hidden">
-			<h3>Basic Cruise Control Simulator</h3>
-			<p>
-				Basic cruise control is a system that automatically controls the speed of a motor vehicle. The system is a servomechanism that takes over the
-				throttle of the car to maintain a steady speed as set by the driver.
-			</p>
-			<form action="{% url 'cruise' %}">
-				<button type="submit" class="btn btn-outline-success">Run Simulation</button>
-			</form>
-		</div>
-		<div class="img img2">
-			<img class="pic" src="{% static 'main/images/CruiseControl.jpeg' %}" alt="cruise control block diagram" />
-		</div>
-		<div class="content hide">
-			<h3>Basic Cruise Control Simulator</h3>
-			<p>
-				Basic cruise control is a system that automatically controls the speed of a motor vehicle. The system is a servomechanism that takes over the
-				throttle of the car to maintain a steady speed as set by the driver.
-			</p>
-			<form action="{% url 'cruise' %}">
-				<button type="submit" class="btn btn-outline-success">Run Simulation</button>
-			</form>
-		</div>
-	</div>
-	<div class="flex">
-		<div class="img imgRES">
-			<img class="pic" src="{% static 'main/images/Servomotor.jpg' %}" alt="servomotor block diagram" />
-		</div>
-		<div class="content contentRES">
-			<h3>Servomotor Simulator</h3>
-			<p>
-				A servo motor is a rotary actuator or a motor that allows for a precise control in terms 
-				of the angular position, acceleration, and velocity.It consists of a suitable motor 
-				coupled to a sensor for position feedback.
-			</p>
-			<form action="#">
-				<button type="submit" class="btn btn-outline-success">Run Simulation</button>
-			</form>
-		</div>
-	</div>
+    <div class="flex">
+        <div class="img imgRES">
+            <img class="pic" src="{% static 'main/images/car-shift.jpg' %}" alt="car shifter" />
+        </div>
+        <div class="content contentRES">
+            <h3>Description</h3>
+            <p>
+                Test, learn and program PID control loops in real time with the automated PID Simulator! With the simulated feedback and optional controls, the PID Simulator is the perfect tool to learn, practice, and teach how a PID controller works in a safe environment
+                while maintaining a real world feel.
+            </p>
+        </div>
+    </div>
+    <div class="flex">
+        <div class="hidden">
+            <h3>Basic Cruise Control Simulator</h3>
+            <p>
+                Basic cruise control is a system that automatically controls the speed of a motor vehicle. The system is a servomechanism that takes over the throttle of the car to maintain a steady speed as set by the driver.
+            </p>
+            <form action="{% url 'cruise' %}">
+                <button type="submit" class="btn draw">Run Simulation</button>
+            </form>
+        </div>
+        <div class="img img2">
+            <img class="pic" src="{% static 'main/images/CruiseControl.jpeg' %}" alt="cruise control block diagram" />
+        </div>
+        <div class="content hide">
+            <h3>Basic Cruise Control Simulator</h3>
+            <p>
+                Basic cruise control is a system that automatically controls the speed of a motor vehicle. The system is a servomechanism that takes over the throttle of the car to maintain a steady speed as set by the driver.
+            </p>
+            <form action="{% url 'cruise' %}">
+                <button type="submit" class="btn draw">Run Simulation</button>
+            </form>
+        </div>
+    </div>
+    <div class="flex">
+        <div class="img imgRES">
+            <img class="pic" src="{% static 'main/images/Servomotor.jpg' %}" alt="servomotor block diagram" />
+        </div>
+        <div class="content contentRES">
+            <h3>Servomotor Simulator</h3>
+            <p>
+                A servo motor is a rotary actuator or a motor that allows for a precise control in terms of the angular position, acceleration, and velocity.It consists of a suitable motor coupled to a sensor for position feedback.
+            </p>
+            <form action="{% url 'servomotor' %}">
+                <button type="submit" class="btn draw">Run Simulation</button>
+            </form>
+        </div>
+    </div>
 </div>
 <footer>
-	<div class="first">
-		<img class="logo" src="{% static 'main/images/log2.png'%}" alt="dash board" />
-		<p class="footer">
-			We are six CSE students creating an E-learning web application that aims to simulate and visualize a cruise control system. We are using a PID
-			controller. The simulation depends on the controller parameters and the inputs
-		</p>
-	</div>
-	<div class="second">
-		<h4 class="footer" style="font-weight: bold">Contacts</h4>
-		<img src="{% static 'main/images/location.png'%}" class="icon" alt="sssss" /><span>121, Aswan-Cairo Road Faculty of Engineering</span><br />
-		<img class="icon" src="{% static 'main/images/call-icon.png'%}" /><span>+20 101 234 5678</span>
-		<br />
-		<img class="icon" src="{% static 'main/images/email.png'%}" /><span> info@eng.s-mu.edu.eg</span>
-	</div>
-	<br />
-	<br />
-	<div class="third">
-		<h4 class="footer" style="font-weight: bold">Follow Us</h4>
-		<img class="icon" src="{% static 'main/images/facebook.png'%}" />
-		<img class="icon" src="{% static 'main/images/twitter.png'%}" />
-		<img class="icon" src="{% static 'main/images/linkedin.png'%}" />
-	</div>
+    <div class="first">
+        <img class="logo" src="{% static 'main/images/log2.png'%}" alt="dash board" />
+        <p class="footer">
+            We are six CSE students creating an E-learning web application that aims to simulate and visualize a cruise control system. We are using a PID controller. The simulation depends on the controller parameters and the inputs
+        </p>
+    </div>
+    <div class="second">
+        <h4 class="footer" style="font-weight: bold">Contacts</h4>
+        <img src="{% static 'main/images/location.png'%}" class="icon" alt="sssss" /><span>121, Aswan-Cairo Road Faculty of Engineering</span><br />
+        <img class="icon" src="{% static 'main/images/call-icon.png'%}" /><span>+20 101 234 5678</span>
+        <br />
+        <img class="icon" src="{% static 'main/images/email.png'%}" /><span> info@eng.s-mu.edu.eg</span>
+    </div>
+    <br />
+    <br />
+    <div class="third">
+        <h4 class="footer" style="font-weight: bold">Follow Us</h4>
+        <img class="icon" src="{% static 'main/images/facebook.png'%}" />
+        <img class="icon" src="{% static 'main/images/twitter.png'%}" />
+        <img class="icon" src="{% static 'main/images/linkedin.png'%}" />
+    </div>
 </footer>
 {% endblock body %}
