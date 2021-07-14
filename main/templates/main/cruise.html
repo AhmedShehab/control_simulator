@@ -287,7 +287,6 @@
     {% if stepinfo %}
     <div style="text-align: center; margin-top: 2%;">
         <button class="btn draw" onclick="openStepInfo();">Show Step info.</button>
-        <p style="color:red; font-size: small;">actuation range is {{min_ac}}:{{max_ac}}</p>
     </div>
     {% endif %}
     </form>
@@ -320,6 +319,9 @@
 <div class=" assignPosition" id="stepInfo">
     <div class="assign_child">
         <h3>Step Info.</h3>
+        {% if unstable %}
+        <p class="removePadding"> {{spec}}</p>
+        {% else %}
         <p class="removePadding">RiseTime: {{ spec.RiseTime}} sec</p>
         <p class="removePadding">SettlingTime: {{ spec.SettlingTime}} sec</p>
         <p class="removePadding">Overshoot: {{ spec.Overshoot}} %</p>
@@ -327,6 +329,8 @@
         <p class="removePadding">Peak: {{ spec.Peak}}</p>
         <p class="removePadding">PeakTime: {{ spec.PeakTime}} sec</p>
         <p class="removePadding">SteadyStateValue: {{ spec.SteadyStateValue}}</p>
+        {% endif %}
+        <p class="removePadding">Actuation Range: {{min_ac}} to {{max_ac}}</p>
         <button class="button" onclick="closeStepInfo();">Exit</button>
     </div>
 </div>

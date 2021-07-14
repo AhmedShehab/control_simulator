@@ -443,6 +443,7 @@ def cruise(request):
     setPoint = 1.0
     if request.POST:
         info = True
+        unstable = False
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
         gain = float(request.POST.get("gain",0))
@@ -514,22 +515,28 @@ def cruise(request):
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
                 tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
-                print(action)
-                print(max_ac)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
                 tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
-                print(action)
-                print(max_ac)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
                 spec = stepinfo_sys(sys,setPoint)
                 tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
-                print(len(action))
-                print(max_ac)
-            for key,value in spec.items():
-                spec[key] = round(value,5)
+            for  x in range(len(output)):
+                if np.isnan(output[x]):
+                    output[x]= float('inf')
+                else:
+                    output[x] = round(output[x], 4)
+            if spec == "Unstable response":
+                unstable = True
+            else:
+                for key,value in spec.items():
+                    spec[key] = round(value,4)
+                min_ac = round(min_ac, 4)
+                max_ac = round(max_ac, 4)
+                max_ac = format(max_ac)
+                min_ac = format(min_ac)
             return render(request, "main/cruise.html", {
                 "assignment":assignment,
                 "t": t,
@@ -547,7 +554,8 @@ def cruise(request):
                 "animation":animation,
                 "spec": spec,
                 "max_ac": max_ac,
-                "min_ac": min_ac
+                "min_ac": min_ac,
+                "unstable": unstable
         })
     else:
         return render(request, "main/cruise.html", {
@@ -585,6 +593,7 @@ def servomotor(request):
     setPoint = 1.0
     if request.POST:
         info = True
+        unstable = False
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
         gain = float(request.POST.get("gain",0))
@@ -657,22 +666,26 @@ def servomotor(request):
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
                 tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
-                print(action)
-                print(max_ac)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
                 tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
-                print(action)
-                print(max_ac)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
                 spec = stepinfo_sys(sys,setPoint)
                 tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
-                print(len(action))
-                print(max_ac)
-            for key,value in spec.items():
-                spec[key] = round(value,5)
+            for  x in range(len(output)):
+                if np.isnan(output[x]):
+                    output[x]= float('inf')
+                else:
+                    output[x] = round(output[x], 4)
+            if spec == "Unstable response":
+                unstable = True
+            else:
+                for key,value in spec.items():
+                    spec[key] = round(value,4)
+                min_ac = round(min_ac,4)
+                max_ac = round(max_ac,4)
             return render(request, "main/servomotor.html", {
                 "assignment":assignment,
                 "t": t,
@@ -690,7 +703,8 @@ def servomotor(request):
                 "stepinfo": info,
                 "spec": spec,
                 "max_ac": max_ac,
-                "min_ac": min_ac
+                "min_ac": min_ac,
+                "unstable": unstable
         })
     else:
         return render(request, "main/servomotor.html", {
