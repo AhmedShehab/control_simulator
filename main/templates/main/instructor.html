@@ -31,7 +31,6 @@
 					<option value="PID">PID</option>
 					<option value="lag">Lag</option>
 					<option value="lead">Lead</option>
-					<option value="laglead">Lag-Lead</option>
 				</select>
 			</span>
 			<br />
@@ -45,6 +44,17 @@
 			<br />
 			<div class="grade" id="grade2" style="display: none">
 				<h6>Transient and steady state response</h6>
+				<div class="input-group input-group-sm">
+					<label for="setPoint">Set Point:</label>
+					<input
+						type="number"
+						class="form-control"
+						aria-label="Sizing example input"
+						aria-describedby="inputGroup-sizing-sm"
+						name="setPoint"
+						id="error"
+					/>
+				</div>
 				<div class="input-group input-group-sm">
 					<label for="rise">Rise Time:</label>
 					<input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="rise" id="rise" />

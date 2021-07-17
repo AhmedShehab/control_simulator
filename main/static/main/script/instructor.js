@@ -53,7 +53,7 @@ function assignmentsSubmitted() {
 function gradeSelect() {
 	var grade = document.getElementById("grade").value;
 	if (grade == "auto") {
-		document.getElementById("grade2").style.display = "block";
+		document.getElementById("grade2").style.display = "grid";
 		document.getElementById("grade3").style.display = "none";
 		document.getElementById("rise").required = true;
 		document.getElementById("settle").required = true;
@@ -63,7 +63,7 @@ function gradeSelect() {
 	}
 	if (grade == "receive") {
 		document.getElementById("grade2").style.display = "none";
-		document.getElementById("grade3").style.display = "block";
+		document.getElementById("grade3").style.display = "grid";
 		document.getElementById("rise").required = false;
 		document.getElementById("settle").required = false;
 		document.getElementById("overshoot").required = false;

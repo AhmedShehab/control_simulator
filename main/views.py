@@ -387,12 +387,13 @@ def instructor(request):
             overshoot = req.get("overshoot")
             error = req.get("error")
             desc = req.get("desc")
+            setPoint = req.get("setPoint")
             controller= req.get("controller")
             if req.get("grade")=="auto":
-                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=5,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller)
+                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=5,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller,setPoint=setPoint)
                 assign.save()
             elif req.get("grade")=="receive":
-                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=5, instructor=request.user.username,description=desc,controller=controller)
+                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=5, instructor=request.user.username,description=desc,controller=controller,setPoint=setPoint)
                 assign.save()
             course=Course.objects.get(name=course)
             course.assignments.add(assign)
@@ -423,11 +424,11 @@ def cruise(request):
                     "RiseTime":assignment.riseTime,
                     "SettlingTime":assignment.setTime,
                     "SteadyStateError":assignment.Ess,
-                    "Overshoot":assignment.pOvershoot
+                    "Overshoot":assignment.pOvershoot,
                 }
             else:
                 assignmentRequirements={
-                    "Description":assignment.description
+                    "Description":assignment.description,
                 }
             pass
         else:
@@ -556,6 +557,8 @@ def cruise(request):
                 "unstable": unstable
         })
     else:
+        if assignment:
+            setPoint = float(assignment.setPoint)
         return render(request, "main/cruise.html", {
             "assignment":assignment,
             "remember":remember,
@@ -573,11 +576,11 @@ def servomotor(request):
                     "RiseTime":assignment.riseTime,
                     "SettlingTime":assignment.setTime,
                     "SteadyStateError":assignment.Ess,
-                    "Overshoot":assignment.pOvershoot
+                    "Overshoot":assignment.pOvershoot,
                 }
             else:
                 assignmentRequirements={
-                    "Description":assignment.description
+                    "Description":assignment.description,
                 }
             pass
         else:
@@ -630,7 +633,6 @@ def servomotor(request):
         }
         submit= request.POST.get("submit")
         if submit== "submit":
-            del request.session["id"]
             if Submission.objects.filter(assignment=assignment):
                 test = Submission.objects.filter(assignment=assignment)
                 for something in test:
@@ -638,6 +640,7 @@ def servomotor(request):
                         return render(request,"main/servomotor.html",{
                             "duplicateAssignment":"Sorry you can't submit the same assignment twice",
                         })
+            del request.session["id"]
             subDate = date.today().strftime("%Y-%m-%d")
             PIDParamaters= f"Propotional Constant(P): {p}, \n Differential Constant(D): {i}, \n Integral Constant(I): {d},"
             ZPkParamaters= f"Gain: {gain}, \n Pole: {pole}, \n Zero: {zero}"
@@ -661,6 +664,7 @@ def servomotor(request):
                     i = 0
                 if not d:
                     d = 0
+                print(setPoint)
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
                 tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
@@ -709,6 +713,8 @@ def servomotor(request):
                 "unstable": unstable
         })
     else:
+        if assignment:
+            setPoint = float(assignment.setPoint)
         return render(request, "main/servomotor.html", {
             "assignment":assignment,
             "remember":remember,

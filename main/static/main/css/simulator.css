@@ -139,23 +139,30 @@ input:focus::placeholder {
 	width: 40%;
 	padding: 2%;
 }
-.simulationContainer .tResponse{
+.simulationContainer .tResponse {
 	border-right: 2px solid var(--main-color);
 	padding: 2%;
 	width: 60%;
 }
-select{
+select {
 	color: var(--main-color);
 	overflow: hidden;
 	outline: none;
 }
-option:hover, option:focus, option:active{
+option:hover,
+option:focus,
+option:active {
 	background-color: var(--main-color);
 	background: var(--main-color);
 	color: white;
 	outline: none;
 }
-.removePadding{
+.removePadding {
 	padding: 0;
 	margin: 0;
+}
+h6{
+	border-bottom: var(--main-color) solid 3px;
+	margin-top: 5px;
+	margin-bottom: 0px;
 }
