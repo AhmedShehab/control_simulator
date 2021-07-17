@@ -141,8 +141,6 @@ def design(request, name):
                 d = 0
             omega_comp, mag_comp, phase_comp = bode_pid(sys, p, i, d)
             gm_comp, pm_comp, wg_comp, wp_comp = margin_pid(sys, p, i, d)
-            print("wg:", wg_comp)
-            print("wp:", wp_comp)
         return render(request, "main/design.html", {
                 "omega": omega,
                 "ph": phase,
@@ -674,6 +672,10 @@ def servomotor(request):
                 t, output = step_sys(sys, setTime, setPoint)
                 spec = stepinfo_sys(sys,setPoint)
                 tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
+            
+            print(output)
+            print("iiiii")
+            print(action)
             for  x in range(len(output)):
                 if np.isnan(output[x]):
                     output[x]= float('inf')

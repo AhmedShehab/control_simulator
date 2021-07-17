@@ -165,7 +165,6 @@ def bode_pid(sys, Kp, Ki, Kd):
     
     return omega, mag, phase
 
-
 def margin_pid(sys, Kp, Ki, Kd):
     ## open-loop system transfer function
     try:
@@ -204,7 +203,7 @@ def step_sys(sys, final_time, setpoint):
         print("Err: system in not defined")
         return
     Gs = control.tf(num, den)
-    
+    print(Gs)
     # closed-loop unity-feedback transfer function
     Ts = control.feedback(Gs, 1)
 
@@ -322,11 +321,9 @@ def action_sys(sys, final_time, setpoint):
     initial_time = 0
     nsteps = 40 * int(final_time)   # number of time steps
     t = np.linspace(initial_time, final_time, round(nsteps))
-    print(t)
-    print("====")
+
     output, t = matlab.step(Ts, t)
-    print(t)
-    print("****")
+
     output = setpoint*output
 
     # calculate list of error
@@ -338,16 +335,13 @@ def action_sys(sys, final_time, setpoint):
 
     # covert numpy arrays to lists
     t = list(t)
-    print(t)
-    print("&&&")
     action = list(action)
 
     # round lists to 6 decimal digits
     ndigits = 6
     t = [round(num, ndigits) for num in t]
     action = [round(num, ndigits) for num in action]
-    print(t)
-    print("$$$$")
+    
     # calculate maximum control action
     max_action = max(action)
     min_action = min(action)
@@ -541,7 +535,7 @@ def tf(sys):
         num = "0.02107"
         den = "0.5s^2 + 1.003s + 0.00584"
     elif sys == 'servo':
-        num = "1"
+        num = "36"
         den  = "s^2 + 3.6s"
     
     return num, den
