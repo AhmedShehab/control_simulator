@@ -26,12 +26,11 @@
     <div class="assign_child">
         <h3>Assignment Requirements</h3>
         <strong>Assignment: {{assignment.subject}} </strong>
-        <br /> setPoint = {{assignment.setPoint}}
-        <br /> Rise Time = {{assignment.riseTime}}s
-        <br /> Settling Time = {{assignment.setTime}}s
-        <br /> Percent overshoot = {{assignment.pOvershoot}}%
-        <br /> steady state error = {{assignment.Ess}}
-        <br />
+        <p class="removePadding">setPoint = {{assignment.setPoint}}</p>
+        <p class="removePadding">Rise Time = {{assignment.riseTime}}s</p>
+        <p class="removePadding">Settling Time = {{assignment.setTime}}s</p>
+        <p class="removePadding">Percent overshoot = {{assignment.pOvershoot}}%</p>
+        <p class="removePadding">steady state error = {{assignment.Ess}}</p> 
         <button class="button" onclick="closeReqForm({{assignment.id}});">Exit</button>
     </div>
 </div>

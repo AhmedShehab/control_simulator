@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from scipy.linalg.basic import pinv
+from scipy.signal.wavelets import ricker
 from .models import User, Instructor, Student, Course, Assignment, Submission
 from uuid import UUID
 from . import design_tool
@@ -392,10 +393,10 @@ def instructor(request):
             setPoint = req.get("setPoint")
             controller= req.get("controller")
             if req.get("grade")=="auto":
-                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=5,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller,setPoint=setPoint)
+                assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=4,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller,setPoint=setPoint)
                 assign.save()
             elif req.get("grade")=="receive":
-                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=5, instructor=request.user.username,description=desc,controller=controller,setPoint=setPoint)
+                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=4, instructor=request.user.username,description=desc,controller=controller,setPoint=setPoint)
                 assign.save()
             course=Course.objects.get(name=course)
             course.assignments.add(assign)
@@ -451,7 +452,6 @@ def cruise(request):
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
-        step = float(request.POST.get("step",0))
         setTime = float(request.POST.get("time",0))
         setPoint = float(request.POST.get("setPoint",0))
         remember = request.POST.get("remember",0)
@@ -465,7 +465,7 @@ def cruise(request):
         PIDController={
             "Simulator":"servo",
             "Controller":"PID",
-            "StepInput":step,
+            "StepInput":setPoint,
             "setTime":setTime,
             "P":p,
             "I":i,
@@ -474,7 +474,7 @@ def cruise(request):
         ZPKController={
             "Simulator":"servo",
             "Controller":"ZPK",
-            "StepInput":step,
+            "StepInput":setPoint,
             "setTime":setTime,
             "Zero":zero,
             "Pole":pole,
@@ -579,6 +579,7 @@ def servomotor(request):
                     "SettlingTime":assignment.setTime,
                     "SteadyStateError":assignment.Ess,
                     "Overshoot":assignment.pOvershoot,
+                    "setPoint": assignment.setPoint,
                 }
             else:
                 assignmentRequirements={
@@ -603,7 +604,6 @@ def servomotor(request):
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
-        step = float(request.POST.get("step",0))
         setTime = float(request.POST.get("time",0))
         setPoint = float(request.POST.get("setPoint",0))
         setPoint = setPoint % 360
@@ -618,7 +618,7 @@ def servomotor(request):
         PIDController={
             "Simulator":"servo",
             "Controller":"PID",
-            "StepInput":step,
+            "StepInput":setPoint,
             "setTime":setTime,
             "P":p,
             "I":i,
@@ -627,7 +627,7 @@ def servomotor(request):
         ZPKController={
             "Simulator":"servo",
             "Controller":"ZPK",
-            "StepInput":step,
+            "StepInput":setPoint,
             "setTime":setTime,
             "Zero":zero,
             "Pole":pole,
@@ -669,6 +669,8 @@ def servomotor(request):
                 print(setPoint)
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
+                spec2 = step_info_pid_new(sys, setPoint, p, i, d)
+                print(spec,spec2)
                 tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)

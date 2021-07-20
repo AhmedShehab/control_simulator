@@ -68,20 +68,13 @@
 <div class="{{assignment.id}} assignPosition">
 	<div class="assign_child">
 		<h3>System Requirements</h3>
-		System: {{assignment.simulator}}
-		<br />
-		Set Point: {{assignment.setPoint}}
-		<br>
-		Controller: {{assignment.controller}}
-		<br />
-		Rise Time = {{assignment.riseTime}}s
-		<br />
-		Settling Time = {{assignment.setTime}}s
-		<br />
-		Percent overshoot = {{assignment.pOvershoot}}%
-		<br />
-		steady state error = {{assignment.Ess}}
-		<br />
+		<p class="removePadding">System: {{assignment.simulator}}</p>
+		<p class="removePadding">Set Point: {{assignment.setPoint}}</p>
+		<p class="removePadding">Controller: {{assignment.controller}}</p>
+		<p class="removePadding">Rise Time = {{assignment.riseTime}}s</p>
+		<p class="removePadding">Settling Time = {{assignment.setTime}}s</p>
+		<p class="removePadding">Percent overshoot = {{assignment.pOvershoot}}%</p>
+		<p class="removePadding">steady state error = {{assignment.Ess}}</p>
 		{% if assignment.simulator == "Cruise Control" %}
 		<form action="{% url 'student' %}" method="POST">
 			{% csrf_token %}
