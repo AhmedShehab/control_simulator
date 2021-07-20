@@ -511,15 +511,18 @@ def cruise(request):
                     i = 0
                 if not d:
                     d = 0
-                t, output = step_pid(sys, setTime, setPoint, p, i, d)
+                #t, output = step_pid(sys, setTime, setPoint, p, i, d)
+                t, output = step_pid_cruise(setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
                 tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
             elif zero and pole and gain:
-                t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+                #t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+                t, output = step_zpk_cruise(setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
                 tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
             else:
-                t, output = step_sys(sys, setTime, setPoint)
+                #t, output = step_sys(sys, setTime, setPoint)
+                t, output = step_cruise(setTime, setPoint)
                 spec = stepinfo_sys(sys,setPoint)
                 tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
             for  x in range(len(output)):
@@ -664,22 +667,25 @@ def servomotor(request):
                     i = 0
                 if not d:
                     d = 0
-                print(setPoint)
+                # print(setPoint)
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
+                #t, output = step_pid_servo(setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
                 tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+                #t, output = step_zpk_servo(setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
                 tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
+                #t, output = step_servo(setTime, setPoint, zero, pole)
                 spec = stepinfo_sys(sys,setPoint)
                 tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
             
-            print(output)
-            print("iiiii")
-            print(action)
+            # print(output)
+            # print("iiiii")
+            # print(action)
             for  x in range(len(output)):
                 if np.isnan(output[x]):
                     output[x]= float('inf')

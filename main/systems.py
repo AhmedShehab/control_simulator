@@ -3,6 +3,7 @@ import control.matlab as matlab
 import numpy as np
 from control.lti import zero
 from django.http import response
+from scipy.integrate import odeint, solve_ivp
 
 
 def bode_sys(sys):
@@ -203,7 +204,7 @@ def step_sys(sys, final_time, setpoint):
         print("Err: system in not defined")
         return
     Gs = control.tf(num, den)
-    print(Gs)
+    #print(Gs)
     # closed-loop unity-feedback transfer function
     Ts = control.feedback(Gs, 1)
 
@@ -302,6 +303,304 @@ def step_pid(sys, final_time, setpoint, Kp, Ki, Kd):
     t = [round(num, ndigits) for num in t]
     output = [round(num, ndigits) for num in output]
 
+    return t, output
+
+def step_cruise(final_time, setpoint):
+    
+    # Define engine lag
+    def lag(p, t, u, extra):
+        # inputs
+        # u = power demand
+        # p = output power
+        # t = time
+        extra = 0.0
+        dp_dt = 2*(u - p)
+        return dp_dt
+
+    # Define car plant
+    def vehicle(v, t, p, load):
+        # inputs
+        # v = behicle speed
+        # t = time
+        # p = power
+        # load = cargo + passenger load
+
+        # Car specifications and initialization data
+        rho = 1.225       # kg/m3
+        CdA = 0.55        # m2
+        m = 1500          # kg
+
+        # Calculate derivative of vehicle velocity
+        dv_dt = (1.0/m) * (p*hp2watt/v - 0.5*CdA*rho*v**2)
+
+        return dv_dt
+
+    # Conversion factors
+    hp2watt = 746
+    mps2kmph = 3.6
+    kmph2mps = 1/mps2kmph
+
+    # simulation time parameters
+    tf = final_time                     # final time for simulation
+    nsteps = int(40* final_time)                # number of time steps
+    
+    t = np.linspace(0,tf,round(nsteps))   # linearly spaced time vector
+    delta_t = t[1]        # how long each step is
+    v0_kmph = 1.0          # car initial speed in km/h
+    sp_kmph = setpoint         # car final speed in km/h
+    # simulate step input operation
+
+    load = 0.0                # passenger(s) and cargo load - in Kg
+    v0 = v0_kmph*kmph2mps                # car initial speed
+    step = np.zeros(nsteps)
+    sp = sp_kmph*kmph2mps
+    step[0] = v0
+    step[1:] = sp
+
+    vt = np.zeros(nsteps)     # for storing speed results - speed vector
+    vt[0] = v0
+    et = np.zeros(nsteps)     # error vector
+    ut = np.zeros(nsteps)     # actuation vector
+    pt = np.zeros(nsteps)     # power vector
+    p0 = pt[0]                # initial car power
+
+    # Actuation limits - Car Physical limits
+    max_power = 140
+    min_power = -140
+
+    # simulate with ODEINT
+    for i in range(nsteps-1):
+        error = step[i] - v0
+        et[i+1] = error
+        u = error
+        # clip input to -100% to 100%
+        if u > max_power:
+            u = max_power
+        elif u < min_power:
+            u = min_power
+        ut[i+1] = u
+        p = odeint(lag, p0, [0,delta_t],args=(u,0))
+        v = odeint(vehicle,v0,[0,delta_t],args=(p[-1], load))
+        p0 = p[-1]
+        v0 = v[-1]
+        vt[i+1] = v0
+        pt[i+1] = p0
+
+    # convert output to km/h
+    vt_kmph = vt*mps2kmph
+    t = list(t)
+    output = list(vt_kmph)
+
+    # round lists to 6 decimal digits
+    ndigits = 6
+    t = [round(num, ndigits) for num in t]
+    output = [round(num, ndigits) for num in output]
+    return t, output
+
+def step_zpk_cruise(final_time, setpoint, z, p, k):
+    
+    # Define engine lag
+    def lag(p, t, u, extra):
+        # inputs
+        # u = power demand
+        # p = output power
+        # t = time
+        extra = 0.0
+        dp_dt = 2*(u - p)
+        return dp_dt
+
+    # Define car plant
+    def vehicle(v, t, p, load):
+        # inputs
+        # v = behicle speed
+        # t = time
+        # p = power
+        # load = cargo + passenger load
+
+        # Car specifications and initialization data
+        rho = 1.225       # kg/m3
+        CdA = 0.55        # m2
+        m = 1500          # kg
+
+        # Calculate derivative of vehicle velocity
+        dv_dt = (1.0/m) * (p*hp2watt/v - 0.5*CdA*rho*v**2)
+
+        return dv_dt
+
+    # Conversion factors
+    hp2watt = 746
+    mps2kmph = 3.6
+    kmph2mps = 1/mps2kmph
+
+    # simulation time parameters
+    tf = final_time                     # final time for simulation
+    nsteps = int(40* final_time)                # number of time steps
+    
+    t = np.linspace(0,tf,round(nsteps))   # linearly spaced time vector
+    delta_t = t[1]        # how long each step is
+    v0_kmph = 1.0          # car initial speed in km/h
+    sp_kmph = setpoint         # car final speed in km/h
+    # simulate step input operation
+
+    load = 0.0                # passenger(s) and cargo load - in Kg
+    v0 = v0_kmph*kmph2mps                # car initial speed
+    step = np.zeros(nsteps)
+    sp = sp_kmph*kmph2mps
+    step[0] = v0
+    step[1:] = sp
+
+    vt = np.zeros(nsteps)     # for storing speed results - speed vector
+    vt[0] = v0
+    et = np.zeros(nsteps)     # error vector
+    ut = np.zeros(nsteps)     # actuation vector
+    pt = np.zeros(nsteps)     # power vector
+    p0 = pt[0]                # initial car power
+
+    # Actuation limits - Car Physical limits
+    max_power = 140
+    min_power = -140
+
+    z = np.array([z])
+    p = np.array([p])
+    num, den = matlab.zpk2tf(z, p, k)
+    Ds = matlab.tf(num, den)
+
+    # simulate with ODEINT
+    for i in range(nsteps-1):
+        error = step[i] - v0
+        et[i+1] = error
+        q = matlab.lsim(Ds, [0, et[i]], [0, t[i]])
+        q = list(q[0])
+        u = q[1]
+        # clip input to -100% to 100%
+        if u > max_power:
+            u = max_power
+        elif u < min_power:
+            u = min_power
+        ut[i+1] = u
+        p = odeint(lag, p0, [0,delta_t],args=(u,0))
+        v = odeint(vehicle,v0,[0,delta_t],args=(p[-1], load))
+        p0 = p[-1]
+        v0 = v[-1]
+        vt[i+1] = v0
+        pt[i+1] = p0
+
+    # convert output to km/h
+    vt_kmph = vt*mps2kmph
+    t = list(t)
+    output = list(vt_kmph)
+
+    # round lists to 6 decimal digits
+    ndigits = 6
+    t = [round(num, ndigits) for num in t]
+    output = [round(num, ndigits) for num in output]
+    return t, output
+
+def step_pid_cruise(final_time, setpoint, Kp, Ki, Kd):
+    
+    # Define engine lag
+    def lag(p, t, u, extra):
+        # inputs
+        # u = power demand
+        # p = output power
+        # t = time
+        extra = 0.0
+        dp_dt = 2*(u - p)
+        return dp_dt
+
+    # Define car plant
+    def vehicle(v, t, p, load):
+        # inputs
+        # v = behicle speed
+        # t = time
+        # p = power
+        # load = cargo + passenger load
+
+        # Car specifications and initialization data
+        rho = 1.225       # kg/m3
+        CdA = 0.55        # m2
+        m = 1500          # kg
+
+        # Calculate derivative of vehicle velocity
+        dv_dt = (1.0/m) * (p*hp2watt/v - 0.5*CdA*rho*v**2)
+
+        return dv_dt
+
+    # Conversion factors
+    hp2watt = 746
+    mps2kmph = 3.6
+    kmph2mps = 1/mps2kmph
+
+    # simulation time parameters
+    tf = final_time                     # final time for simulation
+    nsteps = int(40* final_time)                # number of time steps
+    
+    t = np.linspace(0,tf,round(nsteps))   # linearly spaced time vector
+    delta_t = t[1]        # how long each step is
+    v0_kmph = 1.0          # car initial speed in km/h
+    sp_kmph = setpoint         # car final speed in km/h
+    # simulate step input operation
+
+    load = 0.0                # passenger(s) and cargo load - in Kg
+    v0 = v0_kmph*kmph2mps                # car initial speed
+    step = np.zeros(nsteps)
+    sp = sp_kmph*kmph2mps
+    step[0] = v0
+    step[1:] = sp
+
+    vt = np.zeros(nsteps)     # for storing speed results - speed vector
+    vt[0] = v0
+    et = np.zeros(nsteps)     # error vector
+    ut = np.zeros(nsteps)     # actuation vector
+    pt = np.zeros(nsteps)     # power vector
+    p0 = pt[0]                # initial car power
+    iet = np.zeros(nsteps)    # integral of error vector
+    sum_int = 0.0             # summation of error integral
+
+    # Actuation limits - Car Physical limits
+    max_power = 140
+    min_power = -140
+
+    # controller paramaters
+    kp = Kp                  # proportional gain
+    kd = Kd                  # derivative gain
+    ki = Ki                  # intergral gain
+
+    # simulate with ODEINT
+    for i in range(nsteps-1):
+        error = step[i] - v0
+        et[i+1] = error
+        sum_int = sum_int + error * delta_t
+        # clip integrator output to 1/3 of actuation capacity
+        if sum_int > 0.67*max_power:
+            sum_int = 0.67*max_power
+        elif sum_int < 0.67*min_power:
+            sum_int = 0.67*min_power
+        derivative = (et[i+1] - et[i])/delta_t
+        u = kp * error + kd * derivative + ki * sum_int
+        # clip input to -100% to 100%
+        if u > max_power:
+            u = max_power
+        elif u < min_power:
+            u = min_power
+        ut[i+1] = u
+        p = odeint(lag, p0, [0,delta_t],args=(u,0))
+        v = odeint(vehicle,v0,[0,delta_t],args=(p[-1], load))
+        p0 = p[-1]
+        v0 = v[-1]
+        vt[i+1] = v0
+        pt[i+1] = p0
+        iet[i+1] = sum_int
+
+    # convert output to km/h
+    vt_kmph = vt*mps2kmph
+    t = list(t)
+    output = list(vt_kmph)
+
+    # round lists to 6 decimal digits
+    ndigits = 6
+    t = [round(num, ndigits) for num in t]
+    output = [round(num, ndigits) for num in output]
     return t, output
 
 def action_sys(sys, final_time, setpoint):
