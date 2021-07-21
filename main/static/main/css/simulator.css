@@ -1,168 +1,203 @@
 :root {
-	--main-color: var(#28a745);
+    --main-color: var(#28a745);
 }
+
 body {
-	overflow-y: scroll;
-	overflow-x: scroll;
-	-ms-overflow-style: none; /* IE and Edge */
-	scrollbar-width: none; /* Firefox */
+    overflow-y: scroll;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
+
 body::-webkit-scrollbar {
-	display: none;
+    display: none;
 }
+
 .desc {
-	width: 100%;
-	background-color: var(--main-color);
-	text-align: center;
-	position: absolute;
-	bottom: 0;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
+    width: 100%;
+    background-color: var(--main-color);
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
+
 .descButton {
-	padding: 0.5rem;
-	outline: none;
-	border-radius: 5px;
-	border: 1px white solid;
-	font: 15px sans-serif, arial;
-	background-color: white;
+    padding: 0.5rem;
+    outline: none;
+    border-radius: 5px;
+    border: 1px white solid;
+    font: 15px sans-serif, arial;
+    background-color: white;
 }
+
 .arrowUp {
-	border: solid var(--main-color);
-	border-width: 0 3px 3px 0;
-	display: inline-block;
-	padding: 3px;
-	transform: rotate(-135deg);
-	-webkit-transform: rotate(-135deg);
-	margin-left: -8px;
-	opacity: 0;
-	transition: ease-in-out 50ms;
+    border: solid var(--main-color);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    margin-left: -8px;
+    opacity: 0;
+    transition: ease-in-out 50ms;
 }
+
 .arrowDown {
-	border: solid var(--main-color);
-	border-width: 0 3px 3px 0;
-	display: inline-block;
-	padding: 3px;
-	transform: rotate(45deg);
-	-webkit-transform: rotate(45deg);
-	margin-left: -8px;
-	opacity: 0;
-	transition: ease-in-out 50ms;
+    border: solid var(--main-color);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    margin-left: -8px;
+    opacity: 0;
+    transition: ease-in-out 50ms;
 }
+
 .descButton:hover span {
-	opacity: 1;
-	margin-left: 8px;
+    opacity: 1;
+    margin-left: 8px;
 }
+
 #pdf {
-	position: absolute;
-	height: 0;
-	left: 0;
-	width: 100%;
+    position: absolute;
+    height: 0;
+    left: 0;
+    width: 100%;
 }
+
 input::placeholder {
-	font-size: smaller;
+    font-size: smaller;
 }
+
 input:focus::placeholder {
-	color: transparent;
+    color: transparent;
 }
+
 .input-bar {
-	margin: 0;
-	padding: 0;
-	font-size: small;
-	font-weight: bold;
+    margin: 0;
+    padding: 0;
+    font-size: small;
+    font-weight: bold;
 }
+
 .input-data {
-	margin-top: 0;
-	border-top: none;
-	border-left: none;
-	border-right: none;
-	border-bottom: var(--main-color) solid 3px;
-	outline: none;
+    margin-top: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: var(--main-color) solid 3px;
+    outline: none;
 }
+
 .text0,
 .text1,
 .text2,
 .text11,
 .text22,
 .text33 {
-	margin: 1%;
-	overflow: hidden;
+    margin: 1%;
+    overflow: hidden;
 }
+
 .text0 {
-	width: 98%;
+    width: 98%;
 }
+
 .text1,
 .text2 {
-	width: 45%;
+    width: 45%;
 }
+
 .text1,
 .text11 {
-	float: left;
-	margin-left: 10px;
+    float: left;
+    margin-left: 10px;
 }
+
 .text2,
 .text33 {
-	float: right;
-	margin-right: 10px;
+    float: right;
+    margin-right: 10px;
 }
+
 .text11,
 .text33 {
-	width: 29%;
+    width: 29%;
 }
+
 .text22 {
-	float: left;
+    float: left;
 }
+
 .text22 {
-	width: 31%;
+    width: 31%;
 }
+
 .sub {
-	background-color: var(--main-color);
-	color: white;
-	border-radius: 1mm;
-	border: solid var(--main-color) 1px;
-	outline: none;
-	margin-top: 10px;
-	font: 16px arial, sans-serif;
-	padding: 10px;
+    background-color: var(--main-color);
+    color: white;
+    border-radius: 1mm;
+    border: solid var(--main-color) 1px;
+    outline: none;
+    margin-top: 10px;
+    font: 16px arial, sans-serif;
+    padding: 10px;
 }
+
 .sub:hover,
 .sub:focus {
-	background-color: #30c553;
-	color: white;
+    background-color: #30c553;
+    color: white;
 }
+
 .simulationContainer {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
+
 .visualization {
-	width: 40%;
-	padding: 2%;
+    width: 40%;
+    padding: 2%;
 }
+
 .simulationContainer .tResponse {
-	border-right: 2px solid var(--main-color);
-	padding: 2%;
-	width: 60%;
+    border-right: 2px solid var(--main-color);
+    padding: 2%;
+    width: 60%;
 }
+
 select {
-	color: var(--main-color);
-	overflow: hidden;
-	outline: none;
+    color: var(--main-color);
+    overflow: hidden;
+    outline: none;
 }
+
 option:hover,
 option:focus,
 option:active {
-	background-color: var(--main-color);
-	background: var(--main-color);
-	color: white;
-	outline: none;
+    background-color: var(--main-color);
+    background: var(--main-color);
+    color: white;
+    outline: none;
 }
+
 .removePadding {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
-h6{
-	border-bottom: var(--main-color) solid 3px;
-	margin-top: 5px;
-	margin-bottom: 0px;
+
+h6 {
+    border-bottom: var(--main-color) solid 3px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.reset {
+    width: 100%;
 }

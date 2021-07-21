@@ -12,7 +12,6 @@ from scipy.linalg.basic import pinv
 from scipy.signal.wavelets import ricker
 from .models import User, Instructor, Student, Course, Assignment, Submission
 from uuid import UUID
-from . import design_tool
 import numpy as np
 from .systems import *
 from datetime import date
@@ -42,6 +41,7 @@ def SimulatorApi(request):
     return JsonResponse(spec)
 
 def home(request):
+    # Define the default TF for design tool page
     request.session["num"] = "1"
     request.session["den"] = "s+1"
     request.session["n"] = [1]
@@ -51,9 +51,10 @@ def home(request):
     })
 
 def design(request, name):
-    empty = False
-    remember = 1
-    design = name
+    empty = False                           
+    remember = 1                                   # to remember the selected form
+    design = name    
+    # Get the values of parameters for each system                      
     if name == "Servomotor":
         sys = "servo"
         simulator = "servomotor"
@@ -62,7 +63,7 @@ def design(request, name):
         num, den = tf(sys)
         gm, pm, wg, wp = margin_sys(sys)
     elif name == "Cruise Control":
-        sys = "cruise" #cruise
+        sys = "cruise" 
         simulator = "cruise"
         system = name
         omega, mag, phase = bode_sys(sys)
@@ -71,13 +72,14 @@ def design(request, name):
     else:
         system = "tf"
         simulator = "tf"
-        design = "Design By Frequency" #change
-        empty = True
-        num = request.session["num"]
+        design = "Design By Frequency"             # change
+        empty = True                               # make this page interactive with user by changing TF
+        # Get the stored numerator and denominator
+        num = request.session["num"]            
         den = request.session["den"]
         n = request.session["n"]
         d = request.session["d"]
-        Gs = control.tf(n, d)
+        Gs = control.tf(n, d)                      # get the TF
         omega, mag, phase = bode_sys(Gs)
         gm, pm, wg, wp = margin_sys(Gs)   
     if request.method == "POST":
@@ -87,12 +89,14 @@ def design(request, name):
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
-        remember = request.POST.get("remember",0)
+        remember = request.POST.get("remember",0)  # for the selected form
+        # If post request for changing TF
         if request.POST.get("num"):
             nu = request.POST.get("num")
             de = request.POST.get("den")
             nu = nu.strip('][').split(',')
             de = de.strip('][').split(',')
+            # Check for the required inputs 
             try:
                 nu = [float(i) for i in nu]
                 de = [float(i) for i in de]
@@ -143,8 +147,9 @@ def design(request, name):
                     "sys": system, 
                     "wp": wp
                 })
-        if name == "Crusie Control":
-            sys = "cruise"  #cruise
+        # If post request for designing controller
+        if name == "Cruise Control":
+            sys = "cruise"
             simulator = "cruise"
             num, den = tf(sys)
         elif name == "Servomotor":
@@ -159,9 +164,11 @@ def design(request, name):
             sys = Gs
         omega, mag, phase = bode_sys(sys)
         gm, pm, wg, wp = margin_sys(sys)
+        # If lag/lead controller
         if request.POST.get("zero"):
             omega_comp, mag_comp, phase_comp = bode_zpk(sys, zero, pole, gain)
             gm_comp, pm_comp, wg_comp, wp_comp = margin_zpk(sys, zero, pole, gain)
+        # If P/PI/PID controller
         if request.POST.get("p"):
             if not i:
                 i = 0
@@ -196,7 +203,6 @@ def design(request, name):
                 "pole": pole,
                 "gain": gain,
                 "simulator": simulator
-
             })  
     return render(request, "main/design.html" , {
             "omega": omega,
@@ -464,23 +470,23 @@ def cruise(request):
     except:
         assignment=""
         pass
-    sys = "cruise"
-    remember = 1
-    setTime = 1.0
-    setPoint = 1.0
+    sys = "cruise" 
+    remember = 1                                                 # remember selected form
+    setTime = 1.0                                                # default simulation time
+    setPoint = 1.0                                               # default set point
     if request.POST:
-        info = True
-        unstable = False
+        info = True                                              # show stepInfo for system
+        unstable = False                                         # to know if the system is unstable "for debugging stepinfo"
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
         gain = float(request.POST.get("gain",0))
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
-        setTime = float(request.POST.get("time",0))
-        setPoint = float(request.POST.get("setPoint",0))
-        remember = request.POST.get("remember",0)
-        animation= request.POST.get("animation","false")
+        setTime = float(request.POST.get("time",0))              # the required simulation time
+        setPoint = float(request.POST.get("setPoint",0))         # the required set point
+        remember = request.POST.get("remember",0)                # remember selected form
+        animation= request.POST.get("animation","false")         # show animation in step response or not
         removeAssignment= request.POST.get("removeAssignment",0)
         if removeAssignment == "1":
             del request.session["id"]
@@ -488,14 +494,14 @@ def cruise(request):
         if animation!="true":
             animation="false"
         PIDController={
-            "Simulator":"servo",
+            "Simulator":"cruise",
             "Controller":"PID",
             "P":p,
             "I":i,
             "D":d,
         }
         ZPKController={
-            "Simulator":"servo",
+            "Simulator":"cruise",
             "Controller":"ZPK",
             "Zero":zero,
             "Pole":pole,
@@ -514,10 +520,12 @@ def cruise(request):
             subDate = date.today().strftime("%Y-%m-%d")
             PIDParamaters= f"Propotional Constant (P): {p},\n Differential Constant (D): {i},\n Integral Constant (I): {d},"
             ZPkParamaters= f"Gain: {gain},\n Pole: {pole},\n Zero: {zero}"
-            if p or i or d:   # PID Controller
+            # PID Controller
+            if p or i or d:   
                 controller = PIDController
                 parameters = PIDParamaters
-            else:             # ZPK Controller
+            # ZPK Controller
+            else:             
                 controller = ZPKController
                 parameters = ZPkParamaters
             if assignmentRequirements.get("Description",0):
@@ -529,7 +537,8 @@ def cruise(request):
                 submission.save()
             return HttpResponseRedirect(reverse("cruise"))                     
         elif submit == "simulate":
-            if p:   # PID Controller
+            # PID Controller
+            if p:    
                 if not i:
                     i = 0
                 if not d:
@@ -546,7 +555,9 @@ def cruise(request):
                 if np.isnan(output[x]):
                     output[x]= float('inf')
                 else:
-                    output[x] = round(output[x], 4)
+                    output[x] = round(output[x], 4)      # round to 4 decimal digits
+
+            # check if the funtion doesn't recognize the specific requriements
             if spec == "Unstable response":
                 unstable = True
             else:
