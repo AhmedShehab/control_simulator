@@ -20,7 +20,7 @@ Python3 is needed in order for the project to run correctly. The following pytho
 * [NumPy](https://numpy.org/)
 
 ## Full Documentation
-A detailed report for this project can be downloaded from [here]().
+A detailed report for this project can be downloaded from [here](https://cloudpdf.io/document/1df688ad-ed98-4320-ae45-8dccac6c6889).
 ## Development Team 
 The team is welcoming you to improve and add chages to the project. Please feel free to fork this repository and ... The application was originally developed by:
 * Ahmed Shehab Refaat
@@ -29,7 +29,3 @@ The team is welcoming you to improve and add chages to the project. Please feel 
 * Israa Khaled Taha
 * Rana Wael Mohamed
 * Esraa Yousri Mahmoud
-## Supervision
-The project was developed under the supervision of:
-* Prof. Dr. Eng. Mohammed Moness Ali
-* Dr. Eng. Ahmed Mahmoud Mustafa
