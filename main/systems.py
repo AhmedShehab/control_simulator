@@ -745,86 +745,6 @@ def action_zpk(sys, final_time, setpoint, z, p, k):
     return t, action, min_action, max_action
 
 
-def stepinfo_sys(sys, setPoint):
-    # open-loop system transfer function
-    try:
-        num, den = model(sys)
-    except:
-        # for error detection
-        print("Err: system in not defined")
-        return
-    Gs = control.tf(num, den)
-
-    # closed-loop unity-feedback transfer function
-    Ts = control.feedback(Gs, 1) * setPoint
-    try:
-        spec = matlab.stepinfo(
-            Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
-    except:
-        spec = "Unstable response"
-
-    return spec
-
-
-def stepinfo_zpk(sys, z, p, k, setPoint):
-    # open-loop system transfer function
-    try:
-        num, den = model(sys)
-    except:
-        # for error detection
-        print("Err: system in not defined")
-        return
-    Gs = control.tf(num, den)
-
-    # define compensator transfer function
-    # convert zero and pole to numpy arrays
-    z = np.array([z])
-    p = np.array([p])
-    num, den = matlab.zpk2tf(z, p, k)
-    Ds = matlab.tf(num, den)
-
-    # Compensated open-loop transfer function
-    DsGs = Ds*Gs
-
-    # closed-loop unity-feedback transfer function
-    Ts = control.feedback(DsGs, 1) * setPoint
-    try:
-        spec = matlab.stepinfo(
-            Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
-    except:
-        spec = "Unstable response"
-
-    return spec
-
-
-def stepinfo_pid(sys, Kp, Ki, Kd, setPoint):
-    # open-loop system transfer function
-    try:
-        num, den = model(sys)
-    except:
-        # for error detection
-        print("Err: system in not defined")
-        return
-    Gs = control.tf(num, den)
-
-    # PID Controller
-    s = matlab.tf('s')
-    Ds = Kp + Ki/s + Kd*s
-
-    # Compensated open-loop transfer function
-    DsGs = Ds*Gs
-
-    # closed-loop unity-feedback transfer function
-    Ts = control.feedback(DsGs, 1) * setPoint
-    try:
-        spec = matlab.stepinfo(
-            Ts, SettlingTimeThreshold=0.02, RiseTimeLimits=(0.1, 0.9))
-    except:
-        spec = "Unstable response"
-
-    return spec
-
-
 def model(sys):
 
     # check if sys is a transfer function
@@ -929,26 +849,28 @@ def isPass(parameters, requirements):
     return score, Pass
 
 
-def step_info_pid_new(sys, setPoint, p, i, d):
-    transientResponse = {}  # Dictionary holding all transient response values
-    t, output = step_pid(sys, 500, setPoint, p, i, d)
+def stepinfo_pid(sys,p, i, d,setPoint):
+    if sys == "cruise":
+        t, output = step_pid_cruise(500, setPoint, p, i, d)
+    else:
+        return
 
-    peak = 0
+    Peak = 0
     time10 = 0  # time at 10 percent of the steady state value
     time90 = 0  # time at 90 percent of the steady state value
     counter = 0  # counter to check for how long a value stays in a certain range
-    print(output)
     for index, element in enumerate(output):
-        # determining the peak value
-        if element >= peak:
-            peak = element
+        # determining the Peak value
+        if element >= Peak:
+            Peak = element
+            PeakTime = t[index]
 
         # determining the Time to reach 10% and 90% of the set point
         if time10 == 0:  # Make sure to take the first time sample
-            if abs(element - (0.1 * setPoint)) <= 0.1:
+            if abs(element - (0.1 * setPoint)) <= 0.5:
                 time10 = t[index]
         if time90 == 0:
-            if abs(element - (0.9 * setPoint)) <= 0.1:
+            if abs(element - (0.9 * setPoint)) <= 0.5:
                 time90 = t[index]
 
         # Determining the settling time
@@ -965,12 +887,71 @@ def step_info_pid_new(sys, setPoint, p, i, d):
 
     # Determining the steady state Value
     if abs(output[-1] - setPoint) <= 0.001:
-        transientResponse['SteadyStateValue'] = setPoint
+        SteadyStateValue = setPoint
     else:
-        transientResponse['SteadyStateValue'] = output[-1]
+        SteadyStateValue= output[-1]
+    
+    transientResponse = {
+        'RiseTime': (time90 - time10),
+        'Overshoot': (Peak - setPoint)*100/setPoint,
+        'SettlingTime': settlingTime,
+        'Peak': Peak,
+        'PeakTime':PeakTime,
+        'SteadyStateValue': SteadyStateValue,
+    }
 
-    transientResponse['RiseTime'] = time90 - time10
-    transientResponse['Overshoot'] = (peak - setPoint)*100/setPoint
-    transientResponse['SettlingTime'] = settlingTime
+    return transientResponse
+
+
+def stepinfo_zpk(sys,z, p, k,setPoint):
+    if sys == "cruise":
+        t, output = step_zpk_cruise(500, setPoint, z,p,k)
+    else:
+        return
+
+    Peak = 0
+    time10 = 0  # time at 10 percent of the steady state value
+    time90 = 0  # time at 90 percent of the steady state value
+    counter = 0  # counter to check for how long a value stays in a certain range
+    for index, element in enumerate(output):
+        # determining the Peak value
+        if element >= Peak:
+            Peak = element
+            PeakTime = t[index]
+
+        # determining the Time to reach 10% and 90% of the set point
+        if time10 == 0:  # Make sure to take the first time sample
+            if abs(element - (0.1 * setPoint)) <= 0.5:
+                time10 = t[index]
+        if time90 == 0:
+            if abs(element - (0.9 * setPoint)) <= 0.5:
+                time90 = t[index]
+
+        # Determining the settling time
+        if counter <= 500:  # Check if it stays for 10 samples in the same range
+            if abs(element - setPoint) <= 0.02 * setPoint:
+                # Make sure to get the first time it reaches the 98% range before it stays
+                if counter == 0:
+                    settlingTime = t[index]
+                    counter += 1
+                else:
+                    counter += 1
+            else:
+                counter = 0
+
+    # Determining the steady state Value
+    if abs(output[-1] - setPoint) <= 0.001:
+        SteadyStateValue = setPoint
+    else:
+        SteadyStateValue= output[-1]
+    
+    transientResponse = {
+        'RiseTime': (time90 - time10),
+        'Overshoot': (Peak - setPoint)*100/setPoint,
+        'SettlingTime': settlingTime,
+        'Peak': Peak,
+        'PeakTime':PeakTime,
+        'SteadyStateValue': SteadyStateValue,
+    }
 
     return transientResponse

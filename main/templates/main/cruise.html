@@ -319,18 +319,12 @@
 <div class=" assignPosition" id="stepInfo">
     <div class="assign_child">
         <h3>Step Info.</h3>
-        {% if unstable %}
-        <p class="removePadding"> {{spec}}</p>
-        {% else %}
-        <p class="removePadding">RiseTime: {{ spec.RiseTime}} sec</p>
-        <p class="removePadding">SettlingTime: {{ spec.SettlingTime}} sec</p>
-        <p class="removePadding">Overshoot: {{ spec.Overshoot}} %</p>
-        <p class="removePadding">Undershoot: {{ spec.Undershoot}} %</p>
-        <p class="removePadding">Peak: {{ spec.Peak}}</p>
-        <p class="removePadding">PeakTime: {{ spec.PeakTime}} sec</p>
-        <p class="removePadding">SteadyStateValue: {{ spec.SteadyStateValue}}</p>
-        {% endif %}
-        <p class="removePadding">Actuation Range: {{min_ac}} to {{max_ac}}</p>
+        <div  id='calculating'>
+            <div id= 'removeCalculating'>
+                <h5>Calculating Step Info.</h5>
+                <img src="{% static 'main/images/loading.svg' %}" style="width: 100px;height:100px">
+           </div>
+        </div>
         <button class="button" onclick="closeStepInfo();">Exit</button>
     </div>
 </div>
@@ -501,11 +495,9 @@
                     v[count] = ((Math.floor(v[count] * 100) / 100))
                         //hp[count] = ((Math.floor(hp[count]*100)/100))
                     if (v[count] < 10) {
-                        console.log('vsim = ' + v[count])
                         message1.text = '0' + v[count]
                             //message2.text = ('0'+hp[vount])
                     } else {
-                        console.log('vsim = ' + v[count])
                         message1.text = v[count]
                             //message2.text = (hp[vount])
                     }
@@ -562,17 +554,13 @@
                     v[count] = ((Math.floor(v[count] * 100) / 100))
                         //hp[count] = ((Math.floor(hp[count]*100)/100))
                     if (v[count] < 10) {
-                        console.log('vsim = ' + v[count])
                         message1.text = '0' + v[count]
                             //message2.text = ('0'+hp[vount])
                     } else {
-                        console.log('vsim = ' + v[count])
                         message1.text = v[count]
                             //message2.text = (hp[vount])
                     }
                     chart.data.labels.push(tarray[count]);
-                    console.log('vchart = ' + v[count])
-                    console.log('t = ' + tarray[count])
                     chart.data.datasets[0].data.push(v[count]);
                     chart.update();
                     if (l == count + 1) {

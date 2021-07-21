@@ -10,5 +10,6 @@ urlpatterns = [
     path("logout/",views.logout_view,name="logout"),
     path("cruise/",views.cruise,name="cruise"),
     path("design/<str:name>",views.design,name="design"),
-    path("servomotor/", views.servomotor, name="servomotor")
+    path("servomotor/", views.servomotor, name="servomotor"),
+    path("simulatorapi/", views.SimulatorApi, name="simulatorapi")
 ]

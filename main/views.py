@@ -1,6 +1,10 @@
 from os import remove, system
+from control.matlab.timeresp import stepinfo
 from django import http
 from django.contrib.auth import authenticate, login, logout
+from django.http.response import HttpResponseRedirectBase, JsonResponse
+import json
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -13,6 +17,29 @@ import numpy as np
 from .systems import *
 from datetime import date
 import decimal
+
+@csrf_exempt
+def SimulatorApi(request):
+    # sys = request.body['sys']
+    # x = request.body['x'] # x = p if pid system and x = z if ZPK system
+    # y = request.body['y'] # y = i if pid system and y = p if ZPK system
+    # z = request.body['z'] # z = i if pid system and z = k if ZPK system
+    # setPoint = request.body['setPoint']
+    # spec = step_info_pid_new(sys,x,y,z,setPoint)
+    paramaters = json.loads(request.body)
+    sys = paramaters['sys']
+    setPoint = float(paramaters['setPoint'])
+    if paramaters.get('p',0):
+        p = float(paramaters.get('p'))
+        i = float(paramaters.get('i'))
+        d = float(paramaters.get('d'))
+        spec = stepinfo_pid(sys,p,i,d,setPoint)
+    else:
+        zero = float(paramaters['zero'])
+        pole = float(paramaters['pole'])
+        gain = float(paramaters['gain'])
+        spec = stepinfo_zpk(sys,zero,pole,gain,setPoint)
+    return JsonResponse(spec)
 
 def home(request):
     request.session["num"] = "1"
@@ -463,8 +490,6 @@ def cruise(request):
         PIDController={
             "Simulator":"servo",
             "Controller":"PID",
-            "StepInput":setPoint,
-            "setTime":setTime,
             "P":p,
             "I":i,
             "D":d,
@@ -472,8 +497,6 @@ def cruise(request):
         ZPKController={
             "Simulator":"servo",
             "Controller":"ZPK",
-            "StepInput":setPoint,
-            "setTime":setTime,
             "Zero":zero,
             "Pole":pole,
             "Gain":gain,
@@ -513,19 +536,13 @@ def cruise(request):
                     d = 0
                 #t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 t, output = step_pid_cruise(setTime, setPoint, p, i, d)
-                spec = stepinfo_pid(sys, p, i, d,setPoint)
-                tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
             elif zero and pole and gain:
                 #t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
                 t, output = step_zpk_cruise(setTime, setPoint, zero, pole, gain)
-                spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
-                tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
             else:
                 #t, output = step_sys(sys, setTime, setPoint)
                 t, output = step_cruise(setTime, setPoint)
-                spec = stepinfo_sys(sys,setPoint)
-                tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
-            for  x in range(len(output)):
+            """ for  x in range(len(output)):
                 if np.isnan(output[x]):
                     output[x]= float('inf')
                 else:
@@ -538,7 +555,7 @@ def cruise(request):
                 min_ac = round(min_ac, 4)
                 max_ac = round(max_ac, 4)
                 max_ac = format(max_ac)
-                min_ac = format(min_ac)
+                min_ac = format(min_ac) """
             return render(request, "main/cruise.html", {
                 "assignment":assignment,
                 "t": t,
@@ -554,10 +571,10 @@ def cruise(request):
                 "gain":gain,
                 "stepinfo": info,
                 "animation":animation,
-                "spec": spec,
-                "max_ac": max_ac,
-                "min_ac": min_ac,
-                "unstable": unstable
+                # "spec": spec,
+                # "max_ac": max_ac,
+                # "min_ac": min_ac,
+                # "unstable": unstable
         })
     else:
         if assignment:
@@ -619,8 +636,6 @@ def servomotor(request):
         PIDController={
             "Simulator":"servo",
             "Controller":"PID",
-            "StepInput":setPoint,
-            "setTime":setTime,
             "P":p,
             "I":i,
             "D":d,
@@ -628,8 +643,6 @@ def servomotor(request):
         ZPKController={
             "Simulator":"servo",
             "Controller":"ZPK",
-            "StepInput":setPoint,
-            "setTime":setTime,
             "Zero":zero,
             "Pole":pole,
             "Gain":gain,
@@ -669,37 +682,26 @@ def servomotor(request):
                     d = 0
                 # print(setPoint)
                 t, output = step_pid(sys, setTime, setPoint, p, i, d)
-                #t, output = step_pid_servo(setTime, setPoint, p, i, d)
-                spec = stepinfo_pid(sys, p, i, d,setPoint)
-                spec2 = step_info_pid_new(sys, setPoint, p, i, d)
-                print(spec,spec2)
-                tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
             elif zero and pole and gain:
                 t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
-                #t, output = step_zpk_servo(setTime, setPoint, zero, pole, gain)
-                spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
-                tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
             else:
                 t, output = step_sys(sys, setTime, setPoint)
-                #t, output = step_servo(setTime, setPoint, zero, pole)
-                spec = stepinfo_sys(sys,setPoint)
-                tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
             
             # print(output)
             # print("iiiii")
             # print(action)
-            for  x in range(len(output)):
-                if np.isnan(output[x]):
-                    output[x]= float('inf')
-                else:
-                    output[x] = round(output[x], 4)
-            if spec == "Unstable response":
-                unstable = True
-            else:
-                for key,value in spec.items():
-                    spec[key] = round(value,4)
-                min_ac = round(min_ac,4)
-                max_ac = round(max_ac,4)
+            # for  x in range(len(output)):
+            #     if np.isnan(output[x]):
+            #         output[x]= float('inf')
+            #     else:
+            #         output[x] = round(output[x], 4)
+            # if spec == "Unstable response":
+            #     unstable = True
+            # else:
+            #     for key,value in spec.items():
+            #         spec[key] = round(value,4)
+            #     min_ac = round(min_ac,4)
+            #     max_ac = round(max_ac,4)
             return render(request, "main/servomotor.html", {
                 "assignment":assignment,
                 "t": t,
@@ -714,11 +716,11 @@ def servomotor(request):
                 "pole":pole,
                 "gain":gain,
                 "animation":animation,
-                "stepinfo": info,
-                "spec": spec,
-                "max_ac": max_ac,
-                "min_ac": min_ac,
-                "unstable": unstable
+                # "stepinfo": info,
+                # "spec": spec,
+                # "max_ac": max_ac,
+                # "min_ac": min_ac,
+                # "unstable": unstable
         })
     else:
         if assignment:
