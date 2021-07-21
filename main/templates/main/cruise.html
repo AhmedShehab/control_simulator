@@ -26,7 +26,6 @@
     <div class="assign_child">
         <h3>Assignment Requirements</h3>
         <strong>Assignment: {{assignment.subject}} </strong>
-        <br /> setPoint = {{assignment.setPoint}}
         <br /> Rise Time = {{assignment.riseTime}}s
         <br /> Settling Time = {{assignment.setTime}}s
         <br /> Percent overshoot = {{assignment.pOvershoot}}%
@@ -78,7 +77,7 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data reset" type="number" step="0.00001" required name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="1" max="200" step="0.00001" required name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
@@ -99,7 +98,7 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="1" max="200" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
@@ -123,7 +122,7 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="1" max="200" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
@@ -154,7 +153,7 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data reset" type="number" step="0.00001" min="0" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" step="0.00001" min="1" max="200" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
@@ -184,7 +183,7 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="1" max="200" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
@@ -218,7 +217,7 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="1" max="200" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
@@ -227,11 +226,11 @@
 					<br /><br /><br />
 					<div class="text11">
 						<p class="input-bar">Zero:</p>
-						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="zero" value="{{zero}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="zero" value="{{zero}}" id="zero"  onchange="getElementById('pole').value=Math.min(getElementById('zero').value)"/>
 					</div>
 					<div class="text22">
 						<p class="input-bar">Pole:</p>
-						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="pole" value="{{pole}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="pole" value="{{pole}}" id="pole" onchange="getElementById('pole').value=Math.max(getElementById('zero').value,getElementById('pole').value)"/>
 					</div>
 					<div class="text33">
 						<p class="input-bar">Gain:</p>
@@ -252,7 +251,7 @@
 					{% csrf_token %}
 					<div class="text1">
 						<p class="input-bar">Set Point:</p>
-						<input class="input-data reset" type="number" min="0" step="0.00001" name="setPoint" value="{{setPoint}}" />
+						<input class="input-data reset" type="number" min="1" max="200" step="0.00001" name="setPoint" value="{{setPoint}}" />
 					</div>
 					<div class="text2">
 						<p class="input-bar">Simulation Time:</p>
@@ -261,11 +260,11 @@
 					<br /><br /><br />
 					<div class="text11">
 						<p class="input-bar">Zero:</p>
-						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="zero" value="{{zero}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="zero" value="{{zero}}" id="zero2"  onchange="getElementById('pole'2).value=Math.max(getElementById('zero2').value)" />
 					</div>
 					<div class="text22">
 						<p class="input-bar">Pole:</p>
-						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="pole" value="{{pole}}" />
+						<input class="input-data clear" type="number" step="0.00001" required placeholder="Enter a value" name="pole" value="{{pole}}" id="pole2" onchange="getElementById('pole2').value=Math.min(getElementById('zero2').value,getElementById('pole2').value)"/>
 					</div>
 					<div class="text33">
 						<p class="input-bar">Gain:</p>
@@ -349,23 +348,9 @@
                 element.style.display = "none";
             }
         }
-        // If there is assignment preset the form Requirements
         if ("{{assignment.controller}}" != "") {
-
-            // Select assignment controller and disables the selector
-            var selector = document.getElementById("selector")
-            selector.value = "{{assignment.controller}}";
+            document.getElementById("selector").value = "{{assignment.controller}}";
             selector.disabled = true
-            
-            // Disable set point fields and display the required set Point
-            document.getElementsByName("setPoint").forEach(element => {
-                element.style.display= "none";
-                var span = document.createElement('span')
-                span.innerHTML="<h6>{{assignment.setPoint}}</h6>"
-                span.style.textAlign='left'
-                element.parentNode.append(span)
-            })
-            
             display();
         }
         var v = document.getElementById("speed").value;

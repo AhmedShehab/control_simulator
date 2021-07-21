@@ -7,13 +7,13 @@ from django.urls import reverse
 from scipy.linalg.basic import pinv
 from .models import User, Instructor, Student, Course, Assignment, Submission
 from uuid import UUID
-from . import design_tool
 import numpy as np
 from .systems import *
 from datetime import date
 import decimal
 
 def home(request):
+    # Define the default TF for design tool page
     request.session["num"] = "1"
     request.session["den"] = "s+1"
     request.session["n"] = [1]
@@ -23,9 +23,10 @@ def home(request):
     })
 
 def design(request, name):
-    empty = False
-    remember = 1
-    design = name
+    empty = False                           
+    remember = 1                                   # to remember the selected form
+    design = name    
+    # Get the values of parameters for each system                      
     if name == "Servomotor":
         sys = "servo"
         simulator = "servomotor"
@@ -34,7 +35,7 @@ def design(request, name):
         num, den = tf(sys)
         gm, pm, wg, wp = margin_sys(sys)
     elif name == "Cruise Control":
-        sys = "cruise" #cruise
+        sys = "cruise" 
         simulator = "cruise"
         system = name
         omega, mag, phase = bode_sys(sys)
@@ -43,13 +44,14 @@ def design(request, name):
     else:
         system = "tf"
         simulator = "tf"
-        design = "Design By Frequency" #change
-        empty = True
-        num = request.session["num"]
+        design = "Design By Frequency"             # change
+        empty = True                               # make this page interactive with user by changing TF
+        # Get the stored numerator and denominator
+        num = request.session["num"]            
         den = request.session["den"]
         n = request.session["n"]
         d = request.session["d"]
-        Gs = control.tf(n, d)
+        Gs = control.tf(n, d)                      # get the TF
         omega, mag, phase = bode_sys(Gs)
         gm, pm, wg, wp = margin_sys(Gs)   
     if request.method == "POST":
@@ -59,12 +61,14 @@ def design(request, name):
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
-        remember = request.POST.get("remember",0)
+        remember = request.POST.get("remember",0)  # for the selected form
+        # If post request for changing TF
         if request.POST.get("num"):
             nu = request.POST.get("num")
             de = request.POST.get("den")
             nu = nu.strip('][').split(',')
             de = de.strip('][').split(',')
+            # Check for the required inputs 
             try:
                 nu = [float(i) for i in nu]
                 de = [float(i) for i in de]
@@ -115,8 +119,9 @@ def design(request, name):
                     "sys": system, 
                     "wp": wp
                 })
-        if name == "Crusie Control":
-            sys = "cruise"  #cruise
+        # If post request for designing controller
+        if name == "Cruise Control":
+            sys = "cruise"
             simulator = "cruise"
             num, den = tf(sys)
         elif name == "Servomotor":
@@ -131,9 +136,11 @@ def design(request, name):
             sys = Gs
         omega, mag, phase = bode_sys(sys)
         gm, pm, wg, wp = margin_sys(sys)
+        # If lag/lead controller
         if request.POST.get("zero"):
             omega_comp, mag_comp, phase_comp = bode_zpk(sys, zero, pole, gain)
             gm_comp, pm_comp, wg_comp, wp_comp = margin_zpk(sys, zero, pole, gain)
+        # If P/PI/PID controller
         if request.POST.get("p"):
             if not i:
                 i = 0
@@ -168,7 +175,6 @@ def design(request, name):
                 "pole": pole,
                 "gain": gain,
                 "simulator": simulator
-
             })  
     return render(request, "main/design.html" , {
             "omega": omega,
@@ -436,24 +442,23 @@ def cruise(request):
     except:
         assignment=""
         pass
-    sys = "cruise"
-    remember = 1
-    setTime = 1.0
-    setPoint = 1.0
+    sys = "cruise" 
+    remember = 1                                                 # remember selected form
+    setTime = 1.0                                                # default simulation time
+    setPoint = 1.0                                               # default set point
     if request.POST:
-        info = True
-        unstable = False
+        info = True                                              # show stepInfo for system
+        unstable = False                                         # to know if the system is unstable "for debugging stepinfo"
         zero = float(request.POST.get("zero",0))
         pole = float(request.POST.get("pole",0))
         gain = float(request.POST.get("gain",0))
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
-        step = float(request.POST.get("step",0))
-        setTime = float(request.POST.get("time",0))
-        setPoint = float(request.POST.get("setPoint",0))
-        remember = request.POST.get("remember",0)
-        animation= request.POST.get("animation","false")
+        setTime = float(request.POST.get("time",0))              # the required simulation time
+        setPoint = float(request.POST.get("setPoint",0))         # the required set point
+        remember = request.POST.get("remember",0)                # remember selected form
+        animation= request.POST.get("animation","false")         # show animation in step response or not
         removeAssignment= request.POST.get("removeAssignment",0)
         if removeAssignment == "1":
             del request.session["id"]
@@ -461,19 +466,15 @@ def cruise(request):
         if animation!="true":
             animation="false"
         PIDController={
-            "Simulator":"servo",
+            "Simulator":"cruise",
             "Controller":"PID",
-            "StepInput":step,
-            "setTime":setTime,
             "P":p,
             "I":i,
             "D":d,
         }
         ZPKController={
-            "Simulator":"servo",
+            "Simulator":"cruise",
             "Controller":"ZPK",
-            "StepInput":step,
-            "setTime":setTime,
             "Zero":zero,
             "Pole":pole,
             "Gain":gain,
@@ -491,10 +492,12 @@ def cruise(request):
             subDate = date.today().strftime("%Y-%m-%d")
             PIDParamaters= f"Propotional Constant (P): {p},\n Differential Constant (D): {i},\n Integral Constant (I): {d},"
             ZPkParamaters= f"Gain: {gain},\n Pole: {pole},\n Zero: {zero}"
-            if p or i or d:   # PID Controller
+            # PID Controller
+            if p or i or d:   
                 controller = PIDController
                 parameters = PIDParamaters
-            else:             # ZPK Controller
+            # ZPK Controller
+            else:             
                 controller = ZPKController
                 parameters = ZPkParamaters
             if assignmentRequirements.get("Description",0):
@@ -506,7 +509,8 @@ def cruise(request):
                 submission.save()
             return HttpResponseRedirect(reverse("cruise"))                     
         elif submit == "simulate":
-            if p:   # PID Controller
+            # PID Controller
+            if p:    
                 if not i:
                     i = 0
                 if not d:
@@ -514,31 +518,40 @@ def cruise(request):
                 #t, output = step_pid(sys, setTime, setPoint, p, i, d)
                 t, output = step_pid_cruise(setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
-                tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
+                #tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
+
+            # Lag/Lead Controller
             elif zero and pole and gain:
                 #t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
                 t, output = step_zpk_cruise(setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
-                tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
+                #tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
+
+            # Uncompensated system
             else:
                 #t, output = step_sys(sys, setTime, setPoint)
                 t, output = step_cruise(setTime, setPoint)
                 spec = stepinfo_sys(sys,setPoint)
-                tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
+                #tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
+
+            # check if the output is not a number "inf"    
             for  x in range(len(output)):
                 if np.isnan(output[x]):
                     output[x]= float('inf')
                 else:
-                    output[x] = round(output[x], 4)
+                    output[x] = round(output[x], 4)      # round to 4 decimal digits
+
+            # check if the funtion doesn't recognize the specific requriements
             if spec == "Unstable response":
                 unstable = True
             else:
                 for key,value in spec.items():
-                    spec[key] = round(value,4)
-                min_ac = round(min_ac, 4)
-                max_ac = round(max_ac, 4)
-                max_ac = format(max_ac)
-                min_ac = format(min_ac)
+                    spec[key] = round(value,4)           # round to 4 decimal digits
+                # min_ac = round(min_ac, 4)
+                # max_ac = round(max_ac, 4)
+                # max_ac = format(max_ac)
+                # min_ac = format(min_ac)
+
             return render(request, "main/cruise.html", {
                 "assignment":assignment,
                 "t": t,
@@ -555,8 +568,8 @@ def cruise(request):
                 "stepinfo": info,
                 "animation":animation,
                 "spec": spec,
-                "max_ac": max_ac,
-                "min_ac": min_ac,
+                # "max_ac": max_ac,
+                # "min_ac": min_ac,
                 "unstable": unstable
         })
     else:
@@ -604,7 +617,6 @@ def servomotor(request):
         p = float(request.POST.get("p",0))
         i = float(request.POST.get("i",0))
         d = float(request.POST.get("d",0))
-        step = float(request.POST.get("step",0))
         setTime = float(request.POST.get("time",0))
         setPoint = float(request.POST.get("setPoint",0))
         setPoint = setPoint % 360
@@ -619,8 +631,6 @@ def servomotor(request):
         PIDController={
             "Simulator":"servo",
             "Controller":"PID",
-            "StepInput":step,
-            "setTime":setTime,
             "P":p,
             "I":i,
             "D":d,
@@ -628,8 +638,6 @@ def servomotor(request):
         ZPKController={
             "Simulator":"servo",
             "Controller":"ZPK",
-            "StepInput":step,
-            "setTime":setTime,
             "Zero":zero,
             "Pole":pole,
             "Gain":gain,
@@ -668,36 +676,37 @@ def servomotor(request):
                 if not d:
                     d = 0
                 # print(setPoint)
-                t, output = step_pid(sys, setTime, setPoint, p, i, d)
-                #t, output = step_pid_servo(setTime, setPoint, p, i, d)
+                #t, output = step_pid(sys, setTime, setPoint, p, i, d)
+                t, output = step_pid_servo(setTime, setPoint, p, i, d)
                 spec = stepinfo_pid(sys, p, i, d,setPoint)
-                tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
+                #tt, action, min_ac, max_ac = action_pid(sys, setTime, setPoint, p, i, d)
             elif zero and pole and gain:
-                t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
-                #t, output = step_zpk_servo(setTime, setPoint, zero, pole, gain)
+                #t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+                t, output = step_zpk_servo(setTime, setPoint, zero, pole, gain)
                 spec = stepinfo_zpk(sys, zero, pole, gain,setPoint)
-                tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
+                #tt, action, min_ac, max_ac = action_zpk(sys, setTime, setPoint, zero, pole, gain)
             else:
-                t, output = step_sys(sys, setTime, setPoint)
-                #t, output = step_servo(setTime, setPoint, zero, pole)
+                #t, output = step_sys(sys, setTime, setPoint)
+                t, output = step_servo(setTime, setPoint)
                 spec = stepinfo_sys(sys,setPoint)
-                tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
-            
-            # print(output)
-            # print("iiiii")
-            # print(action)
+                #tt, action, min_ac, max_ac = action_sys(sys, setTime, setPoint)
+
+            # check if the output is not a number "inf"  
             for  x in range(len(output)):
                 if np.isnan(output[x]):
                     output[x]= float('inf')
                 else:
-                    output[x] = round(output[x], 4)
+                    output[x] = round(output[x], 4)                  # round to 4 decimal digits
+
+            # check if the funtion doesn't recognize the specific requriements      
             if spec == "Unstable response":
                 unstable = True
             else:
                 for key,value in spec.items():
-                    spec[key] = round(value,4)
-                min_ac = round(min_ac,4)
-                max_ac = round(max_ac,4)
+                    spec[key] = round(value,4)                       # round to 4 decimal digits
+                # min_ac = round(min_ac,4)
+                # max_ac = round(max_ac,4)
+
             return render(request, "main/servomotor.html", {
                 "assignment":assignment,
                 "t": t,
@@ -714,8 +723,8 @@ def servomotor(request):
                 "animation":animation,
                 "stepinfo": info,
                 "spec": spec,
-                "max_ac": max_ac,
-                "min_ac": min_ac,
+                # "max_ac": max_ac,
+                # "min_ac": min_ac,
                 "unstable": unstable
         })
     else:
