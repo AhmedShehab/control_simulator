@@ -1,5 +1,5 @@
 # E-learning Web Application for Control Systems
-This project is submitted to the Computers & Systems Engineering department, Minia University in compliance with the requirements of the degree of B<!--A comment to prevent hyperlinking-->.Sc.
+This project is submitted to the Computers & Systems Engineering Department, Minia University in compliance with the requirements of the degree of B<!--A comment to prevent hyperlinking-->.Sc.
 
 This application is designed to be an e-learning tool for engineering students to learn about classic control theory and its potential applications. The application contains two simulation environments for systems that are used in daily-life. Also, there is a design tool that empowers users to design controllers for the available systems using a popular method in Control engineering which is the design by frequency response technique. Additionally, The website has an authentication system that enables instructors to assign homeworks for their students. These assignments also can be autograded by the appliaction once submitted.
 ## Local Development
