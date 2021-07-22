@@ -20,7 +20,7 @@ The following python packages may be installed using a Python package-management
 ## Full Documentation
 A detailed report for this project can be downloaded from [here](https://cloudpdf.io/document/1df688ad-ed98-4320-ae45-8dccac6c6889).
 ## Development Team 
-The team is welcoming anyone to contribute to the project and chekc our work. The application was originally developed by:
+The team is welcoming anyone to contribute to the project and check our work. The application was originally developed by:
 * Ahmed Shehab Refaat
 * Kareem Ashraf Rashed
 * George Magdy Rady
