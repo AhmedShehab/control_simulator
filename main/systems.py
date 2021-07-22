@@ -932,8 +932,8 @@ def model(sys):
         den = list(sys.den[0][0])
 
     if sys == 'cruise':
-        num = 0.02107
-        den = [0.5, 1.003, 0.00584]
+        num = 55
+        den = [1, 2, 0]
 
     elif sys == 'servo':
         num = 36
@@ -944,8 +944,8 @@ def model(sys):
 
 def tf(sys):
     if sys == 'cruise':
-        num = "0.02107"
-        den = "0.5s^2 + 1.003s + 0.00584"
+        num = "55"
+        den = "s^2 + 2s"
     elif sys == 'servo':
         num = "36"
         den  = "s^2 + 3.6s"
