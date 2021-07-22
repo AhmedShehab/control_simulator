@@ -18,13 +18,7 @@ from datetime import date
 import decimal
 
 @csrf_exempt
-def SimulatorApi(request):
-    # sys = request.body['sys']
-    # x = request.body['x'] # x = p if pid system and x = z if ZPK system
-    # y = request.body['y'] # y = i if pid system and y = p if ZPK system
-    # z = request.body['z'] # z = i if pid system and z = k if ZPK system
-    # setPoint = request.body['setPoint']
-    # spec = step_info_pid_new(sys,x,y,z,setPoint)
+def stepinfoapi(request):
     paramaters = json.loads(request.body)
     sys = paramaters['sys']
     setPoint = float(paramaters['setPoint'])
@@ -33,12 +27,17 @@ def SimulatorApi(request):
         i = float(paramaters.get('i'))
         d = float(paramaters.get('d'))
         spec = stepinfo_pid(sys,p,i,d,setPoint)
-    else:
+    elif paramaters.get('zero',0):        
         zero = float(paramaters['zero'])
         pole = float(paramaters['pole'])
         gain = float(paramaters['gain'])
         spec = stepinfo_zpk(sys,zero,pole,gain,setPoint)
+    else:
+        return JsonResponse({
+            "error": "No Controller Selected yet"
+        }, status=400)
     return JsonResponse(spec)
+
 
 def home(request):
     # Define the default TF for design tool page
@@ -49,6 +48,7 @@ def home(request):
     return render(request, "main/home.html",{
         "home": True
     })
+
 
 def design(request, name):
     empty = False                           
@@ -532,7 +532,7 @@ def cruise(request):
                 submission = Submission.objects.create(student=student,assignment=assignment,dateSubmitted=subDate,parameters=parameters)
                 submission.save()
             elif assignmentRequirements.get("RiseTime"):
-                score,Pass =isPass(controller,assignmentRequirements)
+                score,Pass = isPass(controller,assignmentRequirements)
                 submission = Submission.objects.create(student=student,assignment=assignment,score=score,Pass=Pass,dateSubmitted=subDate,parameters=parameters)
                 submission.save()
             return HttpResponseRedirect(reverse("cruise"))                     
@@ -692,15 +692,11 @@ def servomotor(request):
                 if not d:
                     d = 0
                 # print(setPoint)
-                t, output = step_pid(sys, setTime, setPoint, p, i, d)
+                t, output = step_pid_servo(setTime, setPoint, p, i, d)
             elif zero and pole and gain:
-                t, output = step_zpk(sys, setTime, setPoint, zero, pole, gain)
+                t, output = step_zpk_servo(setTime, setPoint, zero, pole, gain)
             else:
-                t, output = step_sys(sys, setTime, setPoint)
-            
-            # print(output)
-            # print("iiiii")
-            # print(action)
+                t, output = step_servo(setTime, setPoint)
             # for  x in range(len(output)):
             #     if np.isnan(output[x]):
             #         output[x]= float('inf')
@@ -727,7 +723,7 @@ def servomotor(request):
                 "pole":pole,
                 "gain":gain,
                 "animation":animation,
-                # "stepinfo": info,
+                "stepinfo": info,
                 # "spec": spec,
                 # "max_ac": max_ac,
                 # "min_ac": min_ac,

@@ -15,7 +15,7 @@ class Assignment(models.Model):
     subject     = models.CharField(max_length=64,null=True)
     dueDate     = models.DateField()
     score       = models.FloatField()
-    instructor  = models.CharField(max_length=64,null=True) # Remove Nul =    True later
+    instructor  = models.CharField(max_length=64,null=True) # Remove Nul =  True later
     riseTime    = models.FloatField(null=True)
     setTime     = models.FloatField(null=True)
     Ess         = models.FloatField(null=True)

@@ -11,5 +11,5 @@ urlpatterns = [
     path("cruise/",views.cruise,name="cruise"),
     path("design/<str:name>",views.design,name="design"),
     path("servomotor/", views.servomotor, name="servomotor"),
-    path("simulatorapi/", views.SimulatorApi, name="simulatorapi")
+    path("stepinfoapi/", views.stepinfoapi, name="stepinfoapi")
 ]

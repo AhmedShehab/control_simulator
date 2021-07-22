@@ -15,11 +15,6 @@ function run() {
 			pdf.style.height = "0";
 		}, 500);
 	}
-	if (pdf.src == "about:servo") {
-		pdf.src = "https://cloudpdf.io/document/f85e498d-8145-49e2-a385-ba08660ba4e4";
-	} else {
-		pdf.src = "https://cloudpdf.io/document/aad2b22a-7d7f-47e7-ac84-db6abc6f0b2e";
-	}
 }
 function display() {
 	var name = document.getElementById("selector").value;
@@ -53,17 +48,24 @@ function closeStepInfo() {
 }
 
 addEventListener("DOMContentLoaded", () => {
+	setTimeout(() => {
+		// Load PDF when the page content is loaded
+		var pdf = document.getElementById("pdf");
+		if (pdf.src == "about:servo") {
+			pdf.src = "https://cloudpdf.io/document/f85e498d-8145-49e2-a385-ba08660ba4e4";
+		} else {
+			pdf.src = "https://cloudpdf.io/document/aad2b22a-7d7f-47e7-ac84-db6abc6f0b2e";
+		}
+	}, 500);
+
+	// Calculate Step info and insert Values to the DOM
 	var simulator = document.title;
-	var p, i, d, zero, pole, gain, setPoint;
+	var p, i, d, zero, pole, gain, setPoint, sys;
 	var selected = document.getElementsByTagName("select")[0].value;
 	document.getElementsByName("setPoint").forEach((element) => {
 		setPoint = element.value;
 	});
-	if (simulator == "Servomotor Simulator") {
-		var sys = "servo";
-	} else {
-		var sys = "cruise";
-	}
+	simulator == "Servomotor Simulator" ? (sys = "servo") : (sys = "cruise");
 	if (selected == "P" || selected == "PI" || selected == "PID" || selected == "PD") {
 		document.getElementsByName("p").forEach((element) => {
 			p = element.value;
@@ -74,7 +76,7 @@ addEventListener("DOMContentLoaded", () => {
 		document.getElementsByName("d").forEach((element) => {
 			d = element.value;
 		});
-		fetch("/simulatorapi/", {
+		fetch("/stepinfoapi/", {
 			method: "POST",
 			body: JSON.stringify({
 				sys: sys,
@@ -86,24 +88,7 @@ addEventListener("DOMContentLoaded", () => {
 		})
 			.then((response) => response.json())
 			.then((data) => {
-				var div = document.querySelector("#calculating");
-				document.querySelector("#removeCalculating").remove();
-				var pRiseTime = document.createElement("p");
-				var pOvershoot = document.createElement("p");
-				var pSteadyStateValue = document.createElement("p");
-				var pSettlingTime = document.createElement("p");
-				pRiseTime.innerText = `Rise Time: ${data.RiseTime.toFixed(4)} seconds`;
-				pSettlingTime.innerText = `Settling Time: ${data.SettlingTime.toFixed(4)} seconds`;
-				pOvershoot.innerText = `Percentage Overshoot: ${data.Overshoot.toFixed(4)} %`;
-				pSteadyStateValue.innerText = `Steady State Value: ${data.SteadyStateValue.toFixed(4)}`;
-				pSettlingTime.className = "removePadding";
-				pOvershoot.className = "removePadding";
-				pSteadyStateValue.className = "removePadding";
-				pRiseTime.className = "removePadding";
-				div.append(pRiseTime);
-				div.append(pSettlingTime);
-				div.append(pOvershoot);
-				div.append(pSteadyStateValue);
+				appendData(data);
 			});
 	} else {
 		document.getElementsByName("zero").forEach((element) => {
@@ -115,7 +100,7 @@ addEventListener("DOMContentLoaded", () => {
 		document.getElementsByName("gain").forEach((element) => {
 			gain = element.value;
 		});
-		fetch("/simulatorapi/", {
+		fetch("/stepinfoapi/", {
 			method: "POST",
 			body: JSON.stringify({
 				sys: sys,
@@ -127,24 +112,45 @@ addEventListener("DOMContentLoaded", () => {
 		})
 			.then((response) => response.json())
 			.then((data) => {
-				var div = document.querySelector("#calculating");
-				document.querySelector("#removeCalculating").remove();
-				var pRiseTime = document.createElement("p");
-				var pOvershoot = document.createElement("p");
-				var pSteadyStateValue = document.createElement("p");
-				var pSettlingTime = document.createElement("p");
-				pRiseTime.innerText = `Rise Time: ${data.RiseTime.toFixed(4)} seconds`;
-				pSettlingTime.innerText = `Settling Time: ${data.SettlingTime.toFixed(4)} seconds`;
-				pOvershoot.innerText = `Percentage Overshoot: ${data.Overshoot.toFixed(4)} %`;
-				pSteadyStateValue.innerText = `Steady State Value: ${data.SteadyStateValue.toFixed(4)}`;
-				pSettlingTime.className = "removePadding";
-				pOvershoot.className = "removePadding";
-				pSteadyStateValue.className = "removePadding";
-				pRiseTime.className = "removePadding";
-				div.append(pRiseTime);
-				div.append(pSettlingTime);
-				div.append(pOvershoot);
-				div.append(pSteadyStateValue);
+				appendData(data);
 			});
 	}
 });
+
+function appendData(data) {
+	var div = document.querySelector("#calculating");
+	document.querySelector("#removeCalculating").remove();
+	var pRiseTime = document.createElement("p");
+	var pOvershoot = document.createElement("p");
+	var pSteadyStateValue = document.createElement("p");
+	var pSteadyStateError = document.createElement("p");
+	var pSettlingTime = document.createElement("p");
+	var pPeak = document.createElement("p");
+	var pPeakTime = document.createElement("p");
+	pRiseTime.innerText = `Rise Time: ${data.RiseTime.toFixed(4)} seconds`;
+	data.SettlingTime == 0
+		? (pSettlingTime.innerText = `Settling Time: Didn't reach 2% of the steady state`)
+		: (pSettlingTime.innerText = `Settling Time: ${data.SettlingTime.toFixed(4)} seconds`);
+	data.RiseTime <= 0
+		? (pRiseTime.innerText = `Rise Time: Value didn't reach 90% of the steady state`)
+		: (pSettlingTime.innerText = `Rise Time: ${data.RiseTime.toFixed(4)} seconds`);
+	pPeak.innerText = `Peak: ${data.Peak.toFixed(4)}`;
+	pPeakTime.innerText = `Peak Time: ${data.PeakTime.toFixed(4)} seconds`;
+	pOvershoot.innerText = `Percentage Overshoot: ${data.Overshoot.toFixed(4)} %`;
+	pSteadyStateValue.innerText = `Steady State Value: ${data.SteadyStateValue.toFixed(4)}`;
+	pSteadyStateError.innerText = `Steady State Error: ${data.SteadyStateError.toFixed(4)} %`;
+	pSettlingTime.className = "removePadding";
+	pOvershoot.className = "removePadding";
+	pSteadyStateValue.className = "removePadding";
+	pSteadyStateError.className = "removePadding";
+	pRiseTime.className = "removePadding";
+	pPeak.className = "removePadding";
+	pPeakTime.className = "removePadding";
+	div.append(pRiseTime);
+	div.append(pSettlingTime);
+	div.append(pPeak);
+	div.append(pPeakTime);
+	div.append(pOvershoot);
+	div.append(pSteadyStateValue);
+	div.append(pSteadyStateError);
+}

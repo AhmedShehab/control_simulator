@@ -330,7 +330,7 @@ def step_cruise(final_time, setpoint):
         # Car specifications and initialization data
         rho = 1.225       # kg/m3
         CdA = 0.55        # m2
-        m = 1500          # kg
+        m = 1800          # kg
 
         # Calculate derivative of vehicle velocity
         dv_dt = (1.0/m) * (p*hp2watt/v - 0.5*CdA*rho*v**2)
@@ -366,8 +366,8 @@ def step_cruise(final_time, setpoint):
     p0 = 0.0                                  # initial car power
 
     # Actuation limits - Car Physical limits
-    max_power = 140
-    min_power = -140
+    max_power = 120
+    min_power = -120
 
     # simulate with ODEINT
     for i in range(nsteps):
@@ -421,7 +421,7 @@ def step_zpk_cruise(final_time, setpoint, z, p, k):
         # Car specifications and initialization data
         rho = 1.225       # kg/m3
         CdA = 0.55        # m2
-        m = 1500          # kg
+        m = 1800          # kg
 
         # Calculate derivative of vehicle velocity
         dv_dt = (1.0/m) * (p*hp2watt/v - 0.5*CdA*rho*v**2)
@@ -456,8 +456,8 @@ def step_zpk_cruise(final_time, setpoint, z, p, k):
     p0 = 0.0                                 # initial car power
 
     # Actuation limits - Car Physical limits
-    max_power = 140
-    min_power = -140
+    max_power = 120
+    min_power = -120
 
     # Controller TF
     z = np.array([z])
@@ -519,7 +519,7 @@ def step_pid_cruise(final_time, setpoint, Kp, Ki, Kd):
         # Car specifications and initialization data
         rho = 1.225       # kg/m3
         CdA = 0.55        # m2
-        m = 1500          # kg
+        m = 1800          # kg
 
         # Calculate derivative of vehicle velocity
         dv_dt = (1.0/m) * (p*hp2watt/v - 0.5*CdA*rho*v**2)
@@ -556,8 +556,8 @@ def step_pid_cruise(final_time, setpoint, Kp, Ki, Kd):
     sum_int = 0.0                           # summation of error integral
 
     # Actuation limits - Car Physical limits
-    max_power = 140
-    min_power = -140
+    max_power = 120
+    min_power = -120
 
     # controller paramaters
     kp = Kp                                 # proportional gain
@@ -1007,19 +1007,14 @@ def isPass(parameters, requirements):
         k = parameters["Gain"]
         response = stepinfo_zpk(sim, z, p, k, requirements['setPoint'])
     errorPercent = (response["SteadyStateValue"]-parameters["StepInput"])*100
-    print(errorPercent)
     if response["RiseTime"] >= 0.9 * requirements["RiseTime"] and response["RiseTime"] <= 1.1 * requirements["RiseTime"]:
         score += 1
-        print(f"{score}: + 1")
     if response["SettlingTime"] >= 0.9 * requirements["SettlingTime"] and response["SettlingTime"] <= 1.1 * requirements["SettlingTime"]:
         score += 1
-        print(f"{score}: + 2")
     if response["Overshoot"] >= 0.9 * requirements["Overshoot"] and response["Overshoot"] <= 1.1 * requirements["Overshoot"]:
         score += 1
-        print(f"{score}: + 3")
     if errorPercent <= 1.1*requirements['SteadyStateError']:
         score += 1
-        print(f"{score}: + 4")
     if score >= 2:
         Pass = "Pass"
     else:
@@ -1029,19 +1024,20 @@ def isPass(parameters, requirements):
 
 def stepinfo_pid(sys,p, i, d,setPoint):
     if sys == "cruise":
-        t, output = step_pid_cruise(500, setPoint, p, i, d)
+        t, output = step_pid_cruise(100, setPoint, p, i, d)
     else:
-        return
-
+        t, output = step_pid_servo(100, setPoint, p, i, d)
+    settlingTime = 0
     Peak = 0
     time10 = 0  # time at 10 percent of the steady state value
     time90 = 0  # time at 90 percent of the steady state value
     counter = 0  # counter to check for how long a value stays in a certain range
+
     for index, element in enumerate(output):
         # determining the Peak value
-        if element >= Peak:
+        if element > Peak:
             Peak = element
-            PeakTime = t[index]
+            PeakTime = t[index] 
 
         # determining the Time to reach 10% and 90% of the set point
         if time10 == 0:  # Make sure to take the first time sample
@@ -1050,9 +1046,11 @@ def stepinfo_pid(sys,p, i, d,setPoint):
         if time90 == 0:
             if abs(element - (0.9 * setPoint)) <= 0.5:
                 time90 = t[index]
+        # check if risetime < 0
+
 
         # Determining the settling time
-        if counter <= 500:  # Check if it stays for 10 samples in the same range
+        if counter <= 100:  # Check if it stays for 10 samples in the same range
             if abs(element - setPoint) <= 0.02 * setPoint:
                 # Make sure to get the first time it reaches the 98% range before it stays
                 if counter == 0:
@@ -1071,11 +1069,12 @@ def stepinfo_pid(sys,p, i, d,setPoint):
     
     transientResponse = {
         'RiseTime': (time90 - time10),
-        'Overshoot': (Peak - setPoint)*100/setPoint,
+        'Overshoot': (Peak - setPoint)*100/setPoint if (Peak - setPoint)*100/setPoint >=0 else 0,
         'SettlingTime': settlingTime,
         'Peak': Peak,
         'PeakTime':PeakTime,
         'SteadyStateValue': SteadyStateValue,
+        'SteadyStateError':((setPoint - SteadyStateValue)/setPoint)*100,
     }
 
     return transientResponse
@@ -1083,17 +1082,18 @@ def stepinfo_pid(sys,p, i, d,setPoint):
 
 def stepinfo_zpk(sys,z, p, k,setPoint):
     if sys == "cruise":
-        t, output = step_zpk_cruise(500, setPoint, z,p,k)
+        t, output = step_zpk_cruise(100, setPoint, z,p,k)
     else:
-        return
+        t,output = step_zpk_servo(100,setPoint,z,p,k)
 
+    settlingTime = 0
     Peak = 0
     time10 = 0  # time at 10 percent of the steady state value
     time90 = 0  # time at 90 percent of the steady state value
     counter = 0  # counter to check for how long a value stays in a certain range
     for index, element in enumerate(output):
         # determining the Peak value
-        if element >= Peak:
+        if element > Peak:
             Peak = element
             PeakTime = t[index]
 
@@ -1106,7 +1106,7 @@ def stepinfo_zpk(sys,z, p, k,setPoint):
                 time90 = t[index]
 
         # Determining the settling time
-        if counter <= 500:  # Check if it stays for 10 samples in the same range
+        if counter <= 100:  # Check if it stays for 10 samples in the same range
             if abs(element - setPoint) <= 0.02 * setPoint:
                 # Make sure to get the first time it reaches the 98% range before it stays
                 if counter == 0:
@@ -1125,11 +1125,12 @@ def stepinfo_zpk(sys,z, p, k,setPoint):
     
     transientResponse = {
         'RiseTime': (time90 - time10),
-        'Overshoot': (Peak - setPoint)*100/setPoint,
+        'Overshoot': (Peak - setPoint)*100/setPoint if (Peak - setPoint)*100/setPoint >=0 else 0,
         'SettlingTime': settlingTime,
         'Peak': Peak,
         'PeakTime':PeakTime,
         'SteadyStateValue': SteadyStateValue,
+        'SteadyStateError':((setPoint - SteadyStateValue)/setPoint)*100,
     }
 
     return transientResponse
