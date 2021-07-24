@@ -28,13 +28,21 @@ function display() {
 		}
 	}
 }
-function Reset() {
+function Reset(sys) {
+	var simulator = document.title;
 	var reset = document.getElementsByClassName("reset");
+	var resetTime = document.getElementsByClassName("resetTime");
 	var clear = document.getElementsByClassName("clear");
-	var s = 1.0;
+	var s,time;
+	simulator == "Servomotor Simulator" ? (s = 90) : (s = 60);
+	simulator == "Servomotor Simulator" ? (time = 15) : (time = 25);
 	s = s.toFixed(1);
+	time = time.toFixed(1)
 	for (var i = 0; i < reset.length; i++) {
 		reset[i].value = s;
+	}
+	for (var i = 0; i < resetTime.length; i++) {
+		resetTime[i].value = time;
 	}
 	for (var i = 0; i < clear.length; i++) {
 		clear[i].value = "";
@@ -48,8 +56,8 @@ function closeStepInfo() {
 }
 
 addEventListener("DOMContentLoaded", () => {
+	// Wait 500 ms then load PDF when the page content is loaded
 	setTimeout(() => {
-		// Load PDF when the page content is loaded
 		var pdf = document.getElementById("pdf");
 		if (pdf.src == "about:servo") {
 			pdf.src = "https://cloudpdf.io/document/f85e498d-8145-49e2-a385-ba08660ba4e4";
