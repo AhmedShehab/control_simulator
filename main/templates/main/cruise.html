@@ -416,6 +416,7 @@
         var count = 0;
         var l = v.length
         var timer;
+        let v_dash;
 
         function setup() {
 
@@ -430,14 +431,14 @@
                 fill: "white",
             });
 
-            message1 = new Text('00.00', style)
+            message1 = new Text('00', style)
             message2 = new Text('km/hr', style2)
                 //Create the 'dashboard' sprite 
             dashboard = new Sprite(resources["{% static 'main/images/dashboard.png' %}"].texture);
             app.stage.addChild(dashboard);
             app.stage.addChild(message1);
             app.stage.addChild(message2);
-            message1.position.set(150, 175);
+            message1.position.set(180, 175);
             message2.position.set(189, 230);
 
         }
@@ -490,12 +491,13 @@
                     // message1.position.set(124, 139);
                     // message2.position.set(450, 139);	
                     v[count] = ((Math.floor(v[count] * 100) / 100))
+                    v_dash = Math.floor(v[count]);
                         //hp[count] = ((Math.floor(hp[count]*100)/100))
-                    if (v[count] < 10) {
-                        message1.text = '0' + v[count]
+                    if (v_dash < 10) {
+                        message1.text = '0' + v_dash
                             //message2.text = ('0'+hp[vount])
                     } else {
-                        message1.text = v[count]
+                        message1.text = v_dash
                             //message2.text = (hp[vount])
                     }
                     if (l == count + 1) {
@@ -549,12 +551,13 @@
                     // message1.position.set(112, 139);
                     // message2.position.set(450, 139);
                     v[count] = ((Math.floor(v[count] * 100) / 100))
+                    v_dash = Math.floor(v[count]);
                         //hp[count] = ((Math.floor(hp[count]*100)/100))
-                    if (v[count] < 10) {
-                        message1.text = '0' + v[count]
+                    if (v_dash < 10) {
+                        message1.text = '0' + v_dash
                             //message2.text = ('0'+hp[vount])
                     } else {
-                        message1.text = v[count]
+                        message1.text = v_dash
                             //message2.text = (hp[vount])
                     }
                     chart.data.labels.push(tarray[count]);
