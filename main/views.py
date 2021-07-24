@@ -472,8 +472,8 @@ def cruise(request):
         pass
     sys = "cruise" 
     remember = 1                                                 # remember selected form
-    setTime = 1.0                                                # default simulation time
-    setPoint = 1.0                                               # default set point
+    setTime = 25.0                                                # default simulation time
+    setPoint = 60.0                                               # default set point
     if request.POST:
         info = True                                              # show stepInfo for system
         unstable = False                                         # to know if the system is unstable "for debugging stepinfo"
@@ -622,8 +622,8 @@ def servomotor(request):
         pass
     sys = "servo"
     remember = 1
-    setTime = 1.0
-    setPoint = 1.0
+    setTime = 15.0
+    setPoint = 90.0
     if request.POST:
         info = True
         unstable = False
