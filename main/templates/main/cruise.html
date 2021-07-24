@@ -496,9 +496,13 @@
                     if (v_dash < 10) {
                         message1.text = '0' + v_dash
                             //message2.text = ('0'+hp[vount])
-                    } else {
+                    } else if(v_dash >=100){
+                        message1.x = 168;
                         message1.text = v_dash
                             //message2.text = (hp[vount])
+                    }
+                    else{
+                        message1.text = v_dash
                     }
                     if (l == count + 1) {
                         clearInterval(timer);
@@ -556,9 +560,13 @@
                     if (v_dash < 10) {
                         message1.text = '0' + v_dash
                             //message2.text = ('0'+hp[vount])
-                    } else {
+                    } else if(v_dash >=100){
+                        message1.x = 168;
                         message1.text = v_dash
                             //message2.text = (hp[vount])
+                    }
+                    else{
+                        message1.text = v_dash
                     }
                     chart.data.labels.push(tarray[count]);
                     chart.data.datasets[0].data.push(v[count]);
