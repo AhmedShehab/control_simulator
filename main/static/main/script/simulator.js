@@ -135,13 +135,12 @@ function appendData(data) {
 	var pSettlingTime = document.createElement("p");
 	var pPeak = document.createElement("p");
 	var pPeakTime = document.createElement("p");
-	pRiseTime.innerText = `Rise Time: ${data.RiseTime.toFixed(4)} seconds`;
 	data.SettlingTime == 0
 		? (pSettlingTime.innerText = `Settling Time: Didn't reach 2% of the steady state`)
 		: (pSettlingTime.innerText = `Settling Time: ${data.SettlingTime.toFixed(4)} seconds`);
 	data.RiseTime <= 0
 		? (pRiseTime.innerText = `Rise Time: Value didn't reach 90% of the steady state`)
-		: (pSettlingTime.innerText = `Rise Time: ${data.RiseTime.toFixed(4)} seconds`);
+		: (pRiseTime.innerText = `Rise Time: ${data.RiseTime.toFixed(4)} seconds`);
 	pPeak.innerText = `Peak: ${data.Peak.toFixed(4)}`;
 	pPeakTime.innerText = `Peak Time: ${data.PeakTime.toFixed(4)} seconds`;
 	pOvershoot.innerText = `Percentage Overshoot: ${data.Overshoot.toFixed(4)} %`;

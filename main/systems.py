@@ -1006,7 +1006,7 @@ def isPass(parameters, requirements):
         p = parameters["Pole"]
         k = parameters["Gain"]
         response = stepinfo_zpk(sim, z, p, k, requirements['setPoint'])
-    errorPercent = (response["SteadyStateValue"]-parameters["StepInput"])*100
+    errorPercent = (response["SteadyStateValue"]-requirements['setPoint'])*100
     if response["RiseTime"] >= 0.9 * requirements["RiseTime"] and response["RiseTime"] <= 1.1 * requirements["RiseTime"]:
         score += 1
     if response["SettlingTime"] >= 0.9 * requirements["SettlingTime"] and response["SettlingTime"] <= 1.1 * requirements["SettlingTime"]:

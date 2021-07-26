@@ -378,7 +378,7 @@ def student(request):
             "student":student,
             "assignments": assignments,
             "submitted":submitted,
-        }) 
+        })
 
 def instructor(request):
     req= request.POST
@@ -427,7 +427,7 @@ def instructor(request):
                 assign=Assignment.objects.create(subject=subject,dueDate=due,simulator=sim,score=4,instructor=request.user.username,riseTime=rise,setTime=settle,pOvershoot=overshoot,Ess=error,controller=controller,setPoint=setPoint)
                 assign.save()
             elif req.get("grade")=="receive":
-                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=4, instructor=request.user.username,description=desc,controller=controller,setPoint=setPoint)
+                assign=Assignment.objects.create(subject=subject, dueDate=due, simulator=sim, score=4, instructor=request.user.username,description=desc,controller=controller)
                 assign.save()
             course=Course.objects.get(name=course)
             course.assignments.add(assign)
